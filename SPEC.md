@@ -31,6 +31,9 @@ GPT-4o acts as a high-level Director and independent Verifier. Claude acts as a 
 - Runs a ReAct tool-use loop: calls `fetch_url` to read live article content, then reasons over it
 - Uses extended thinking (3,000 budget tokens, 10,000 max tokens) for deep reasoning
 - Preserves all raw fetched page content in `fetched_pages` for downstream storage as `raw_source` chunks
+- Fetches one corroborating source from a different domain when the claim contains a date/statistic/named event, the primary source is indirect/summary-like, or the claim is contested — skipped when the primary source is itself authoritative (capped at 2 fetches total)
+- Source type hierarchy guides corroboration choice: science claims → journal + science outlet; policy claims → .gov doc + fact-checker; historical claims → official archive + reference; general claims → authoritative outlet + independent verification
+- `corroborate(claim_id, claim_text, existing_domains)` method: lightweight 2-round targeted fetch called by the retry loop when the verifier flags weak grounding — adds a new domain's evidence before the next retrieval pass
 
 **fetch_url tool**
 - Defined in `agent/tools.py` using the Anthropic tool-use API schema
@@ -59,7 +62,7 @@ GPT-4o acts as a high-level Director and independent Verifier. Claude acts as a 
   - **Keyword channel (40%)** — BM25 term-frequency scoring (k₁ = 1.5, b = 0.75)
 - Both scores min-max normalised before combining
 - Chunk-type boost: `raw_source` × 1.15, `summary` × 0.95, `source_metadata` × 0.75
-- `_diversify_hits()` biases top-6 results toward 4 raw source chunks + 2 summary chunks
+- `_diversify_hits()` applies two diversity axes: kind-bias (up to 4 raw source chunks) and domain-diversity (prefer chunks from distinct source domains so verdicts rest on multiple independent sources, not one article)
 
 **Verifier (`agent/verifier.py`)**
 - A separate GPT-4o call evaluating each verdict against retrieved evidence on four dimensions:
@@ -74,7 +77,8 @@ GPT-4o acts as a high-level Director and independent Verifier. Claude acts as a 
 - Returns a `VerifierReport` with scores, `unsupported_statements`, `contradictions`, `missing_citations`, and `should_retry`
 
 **Publisher (`agent/publisher.py`)**
-- Renders HTML verdict cards with verdict badge, confidence, summary, key evidence, retrieved evidence chunks (with kind/section/source/score), and collapsible quality score bars
+- Renders HTML verdict cards with verdict badge, confidence, evidence source diversity summary (distinct domain tags), summary, key evidence, retrieved evidence chunks (domain / kind / section / score), and collapsible quality score bars
+- Each retrieved chunk leads with its bare source domain in monospace accent colour for quick readability
 - Writes `docs/YYYY-MM-DD.html`, `docs/index.html`, and `outputs/YYYY-MM-DD.json`
 - JSON output includes `retrieved_evidence` and `verifier_report` per claim
 
@@ -114,8 +118,8 @@ verdict_node          ← Director synthesises verdict          │
   ▼                                                           │
 verify_node           ← LLM-as-a-Judge evaluates verdict      │
   │                                                           │
-  ├─── retry? ──► revise_query_node ── refined query ─────────┘
-  │               (max 2 retries)
+  ├─── retry? ──► revise_query_node ── refined query + corroboration fetch ───┘
+  │               (max 2 retries; fetches one new-domain source via corroborate())
   │
   └─── passed ──► publish_node → HTML + JSON output
                       │
@@ -210,7 +214,7 @@ Each run harvests up to 10 entries per feed (70 candidates max), narrowed to 3 b
 ## 6. Output Format
 
 ### HTML Report (`docs/YYYY-MM-DD.html`)
-Each verdict card shows: verdict badge, claim text, source link, confidence %, summary, collapsible key evidence, collapsible retrieved evidence chunks (kind / section / source / hybrid score / text), and collapsible quality score panel with colour-coded bars.
+Each verdict card shows: verdict badge, claim text, source link, confidence %, evidence source diversity summary (N distinct domain tags), summary, collapsible key evidence, collapsible retrieved evidence chunks (domain / kind / section / hybrid score / text), and collapsible quality score panel with colour-coded bars.
 
 ### JSON Archive (`outputs/YYYY-MM-DD.json`)
 
@@ -327,3 +331,4 @@ open docs/$(date +%Y-%m-%d).html
 | v1.2 | 2026-03-07 | Tuned for reliability — 3k thinking budget, 4k content cap, Director diversity rules |
 | v2.0 | 2026-03-22 | Added persistent evidence store, hybrid retrieval, GraphRAG, LLM-as-a-Judge, self-correcting retry loop, quality score bars in HTML |
 | v2.1 | 2026-03-23 | RAG-centric shift — raw fetched pages stored as `raw_source` chunks; retriever biased toward raw evidence; `--claim` CLI flag; `evals.py` harness; verifier report in JSON output |
+| v2.2 | 2026-03-23 | Evidence diversification — conditional corroborating fetch with source-type hierarchy; domain-aware retrieval ranking; verifier-triggered corroboration in retry loop; source domain tags in HTML report |

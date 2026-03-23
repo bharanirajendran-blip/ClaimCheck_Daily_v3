@@ -14,16 +14,16 @@ Every run:
 
 1. Pulls headlines from 7 RSS feeds (AP, Reuters, PolitiFact, FactCheck.org, WHO, Science Daily, MIT Tech Review)
 2. GPT-4o selects the 3 most fact-checkable claims from different sources and topics
-3. Claude fetches and analyses live source articles using a ReAct tool-use loop with extended thinking
+3. Claude fetches the primary source article, then conditionally fetches one corroborating source from a different domain (triggered when the claim contains a date/stat/named event, or the primary source is indirect)
 4. Raw fetched article text is stored as reusable `raw_source` evidence chunks
 5. Researcher summaries and source citations are stored alongside as `summary` and `source_metadata` chunks
 6. A persistent evidence store accumulates chunks across runs
 7. A lightweight knowledge graph links claims to source domains for cross-run context
-8. Hybrid retrieval (TF-IDF + BM25) surfaces the top evidence chunks, biased toward raw source content
+8. Hybrid retrieval (TF-IDF + BM25) surfaces the top evidence chunks, biased toward raw source content and spread across distinct source domains
 9. GPT-4o synthesises a verdict grounded in the retrieved evidence chunks
 10. A second GPT-4o call acts as an independent LLM-as-a-Judge verifier
-11. If grounding or citation scores fall below threshold, the query is refined and verdict regenerated (up to 2 retries)
-12. HTML and JSON reports are published with verdicts, retrieved evidence, and quality scores
+11. If grounding or citation scores fall below threshold: the query is refined, a corroborating source from a new domain is fetched, and the verdict is regenerated (up to 2 retries)
+12. HTML and JSON reports are published with verdicts, evidence source diversity summary, retrieved evidence chunks, and quality scores
 
 ---
 
@@ -71,9 +71,9 @@ Built with **LangGraph** (StateGraph), **Pydantic v2**, **scikit-learn** (TF-IDF
 | fetch_url tool | Fetches and strips article HTML to plain text | httpx + BeautifulSoup |
 | Evidence Store | Chunks raw fetched pages + summaries; persists across runs | — |
 | Knowledge Graph | Links claims → sources across runs; injects cross-run context | networkx |
-| HybridRetriever | TF-IDF cosine (60%) + BM25 keyword (40%); biased toward raw source chunks | scikit-learn |
+| HybridRetriever | TF-IDF cosine (60%) + BM25 keyword (40%); biased toward raw source chunks, domain-diversified | scikit-learn |
 | Verifier | Independent LLM-as-a-Judge scoring on 4-dimension rubric | GPT-4o |
-| Publisher | HTML + JSON output with retrieved evidence and quality scores | — |
+| Publisher | HTML + JSON output with source diversity summary, retrieved evidence, and quality scores | — |
 
 ### Evidence chunk types
 
@@ -178,7 +178,7 @@ python run.py --outputs-dir my_outputs  # custom output directory
 
 | File | Description |
 |---|---|
-| `docs/YYYY-MM-DD.html` | Dark-themed report with verdicts, retrieved evidence, and quality scores |
+| `docs/YYYY-MM-DD.html` | Dark-themed report with verdicts, evidence source diversity tags, retrieved evidence, and quality scores |
 | `docs/index.html` | Landing page with links to all past reports |
 | `outputs/YYYY-MM-DD.json` | Machine-readable verdicts including retrieved evidence and verifier report |
 | `outputs/evidence_store.json` | Cumulative chunked evidence (grows across runs) |
