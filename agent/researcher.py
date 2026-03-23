@@ -41,16 +41,23 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
 
     IMPORTANT RULES:
     - Fetch the source URL provided first. That is your primary evidence.
-    - Always fetch at least ONE corroborating source from a DIFFERENT domain than
-      the primary source. This is required, not optional — single-source verdicts
-      are weaker and less trustworthy.
-    - For controversial or contested claims, fetch a THIRD source from yet another
-      domain (e.g. an independent fact-checker, government database, or academic
-      reference). Use your judgment on whether the claim warrants a third source.
-    - Do NOT fetch more than 3 sources total — stop after a primary + 1-2 corroborating.
+    - Fetch ONE corroborating source from a DIFFERENT domain when any of these apply:
+        * the claim contains a specific date, statistic, or named event
+        * the primary source is a news summary, blog, or indirect reference
+          (not the original study, official document, or primary source)
+        * the claim is contested or involves numbers that could be misrepresented
+      If none of the above apply and the primary source is itself authoritative
+      (e.g. a .gov site, original study, official archive), you may skip the second fetch.
+    - Do NOT fetch more than 2 sources total.
     - Do NOT chase dead links or keep fetching if URLs return errors; move on immediately.
-    - Prefer authoritative domains: government (.gov), academic (.edu), established
-      news outlets, or recognized reference sources (Britannica, WHO, etc.).
+    - Match your corroborating source to the claim type:
+        * Science / health claim  → primary institution or journal
+                                    + science news outlet (ScienceDaily, Nature News)
+        * Policy / government     → official document or .gov source
+                                    + independent fact-checker (FactCheck.org, PolitiFact)
+        * Historical claim        → official archive (NASA, Smithsonian, national records)
+                                    + established reference (Britannica, major encyclopedia)
+        * General factual claim   → authoritative news outlet + independent verification
     - Base your verdict on what you successfully read.
 
     Structure your final response as follows:
@@ -75,6 +82,28 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
 """)
 
 MAX_TOOL_ROUNDS = 5  # enough rounds to fetch + synthesize findings
+
+CORROBORATE_SYSTEM_PROMPT = textwrap.dedent("""\
+    You are a fact-checking researcher tasked with finding ONE corroborating source.
+
+    You will receive a claim and a list of domains already consulted.
+    Fetch EXACTLY ONE URL from a different, authoritative domain that can independently
+    support or refute the claim. Then write a brief summary of what you found.
+
+    RULES:
+    - Fetch exactly ONE URL — choose the most authoritative source available.
+    - Do NOT fetch from any domain listed as already consulted.
+    - Prefer: .gov, .edu, established journals, recognized reference sources.
+    - If the fetch fails, say so and do not retry.
+
+    Return your findings as:
+
+    ## Corroborating Evidence
+    [prose summary of what the source says about the claim]
+
+    ## Key Sources
+    [{"title": "...", "url": "...", "reliability": "high|medium|low"}]
+""")
 
 
 def _block_to_dict(block) -> dict | None:
@@ -136,6 +165,91 @@ class Researcher:
             sources=sources,
             fetched_pages=fetched_pages,
         )
+
+    def corroborate(
+        self,
+        claim_id: str,
+        claim_text: str,
+        existing_domains: list[str],
+    ) -> ResearchResult | None:
+        """
+        Fetch exactly one corroborating source from a domain not already consulted.
+        Called by the retry loop when the verifier flags weak grounding or missing
+        citations. Returns a ResearchResult whose fetched_pages and findings will
+        be chunked into the evidence store before the next retrieval pass.
+        """
+        logger.info(
+            "[corroborate] Seeking extra source for claim %s (avoiding: %s)",
+            claim_id, existing_domains,
+        )
+        domain_list = ", ".join(existing_domains) if existing_domains else "none"
+        user_msg = (
+            f"Claim:\n\"{claim_text}\"\n\n"
+            f"Domains already consulted: {domain_list}\n\n"
+            "Please fetch ONE corroborating source from a different authoritative domain "
+            "and summarize what it says about this claim."
+        )
+        messages = [{"role": "user", "content": user_msg}]
+        fetched_pages: list[dict] = []
+
+        # Lightweight loop — max 2 rounds (one fetch + one synthesis)
+        for round_num in range(1, 3):
+            kwargs: dict = dict(
+                model=self.model,
+                max_tokens=4000,
+                system=CORROBORATE_SYSTEM_PROMPT,
+                tools=TOOL_DEFINITIONS,
+                messages=messages,
+            )
+            if self.use_extended_thinking:
+                kwargs["thinking"] = {"type": "enabled", "budget_tokens": 1000}
+                kwargs["temperature"] = 1
+
+            try:
+                response = self._client.messages.create(**kwargs)
+            except Exception as exc:
+                logger.warning("[corroborate] API error on round %d: %s", round_num, exc)
+                return None
+
+            if response.stop_reason == "end_turn":
+                parts = [b.text for b in response.content if hasattr(b, "text")]
+                raw_text = "\n".join(parts).strip()
+                sources = self._extract_sources(raw_text)
+                return ResearchResult(
+                    claim_id=claim_id,
+                    findings=raw_text,
+                    sources=sources,
+                    fetched_pages=fetched_pages,
+                )
+
+            if response.stop_reason == "tool_use":
+                assistant_content = [
+                    d for d in (_block_to_dict(b) for b in response.content)
+                    if d is not None
+                ]
+                messages.append({"role": "assistant", "content": assistant_content})
+                tool_results = []
+                for block in response.content:
+                    if block.type == "tool_use":
+                        result_text = execute_tool(block.name, block.input)
+                        if block.name == "fetch_url":
+                            fetched_pages.append({
+                                "url": block.input.get("url", ""),
+                                "content": result_text,
+                            })
+                        tool_results.append({
+                            "type": "tool_result",
+                            "tool_use_id": block.id,
+                            "content": result_text,
+                        })
+                messages.append({"role": "user", "content": tool_results})
+                continue
+
+            logger.warning("[corroborate] Unexpected stop_reason: %s", response.stop_reason)
+            return None
+
+        logger.warning("[corroborate] Max rounds reached for claim %s", claim_id)
+        return None
 
     # ------------------------------------------------------------------
     # Agentic tool-use loop

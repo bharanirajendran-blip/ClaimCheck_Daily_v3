@@ -39,6 +39,7 @@ from .publisher import Publisher
 from .researcher import Researcher
 from .retriever import HybridRetriever, build_retrieval_query
 from .store import load_all_chunks, store_research
+import re as _re
 from .utils import setup_logging
 from .verifier import verify_verdict
 
@@ -237,23 +238,34 @@ def verify_node(state: PipelineState) -> dict[str, Any]:
     return {"verifier_reports": verifier_reports}
 
 
+def _extract_domain(url: str) -> str:
+    """Return bare domain from a URL string (e.g. 'factcheck.org')."""
+    url = url or ""
+    url = _re.sub(r"^https?://", "", url).split("/")[0]
+    return _re.sub(r"^www\.", "", url).lower()
+
+
 def revise_query_node(state: PipelineState) -> dict[str, Any]:
     """
     Node 9 — Build refined retrieval queries from verifier missing_citations.
-    Appended back into graph_context under a special key so retrieve_node
-    can pick them up on the next iteration. Increments retry_counts.
+    Also attempts to fetch one corroborating source from a new domain when the
+    verifier flags weak grounding, so the next retrieve pass has richer evidence.
+    Increments retry_counts.
     """
-    graph_context = dict(state.graph_context)
-    retry_counts  = dict(state.retry_counts)
+    graph_context  = dict(state.graph_context)
+    retry_counts   = dict(state.retry_counts)
+    evidence_chunks = dict(state.evidence_chunks)
 
     for report_id, report in state.verifier_reports.items():
         if not report.should_retry:
             continue
+
         retry_counts[report_id] = retry_counts.get(report_id, 0) + 1
         claim_text = next(
             (c.text for c in state.selected if c.id == report_id), ""
         )
-        # Build a targeted query from the verifier's missing citation hints
+
+        # Refine the retrieval query with verifier's missing-citation hints
         hint_text = " ".join(report.missing_citations[:3])
         refined = f"{claim_text} {hint_text}".strip()
         graph_context[f"{report_id}::revised_query"] = refined
@@ -262,7 +274,42 @@ def revise_query_node(state: PipelineState) -> dict[str, Any]:
             report_id, retry_counts[report_id], refined[:120],
         )
 
-    return {"graph_context": graph_context, "retry_counts": retry_counts}
+        # ── Corroboration fetch ──────────────────────────────────────────
+        # Collect domains already seen for this claim so corroborate()
+        # avoids re-fetching the same sources.
+        existing_chunks = evidence_chunks.get(report_id, [])
+        existing_domains = list({
+            _extract_domain(c.source_url)
+            for c in existing_chunks
+            if getattr(c, "source_url", "")
+        })
+        logger.info(
+            "[revise_query] Requesting corroboration for %s (existing domains: %s)",
+            report_id, existing_domains,
+        )
+        try:
+            extra = _get_researcher().corroborate(
+                claim_id=report_id,
+                claim_text=claim_text,
+                existing_domains=existing_domains,
+            )
+            if extra:
+                new_chunks = store_research(extra, claim_text, state.outputs_dir)
+                evidence_chunks[report_id] = existing_chunks + new_chunks
+                logger.info(
+                    "[revise_query] Corroboration added %d new chunks for claim %s",
+                    len(new_chunks), report_id,
+                )
+        except Exception as exc:
+            logger.warning(
+                "[revise_query] Corroboration failed for claim %s: %s", report_id, exc
+            )
+
+    return {
+        "graph_context": graph_context,
+        "retry_counts": retry_counts,
+        "evidence_chunks": evidence_chunks,
+    }
 
 
 def publish_node(state: PipelineState) -> dict[str, Any]:

@@ -11,10 +11,18 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from dataclasses import asdict
 from pathlib import Path
 
 from .models import DailyReport, Claim, Verdict
+
+
+def _bare_domain(url: str) -> str:
+    """Return a short readable domain from a full URL (e.g. 'factcheck.org')."""
+    url = url or ""
+    url = re.sub(r"^https?://", "", url).split("/")[0]
+    return re.sub(r"^www\.", "", url).lower() or "unknown source"
 
 logger = logging.getLogger(__name__)
 
@@ -116,12 +124,29 @@ class Publisher:
                 f"<li>{e}</li>" for e in verdict.key_evidence
             )
             retrieved_hits = report.retrieval_hits.get(verdict.claim_id, [])
+
+            # Collect distinct domains for the sources-diversity summary
+            seen_domains: list[str] = []
+            for hit in retrieved_hits[:5]:
+                d = _bare_domain(hit.chunk.source_url)
+                if d not in seen_domains:
+                    seen_domains.append(d)
+            domain_tags = "".join(
+                f'<span class="domain-tag">{d}</span>' for d in seen_domains
+            )
+            sources_summary = (
+                f'<p class="sources-summary">'
+                f'Evidence sources ({len(seen_domains)}): {domain_tags}'
+                f'</p>'
+            )
+
             retrieved_items = "".join(
                 (
-                    f"<li><strong>{hit.chunk.chunk_kind}</strong> · "
+                    f"<li>"
+                    f"<span class=\"chunk-domain\">{_bare_domain(hit.chunk.source_url)}</span> · "
+                    f"<strong>{hit.chunk.chunk_kind}</strong> · "
                     f"{hit.chunk.section} · "
-                    f"{(hit.chunk.source_url or 'unknown source')} "
-                    f"(score {hit.hybrid_score:.2f})"
+                    f"score {hit.hybrid_score:.2f}"
                     f"<div class=\"retrieved-text\">{hit.chunk.text}</div></li>"
                 )
                 for hit in retrieved_hits[:4]
@@ -169,6 +194,7 @@ class Publisher:
               <h2 class="claim-text">"{claim.text}"</h2>
               <p class="source">Source: <a href="{claim.url or '#'}" target="_blank">{claim.source}</a></p>
               <p class="confidence">Confidence: {int(verdict.confidence * 100)}%</p>
+              {sources_summary}
               <p class="summary">{verdict.summary}</p>
               <details>
                 <summary>Key Evidence</summary>
@@ -267,6 +293,12 @@ def _page_template(title: str, body: str) -> str:
     .score-pct   {{ width: 2.5rem; text-align: right; color: var(--text); }}
     .retry-note  {{ margin-top: .4rem; color: #f97316; font-size: .82rem; }}
     .retrieved-text {{ margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }}
+    /* Source diversity */
+    .sources-summary {{ margin-top: .4rem; font-size: .82rem; color: var(--muted); }}
+    .domain-tag {{ display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }}
+    .chunk-domain {{ color: var(--accent); font-family: monospace; font-size: .8rem; }}
   </style>
 </head>
 <body>
