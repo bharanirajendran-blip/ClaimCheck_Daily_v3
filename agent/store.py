@@ -192,24 +192,44 @@ def _make_id(claim_id: str, section: str, text: str) -> str:
 
 # ── Persistence helpers ────────────────────────────────────────────────────────
 
+# Fields with defaults that may be absent in chunks saved by older code versions.
+_CHUNK_DEFAULTS: dict[str, object] = {
+    "chunk_kind": "summary",
+    "source_url":  "",
+    "claim_text":  "",
+    "date_slug":   "",
+    "section":     "",
+}
+
+
+def _normalize_chunk_dict(item: dict) -> dict:
+    """Backfill any fields that were added after the initial schema so every
+    chunk in every artifact has a consistent, complete set of fields."""
+    for field, default in _CHUNK_DEFAULTS.items():
+        if field not in item or item[field] is None:
+            item[field] = default
+    return item
+
+
 def _upsert_json_list(path: Path, new_items: list[dict]) -> None:
-    """Write new_items to path, deduplicating by chunk_id so repeated same-day
-    runs don't accumulate duplicate entries in the daily evidence file."""
+    """Write new_items to path, deduplicating by chunk_id and normalising
+    any legacy chunks so the daily file stays consistent across runs."""
     existing: dict[str, dict] = {}
     if path.exists():
         for item in json.loads(path.read_text(encoding="utf-8")):
-            existing[item["chunk_id"]] = item
+            existing[item["chunk_id"]] = _normalize_chunk_dict(item)
     for item in new_items:
-        existing[item["chunk_id"]] = item
+        existing[item["chunk_id"]] = _normalize_chunk_dict(item)
     path.write_text(json.dumps(list(existing.values()), indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def _upsert_cumulative(path: Path, new_chunks: list[EvidenceChunk]) -> None:
-    """Merge new chunks into the cumulative store, deduplicating by chunk_id."""
+    """Merge new chunks into the cumulative store, deduplicating by chunk_id
+    and normalising any legacy chunks on the way through."""
     existing: dict[str, dict] = {}
     if path.exists():
         for item in json.loads(path.read_text(encoding="utf-8")):
-            existing[item["chunk_id"]] = item
+            existing[item["chunk_id"]] = _normalize_chunk_dict(item)
 
     for chunk in new_chunks:
         existing[chunk.chunk_id] = chunk.model_dump()
