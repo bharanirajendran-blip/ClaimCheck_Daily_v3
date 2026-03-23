@@ -45,7 +45,7 @@
     "claim_text": "Apollo 11 landed on the Moon in 1969.",
     "source_url": "https://www.nasa.gov/mission/apollo-11/",
     "section": "Fetched Source 1.5",
-    "text": "\n\n3 days ago\n\n \n\n4 min read\n\nNASA’s Roman Observatory Passes Final Major Prelaunch Tests\n\narticle\n\n4 days ago\n\n \n\n5 min read\n\nNASA’s Hubble Unexpectedly Catches Comet Breaking Up\n\narticle\n\n5 days ago\n\nHighlights\n\n \n\n4 min read\n\nThe Science Behind ‘Project Hail Mary’\n\narticle\n\n3 days ago\n\n \n\n4 min read\n\nMeet the Platypi: NASA’s Newest Astronaut Candidate Class \n\narticle\n\n4 days ago\n\n \n\n3 min read\n\nIce to Fuel: NASA Tests Technology for Refueling Landers \n\narticle\n\n2 weeks ago\n\nHighlights\n\n \n\n5 min read\n\nA Fault Line in Full Bloom\n\narticle\n\n9 hours ago\n\n \n\n4 min read\n\nThe Science Behind ‘Project Hail Mary’\n\narticle\n\n3 days ago\n\n \n\n3 min read\n\nRestless Kīlauea Launches Lava and Ash\n\narticle\n\n3 ",
+    "text": "\n\n3 days ago\n\n \n\n4 min read\n\nNASA’s Roman Observatory Passes Final Major Prelaunch Tests\n\narticle\n\n4 days ago\n\n \n\n5 min read\n\nNASA’s Hubble Unexpectedly Catches Comet Breaking Up\n\narticle\n\n5 days ago\n\nHighlights\n\n \n\n4 min read\n\nThe Science Behind ‘Project Hail Mary’\n\narticle\n\n3 days ago\n\n \n\n4 min read\n\nMeet the Platypi: NASA’s Newest Astronaut Candidate Class \n\narticle\n\n4 days ago\n\n \n\n3 min read\n\nIce to Fuel: NASA Tests Technology for Refueling Landers \n\narticle\n\n2 weeks ago\n\nHighlights\n\n \n\n5 min read\n\nA Fault Line in Full Bloom\n\narticle\n\n10 hours ago\n\n \n\n4 min read\n\nThe Science Behind ‘Project Hail Mary’\n\narticle\n\n3 days ago\n\n \n\n3 min read\n\nRestless Kīlauea Launches Lava and Ash\n\narticle\n\n3",
     "date_slug": "2026-03-23",
     "chunk_kind": "raw_source"
   },
@@ -235,7 +235,7 @@
     "claim_text": "Apollo 11 landed on the Moon in 1969.",
     "source_url": "https://www.nasa.gov/mission/apollo-11/",
     "section": "Overview",
-    "text": "I have excellent information from both authoritative sources. Let me compile my findings.\n\n---",
+    "text": "I have excellent information from both authoritative sources. Let me compile my analysis.\n\n---",
     "date_slug": "2026-03-23",
     "chunk_kind": "summary"
   },
@@ -255,7 +255,7 @@
     "claim_text": "Apollo 11 landed on the Moon in 1969.",
     "source_url": "https://www.nasa.gov/mission/apollo-11/",
     "section": "Evidence Assessment",
-    "text": "Both sources—NASA (the official U.S. space agency that conducted the mission) and Britannica (an established encyclopedia)—**fully confirm** the claim. According to Britannica, Apollo 11 was \"the first space mission to put people on the Moon\" and was launched on **July 16, 1969**. The lunar module *Eagle* landed on the Moon on **July 20, 1969**, with astronauts Neil Armstrong and Buzz Aldrin becoming the first humans to walk on the lunar surface. Command module pilot Michael Collins remained in lunar orbit. The mission concluded with splashdown in the Pacific Ocean on July 24, 1969.\n\nNASA's official Apollo 11 mission page exists as a dedicated resource documenting this historic spaceflight. ",
+    "text": "Both sources—NASA (the official U.S. space agency that conducted the mission) and Britannica (an established encyclopedia)—confirm the claim with high precision.\n\n**Britannica** explicitly states:\n- Apollo 11 was \"the first space mission to put people on the Moon\"\n- It was \"launched on July 16, 1969\"\n- The lunar module *Eagle* \"landed on the Moon on July 20, 1969\"\n- Neil Armstrong and Buzz Aldrin \"became the first people to land on the Moon and walk on the lunar surface\"\n- The mission achieved splashdown on July 24, 1969\n- Crew members were: Commander Neil Armstrong, Lunar Module Pilot Buzz Aldrin, and Command Module Pilot Michael Collins\n\n**NASA's official Apollo 11 mission page** exists as",
     "date_slug": "2026-03-23",
     "chunk_kind": "summary"
   },
@@ -316,6 +316,86 @@
     "source_url": "https://www.britannica.com/event/Apollo-11",
     "section": "Key Sources",
     "text": "Source: Britannica - Apollo 11. URL: https://www.britannica.com/event/Apollo-11. Reliability: High (established encyclopedia, fact-checked).",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "source_metadata"
+  },
+  {
+    "chunk_id": "354abaefb582",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Fetched Source 1.6",
+    "text": " days ago\n\nHighlights\n\n \n\n5 min read\n\nHow Open NASA Data on Comet 3I/ATLAS Will Power Tomorrow’s Discoveries\n\narticle\n\n3 days ago\n\n \n\n4 min read\n\nThe Science Behind ‘Project Hail Mary’\n\narticle\n\n3 days ago\n\n \n\n5 min read\n\nNASA’s Hubble Unexpectedly Catches Comet Breaking Up\n\narticle\n\n5 days ago\n\nFeatured\n\n \n\n4 min read\n\nThe Science Behind ‘Project Hail Mary’\n\narticle\n\n3 days ago\n\n \n\n4 min read\n\nNASA’s Roman Observatory Passes Final Major Prelaunch Tests\n\narticle\n\n4 days ago\n\n \n\n6 min read\n\nNASA \n\n[Content truncated]",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "raw_source"
+  },
+  {
+    "chunk_id": "2f3617cbe667",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Sub-questions",
+    "text": "1. Did a mission called \"Apollo 11\" exist?\n2. Was Apollo 11 a lunar landing mission?\n3. Did Apollo 11 land on the Moon successfully?\n4. Did this occur in the year 1969?\n5. What are the specific dates of the mission?",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "summary"
+  },
+  {
+    "chunk_id": "7c704f1c15b4",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Supporting evidence",
+    "text": "- **Britannica confirms**: \"Apollo 11, the first space mission to put people on the Moon, was launched on July 16, 1969\" and landed on July 20, 1969\n- **Britannica confirms**: Mission objective was \"to land astronauts on the Moon and return them safely back to Earth. It succeeded in its objective\"\n- **NASA maintains an official mission page** for Apollo 11 at nasa.gov/mission/apollo-11/\n- Multiple cross-references cited by Britannica include: Smithsonian National Air and Space Museum, BBC, Space.com, and The Planetary Society",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "summary"
+  },
+  {
+    "chunk_id": "669c12a9184d",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Contradicting evidence",
+    "text": "- **None found.** Both authoritative sources fully corroborate the claim.",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "summary"
+  },
+  {
+    "chunk_id": "ec859e441f0b",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Caveats & Missing Context",
+    "text": "The claim as stated is accurate but simplified. More complete context includes:\n- The **launch date** was July 16, 1969\n- The **lunar landing** occurred on July 20, 1969\n- The **return to Earth** (splashdown) was July 24, 1969\n- Only two of the three astronauts (Armstrong and Aldrin) actually landed on the Moon; Michael Collins remained in lunar orbit aboard the command module\n\nThis is one of the most thoroughly documented events in modern history, witnessed live by hundreds of millions of people worldwide.",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "summary"
+  },
+  {
+    "chunk_id": "72d53af61eea",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Key Sources",
+    "text": "| Title | URL | Reliability |\n|-------|-----|-------------|\n| NASA Apollo 11 Official Mission Page | https://www.nasa.gov/mission/apollo-11/ | **High** (primary source, official U.S. government space agency) |\n| Britannica - Apollo 11 | https://www.britannica.com/event/Apollo-11 | **High** (established encyclopedia, fact-checked) |\n\n---",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "summary"
+  },
+  {
+    "chunk_id": "8bfadf1ab676",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Verdict: ✅ TRUE",
+    "text": "The claim \"Apollo 11 landed on the Moon in 1969\" is **fully accurate**. Apollo 11 launched on July 16, 1969, and successfully landed on the Moon on July 20, 1969, making Neil Armstrong and Buzz Aldrin the first humans to walk on the lunar surface.",
+    "date_slug": "2026-03-23",
+    "chunk_kind": "summary"
+  },
+  {
+    "chunk_id": "91cb26c2781b",
+    "claim_id": "96cc84d3",
+    "claim_text": "Apollo 11 landed on the Moon in 1969.",
+    "source_url": "https://www.nasa.gov/mission/apollo-11/",
+    "section": "Key Sources",
+    "text": "Source: NASA Apollo 11 Official Mission Page. URL: https://www.nasa.gov/mission/apollo-11/. Reliability: High (primary source, official U.S. government space agency).",
     "date_slug": "2026-03-23",
     "chunk_kind": "source_metadata"
   }
