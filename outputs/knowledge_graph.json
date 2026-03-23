@@ -1,0 +1,23 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "claim",
+      "text": "EPA’s Misleading Claim of $1.3 Trillion in Deregulatory ‘Savings’",
+      "id": "8e1baa46"
+    },
+    {
+      "type": "claim",
+      "text": "This 67,800-year-old handprint is the oldest art ever found",
+      "id": "a94480d8"
+    },
+    {
+      "type": "claim",
+      "text": "The Pentagon is planning for AI companies to train on classified data, defense official says",
+      "id": "d2a63ebd"
+    }
+  ],
+  "links": []
+}

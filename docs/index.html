@@ -31,19 +31,24 @@
     .archive li { margin: .4rem 0; }
     footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
               border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
   </style>
 </head>
 <body>
 
             <header><h1>ClaimCheck Daily</h1><p>Automated fact-checking, every day.</p></header>
             <main>
-              <h2>Latest: <a href="2026-03-07.html">2026-03-07</a></h2>
+              <h2>Latest: <a href="2026-03-23.html">2026-03-23</a></h2>
               <h3>Archive</h3>
-<<<<<<< HEAD
-              <ul class="archive"><li><a href="2026-03-07.html">2026-03-07</a></li><li><a href="2026-03-06.html">2026-03-06</a></li><li><a href="2026-03-02.html">2026-03-02</a></li></ul>
-=======
-              <ul class="archive"><li><a href="2026-03-07.html">2026-03-07</a></li><li><a href="2026-03-02.html">2026-03-02</a></li></ul>
->>>>>>> d6ec1be9dc910d4258c6133c8a1e961329b9571c
+              <ul class="archive"><li><a href="2026-03-23.html">2026-03-23</a></li><li><a href="2026-03-07.html">2026-03-07</a></li><li><a href="2026-03-06.html">2026-03-06</a></li><li><a href="2026-03-02.html">2026-03-02</a></li></ul>
             </main>
             <footer>Powered by Claude + GPT-4o · <a href="https://github.com">Source</a></footer>
 </body>

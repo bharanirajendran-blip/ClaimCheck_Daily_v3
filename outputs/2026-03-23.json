@@ -1,0 +1,43 @@
+{
+  "date": "2026-03-23",
+  "generated_at": "2026-03-23T03:35:35Z",
+  "results": [
+    {
+      "claim": "EPA’s Misleading Claim of $1.3 Trillion in Deregulatory ‘Savings’",
+      "source": "FactCheck.org",
+      "verdict": "MOSTLY_TRUE",
+      "confidence": 0.9,
+      "summary": "The claim that the EPA's $1.3 trillion figure is misleading is mostly true. The EPA's calculation only considers costs, excluding significant benefits such as fuel savings, reduced maintenance, and health and environmental improvements. This selective presentation skews the overall cost-benefit analysis, as the EPA's own data suggests a potential net cost when benefits are included.",
+      "key_evidence": [
+        "The $1.3 trillion figure comes from the EPA's regulatory impact analysis, focusing solely on technology and equipment costs.",
+        "The EPA's own calculations, when including fuel savings, show a potential net cost of $180 billion.",
+        "Experts like Jason Schwartz and Kenneth Gillingham criticize the framing as biased and misleading."
+      ]
+    },
+    {
+      "claim": "This 67,800-year-old handprint is the oldest art ever found",
+      "source": "Science Daily — Top Science",
+      "verdict": "MOSTLY_TRUE",
+      "confidence": 0.9,
+      "summary": "The claim that a 67,800-year-old handprint is the oldest art ever found is mostly true. The hand stencil, found in a cave in Sulawesi, Indonesia, has been dated using uranium-series dating to at least 67,800 years ago, making it the oldest reliably dated cave art. However, the definition of 'art' can vary, and other symbolic artifacts might be older. The research is credible, conducted by a reputable international team, and uses established dating methods.",
+      "key_evidence": [
+        "The claim that a 67,800-year-old handprint is 'the oldest art ever found' appears largely accurate with important caveats. The source article from Science Daily reports on research led by credible institutions (Griffith University and Indonesia's BRIN), using established uranium-series dating methods—the same technique that has been used successfully to date other ancient cave art in the region.",
+        "The discovery builds on previous work by the same team, which identified progressively older cave art in Sulawesi over the past decade. The 2024 finding (previously the oldest) is now surpassed by at least 15,000 years. The research appears methodologically sound: uranium-series dating of calcite layers provides minimum ages, and the team examined layers both over and beneath the artwork for accuracy.",
+        "The claim applies to cave art/rock art. Other symbolic artifacts—such as the ~77,000-year-old ochre engravings from Blombos Cave, South Africa, or ~100,000+ year-old shell beads—might be considered 'art' by some definitions.",
+        "The hand stencil in Sulawesi, dated via uranium-series analysis to at least 67,800 years ago, is credibly the oldest reliably dated cave art discovered to date. The caveat is that 'oldest art' depends on how one defines art; other symbolic objects may be older."
+      ]
+    },
+    {
+      "claim": "The Pentagon is planning for AI companies to train on classified data, defense official says",
+      "source": "MIT Technology Review",
+      "verdict": "MOSTLY_TRUE",
+      "confidence": 0.85,
+      "summary": "The claim that the Pentagon is planning for AI companies to train on classified data is mostly true. The MIT Technology Review article provides credible evidence from an anonymous defense official that discussions are underway to set up secure environments for AI training on classified data. However, the plans are still in the discussion phase, and there is no official on-record confirmation from the Pentagon.",
+      "key_evidence": [
+        "A US defense official confirmed to MIT Technology Review that training AI models on classified data 'is expected to make them more accurate and effective in certain tasks.'",
+        "The article states that the Pentagon is discussing plans to set up secure environments for AI companies to train military-specific versions of their models on classified data.",
+        "The Pentagon intends to first evaluate model accuracy using non-classified data before proceeding with classified training, indicating early-stage discussions."
+      ]
+    }
+  ]
+}

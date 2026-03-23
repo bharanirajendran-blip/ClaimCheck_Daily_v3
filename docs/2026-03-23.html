@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-03-23</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive li { margin: .4rem 0; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-03-23</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              <h2 class="claim-text">"EPA’s Misleading Claim of $1.3 Trillion in Deregulatory ‘Savings’"</h2>
+              <p class="source">Source: <a href="https://www.factcheck.org/2026/03/epas-misleading-claim-of-1-3-trillion-in-deregulatory-savings/" target="_blank">FactCheck.org</a></p>
+              <p class="confidence">Confidence: 90%</p>
+              <p class="summary">The claim that the EPA's $1.3 trillion figure is misleading is mostly true. The EPA's calculation only considers costs, excluding significant benefits such as fuel savings, reduced maintenance, and health and environmental improvements. This selective presentation skews the overall cost-benefit analysis, as the EPA's own data suggests a potential net cost when benefits are included.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>The $1.3 trillion figure comes from the EPA's regulatory impact analysis, focusing solely on technology and equipment costs.</li><li>The EPA's own calculations, when including fuel savings, show a potential net cost of $180 billion.</li><li>Experts like Jason Schwartz and Kenneth Gillingham criticize the framing as biased and misleading.</li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              <h2 class="claim-text">"This 67,800-year-old handprint is the oldest art ever found"</h2>
+              <p class="source">Source: <a href="https://www.sciencedaily.com/releases/2026/03/260322020300.htm" target="_blank">Science Daily — Top Science</a></p>
+              <p class="confidence">Confidence: 90%</p>
+              <p class="summary">The claim that a 67,800-year-old handprint is the oldest art ever found is mostly true. The hand stencil, found in a cave in Sulawesi, Indonesia, has been dated using uranium-series dating to at least 67,800 years ago, making it the oldest reliably dated cave art. However, the definition of 'art' can vary, and other symbolic artifacts might be older. The research is credible, conducted by a reputable international team, and uses established dating methods.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>The claim that a 67,800-year-old handprint is 'the oldest art ever found' appears largely accurate with important caveats. The source article from Science Daily reports on research led by credible institutions (Griffith University and Indonesia's BRIN), using established uranium-series dating methods—the same technique that has been used successfully to date other ancient cave art in the region.</li><li>The discovery builds on previous work by the same team, which identified progressively older cave art in Sulawesi over the past decade. The 2024 finding (previously the oldest) is now surpassed by at least 15,000 years. The research appears methodologically sound: uranium-series dating of calcite layers provides minimum ages, and the team examined layers both over and beneath the artwork for accuracy.</li><li>The claim applies to cave art/rock art. Other symbolic artifacts—such as the ~77,000-year-old ochre engravings from Blombos Cave, South Africa, or ~100,000+ year-old shell beads—might be considered 'art' by some definitions.</li><li>The hand stencil in Sulawesi, dated via uranium-series analysis to at least 67,800 years ago, is credibly the oldest reliably dated cave art discovered to date. The caveat is that 'oldest art' depends on how one defines art; other symbolic objects may be older.</li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:92%;background:hsl(111,70%,45%)"></div></div><span class="score-pct">92%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              <h2 class="claim-text">"The Pentagon is planning for AI companies to train on classified data, defense official says"</h2>
+              <p class="source">Source: <a href="https://www.technologyreview.com/2026/03/17/1134351/the-pentagon-is-planning-for-ai-companies-to-train-on-classified-data-defense-official-says/" target="_blank">MIT Technology Review</a></p>
+              <p class="confidence">Confidence: 85%</p>
+              <p class="summary">The claim that the Pentagon is planning for AI companies to train on classified data is mostly true. The MIT Technology Review article provides credible evidence from an anonymous defense official that discussions are underway to set up secure environments for AI training on classified data. However, the plans are still in the discussion phase, and there is no official on-record confirmation from the Pentagon.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>A US defense official confirmed to MIT Technology Review that training AI models on classified data 'is expected to make them more accurate and effective in certain tasks.'</li><li>The article states that the Pentagon is discussing plans to set up secure environments for AI companies to train military-specific versions of their models on classified data.</li><li>The Pentagon intends to first evaluate model accuracy using non-classified data before proceeding with classified training, indicating early-stage discussions.</li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:70%;background:hsl(84,70%,45%)"></div></div><span class="score-pct">70%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-03-23T03:35:35Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>
