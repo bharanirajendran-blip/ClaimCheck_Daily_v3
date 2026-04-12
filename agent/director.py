@@ -16,7 +16,16 @@ from typing import Any
 
 from openai import OpenAI
 
-from .models import Claim, DailyReport, ResearchResult, RetrievalHit, Verdict, VerdictLabel, VerifierReport
+from .models import (
+    Claim,
+    DailyReport,
+    ResearchResult,
+    RetrievalHit,
+    ReviewQueueItem,
+    Verdict,
+    VerdictLabel,
+    VerifierReport,
+)
 from .utils import retry
 
 logger = logging.getLogger(__name__)
@@ -163,6 +172,7 @@ class Director:
         claims: list[Claim],
         retrieval_hits: dict[str, list[RetrievalHit]] | None = None,
         verifier_reports: dict[str, VerifierReport] | None = None,
+        review_queue: dict[str, ReviewQueueItem] | None = None,
     ) -> DailyReport:
         """Assemble the final DailyReport Pydantic model."""
         claim_map = {c.id: c for c in claims}
@@ -171,6 +181,7 @@ class Director:
             claims=[claim_map[v.claim_id] for v in verdicts if v.claim_id in claim_map],
             retrieval_hits=retrieval_hits or {},
             verifier_reports=verifier_reports or {},
+            review_queue=review_queue or {},
         )
 
     # ------------------------------------------------------------------

@@ -26,6 +26,7 @@ from __future__ import annotations
 import hashlib
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -34,9 +35,10 @@ from langgraph.graph import END, START, StateGraph
 from .director import Director
 from .feeds import harvest_claims
 from .graph import get_related_context, update_graph
-from .models import Claim, DailyReport, PipelineState, ResearchResult
+from .models import Claim, DailyReport, PipelineState, ResearchResult, ReviewQueueItem
 from .publisher import Publisher
 from .researcher import Researcher
+from .review_queue import upsert_review_queue
 from .retriever import HybridRetriever, build_retrieval_query
 from .store import load_all_chunks, store_research
 import re as _re
@@ -47,6 +49,8 @@ logger = logging.getLogger(__name__)
 
 FALLBACK_RETRIEVAL_SCORE_FLOOR = 0.2
 _ERROR_FETCH_PREFIX = "Error fetching page"
+REVIEW_CONFIDENCE_THRESHOLD = 0.60
+REVIEW_VERIFIER_SCORE_THRESHOLD = 0.75
 
 # Lazily-initialised singletons — not created until first node call,
 # so API keys are guaranteed to be loaded from .env before instantiation.
@@ -304,6 +308,21 @@ def _extract_domain(url: str) -> str:
     return _re.sub(r"^www\.", "", url).lower()
 
 
+def _review_reason(verdict, verifier_report) -> str:
+    reasons: list[str] = []
+    if verdict.confidence < REVIEW_CONFIDENCE_THRESHOLD:
+        reasons.append(
+            f"Model confidence {verdict.confidence:.2f} is below the review threshold "
+            f"of {REVIEW_CONFIDENCE_THRESHOLD:.2f}."
+        )
+    if verifier_report and verifier_report.overall_score < REVIEW_VERIFIER_SCORE_THRESHOLD:
+        reasons.append(
+            f"Verifier overall score {verifier_report.overall_score:.2f} is below the "
+            f"review threshold of {REVIEW_VERIFIER_SCORE_THRESHOLD:.2f}."
+        )
+    return " ".join(reasons)
+
+
 def revise_query_node(state: PipelineState) -> dict[str, Any]:
     """
     Node 9 — Build refined retrieval queries from verifier missing_citations.
@@ -371,6 +390,46 @@ def revise_query_node(state: PipelineState) -> dict[str, Any]:
     }
 
 
+def review_gate_node(state: PipelineState) -> dict[str, Any]:
+    """
+    Week 11 slice — queue low-confidence claims for human review.
+    This does not pause execution yet; it persists a review queue entry and
+    marks the claim as pending review in the published artifacts.
+    """
+    review_queue = dict(state.review_queue)
+    pending_items: list[ReviewQueueItem] = []
+    date_slug = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    for verdict in state.verdicts:
+        verifier_report = state.verifier_reports.get(verdict.claim_id)
+        reason = _review_reason(verdict, verifier_report)
+        if not reason:
+            continue
+
+        claim = next((c for c in state.selected if c.id == verdict.claim_id), None)
+        item = ReviewQueueItem(
+            review_id=f"{date_slug}:{verdict.claim_id}",
+            claim_id=verdict.claim_id,
+            claim_text=claim.text if claim else "",
+            source=claim.source if claim else "",
+            date_slug=date_slug,
+            verdict=verdict.verdict,
+            confidence=verdict.confidence,
+            verifier_score=verifier_report.overall_score if verifier_report else None,
+            reason=reason,
+        )
+        review_queue[verdict.claim_id] = item
+        pending_items.append(item)
+
+    if pending_items:
+        upsert_review_queue(state.outputs_dir, pending_items)
+        logger.info("[review_gate] Queued %d claim(s) for manual review.", len(pending_items))
+    else:
+        logger.info("[review_gate] No claims required manual review.")
+
+    return {"review_queue": review_queue}
+
+
 def publish_node(state: PipelineState) -> dict[str, Any]:
     """Node 10 — Publisher renders HTML to docs/ and JSON to outputs/.
     Passes verifier_reports and retrieval_hits into DailyReport so the
@@ -381,6 +440,7 @@ def publish_node(state: PipelineState) -> dict[str, Any]:
         state.selected,
         retrieval_hits=state.retrieval_hits,
         verifier_reports=state.verifier_reports,
+        review_queue=state.review_queue,
     )
     Publisher(docs_dir=state.docs_dir, outputs_dir=state.outputs_dir).publish(report)
     logger.info("[publish] Report written → %s/%s.html", state.docs_dir, report.date_slug)
@@ -435,6 +495,7 @@ def build_graph() -> StateGraph:
     graph.add_node("verdict",        verdict_node)
     graph.add_node("verify",         verify_node)
     graph.add_node("revise_query",   revise_query_node)
+    graph.add_node("review_gate",    review_gate_node)
     graph.add_node("publish",        publish_node)
 
     # Linear spine
@@ -455,9 +516,10 @@ def build_graph() -> StateGraph:
     graph.add_conditional_edges(
         "verify",
         should_retry_verdict,
-        {"revise": "revise_query", "publish": "publish"},
+        {"revise": "revise_query", "publish": "review_gate"},
     )
     graph.add_edge("revise_query",   "retrieve")
+    graph.add_edge("review_gate",    "publish")
 
     graph.add_edge("publish",        END)
 

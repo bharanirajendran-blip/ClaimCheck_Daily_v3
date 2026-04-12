@@ -1,143 +1,120 @@
 # ClaimCheck Daily v3
 
-An automated fact-checking pipeline extending v2 with multi-agent workflows, an MCP server, human-in-the-loop confidence routing, and vector-based persistent memory.
+ClaimCheck Daily v3 is the current development branch of the ClaimCheck project. At the moment, the implemented system is the proven `v2` fact-checking pipeline plus an MCP server interface for running manual checks and exploring stored artifacts.
 
 **Repo:** https://github.com/bharanirajendran-blip/ClaimCheck_Daily_v3
 
-**Built on:** ClaimCheck Daily v2 — which introduced RAG, hybrid retrieval, LLM-as-a-Judge, and a self-correcting retry loop.
+**Current implemented scope**
+- Core `v2` runtime: LangGraph pipeline, hybrid retrieval, knowledge graph, LLM-as-a-Judge verification, retry loop, HTML/JSON publishing
+- Week 9 addition: MCP server in [agent/mcp_server.py](/Users/Bharani/Desktop/DS/Grad5900App_AgenticAI/ClaimCheck_Daily_v3/agent/mcp_server.py:1)
 
-**v3 adds:** MCP server (Week 9), Supervisor + specialist researchers + Debate pattern (Week 10), HITL confidence routing + vector memory + checkpointing (Week 11).
+**Planned, not yet integrated into the runtime graph**
+- Week 10: supervisor/specialist routing, debate, reflection
+- Week 11: confidence-based HITL interrupts, persistent memory, checkpointing
 
-**Core idea:** `research → store → retrieve → verify → revise` extended with `supervise → debate → reflect → interrupt → remember`.
+**Core idea today:** `research → store → retrieve → verify → revise`, with an MCP entry point for single-claim checks and archive lookup.
 
----
+## What's Implemented
 
-## What's New in v3
+### Fact-checking pipeline
+- Pulls claims from RSS feeds or accepts a manual `--claim`
+- Researches each claim with Claude using a ReAct-style `fetch_url` loop
+- Stores reusable evidence chunks across runs
+- Retrieves evidence with hybrid TF-IDF + BM25 ranking
+- Injects lightweight graph context from prior claims sharing source domains
+- Generates grounded verdicts with GPT-4o
+- Verifies verdict quality with an independent GPT-4o judge
+- Retries weak verdicts with refined retrieval queries and corroboration fetches
+- Publishes HTML and JSON reports
 
-### Week 9 — MCP Server
-ClaimCheck is now also an MCP server (`agent/mcp_server.py`). Any MCP-compatible host (Claude Desktop, custom app) can connect and call:
-- `check_claim(text)` — run the full pipeline on a single claim
-- `search_evidence(query)` — semantic search over the evidence store
-- `get_verdict_history(date?)` — retrieve past verdicts from the archive
+### MCP server
+ClaimCheck can also run as an MCP server. Any MCP-compatible host can call:
+- `check_claim(text)` — run the full pipeline on one claim
+- `search_evidence(query, k=5)` — search the stored evidence store with the same hybrid retriever used by the pipeline
+- `get_verdict_history(date?)` — fetch archived verdicts from daily and manual runs
 
-### Week 10 — Multi-Agent: Supervisor + Specialists + Debate
-- **Supervisor pattern** routes each claim to a domain-specialist researcher (science, politics, health, tech) with tuned prompts and preferred sources
-- **Debate pattern** triggers for MIXED/low-confidence verdicts: Advocate defends the verdict, Devil's Advocate challenges it, Judge synthesises
-- **Self-reflection** pass: a Critic agent reviews each verdict before publish, flagging unsupported claims and logical gaps
+Manual MCP checks use the same `docs_manual` / `outputs_manual` convention as the CLI, and the read tools search across both daily and manual artifact stores.
 
-### Week 11 — HITL + Vector Memory
-- **Confidence-based routing**: score ≥ 0.85 → auto-publish; 0.60–0.85 → suggest + confirm; < 0.60 → `interrupt()` and pause for human review
-- **LangGraph `interrupt()`** breakpoints at verdict_node for low-confidence claims
-- **ChromaDB vector memory** replaces TF-IDF/BM25 for semantic cross-run retrieval, entity memory, and episodic recall
-- **SQLite checkpointing** — runs survive crashes and can be resumed from any node
+## Current Pipeline
 
----
-
-## Full Pipeline
-
+```text
+START
+  │
+  ▼
+harvest_node          ← parse RSS/Atom feeds → candidate claims
+  │
+  ▼
+select_node           ← Director picks top claims
+  │
+  ▼
+research_node         ← Researcher investigates each claim
+  │
+  ▼
+store_evidence_node   ← chunk + persist evidence
+  │
+  ▼
+graph_context_node    ← update knowledge graph + retrieve related context
+  │
+  ▼
+retrieve_node         ← hybrid TF-IDF + BM25 retrieval
+  │
+  ▼
+verdict_node          ← grounded verdict synthesis
+  │
+  ▼
+verify_node           ← LLM-as-a-Judge
+  │
+  ├── retry? ──► revise_query_node ──► retrieve_node
+  │
+  └── pass ──► publish_node ──► END
 ```
-feeds.yaml
-    │
-    ▼
-harvest_node ──► select_node ──► supervisor_node ──► specialist_research_node
-                  (GPT-4o)        (routes by domain:    (Science / Politics /
-                                   science, politics,    Health / Tech researcher)
-                                   health, tech)              │
-                                                        store_evidence_node
-                                                              │
-                                                        graph_context_node
-                                                              │
-                                                        retrieve_node
-                                                        (ChromaDB vector +
-                                                         claim-local-first)
-                                                              │
-                                                        verdict_node
-                                                        (GPT-4o RAG)
-                                                              │
-                                                        reflect_node ◄──────────────┐
-                                                        (Critic pass)               │
-                                                              │                     │
-                                                        verify_node                 │
-                                                        (LLM-as-a-Judge)           │
-                                                              │                     │
-                              ┌─────── low confidence? ──────┤                     │
-                              │   interrupt() → human review │                     │
-                              │                              │                     │
-                              ├─────── retry? ───────────────┘                     │
-                              │   (revise_query + debate_node) ────────────────────┘
-                              │
-                              └─────── passed ──► publish_node ──► END
-```
 
----
+The MCP server is an interface layer on top of this runtime. It does not add extra LangGraph nodes today.
 
 ## Components
 
-| Component | Role | Model |
+| Component | Role | Model / Library |
 |---|---|---|
-| Director | Claim selection | GPT-4o |
-| Supervisor | Routes claims to domain-specialist researcher | GPT-4o |
-| Specialist Researcher | Domain-tuned ReAct research loop (×4 specialists) | Claude + extended thinking |
-| Debate agents | Advocate + Devil's Advocate + Judge for low-confidence verdicts | GPT-4o |
-| Critic | Self-reflection pass on each verdict before publish | GPT-4o |
-| fetch_url tool | Fetches and strips article HTML to plain text | httpx + BeautifulSoup |
-| Evidence Store | Chunks raw fetched pages + summaries; persists across runs | — |
-| ChromaDB | Vector memory for semantic retrieval + entity/episodic memory | text-embedding-3-small |
-| Knowledge Graph | Links claims → sources across runs; injects cross-run context | networkx |
-| Verifier | Independent LLM-as-a-Judge scoring on 4-dimension rubric | GPT-4o |
-| MCP Server | Exposes check_claim, search_evidence, get_verdict_history tools | — |
-| Publisher | HTML + JSON output with source diversity, retrieved evidence, quality scores | — |
-
----
-
-## Verdict Labels
-
-| Label | Meaning |
-|---|---|
-| ✅ TRUE | Claim is accurate |
-| 🟢 MOSTLY TRUE | Accurate with minor caveats |
-| 🟡 MIXED | Partially true, partially false |
-| 🟠 MOSTLY FALSE | Misleading or largely inaccurate |
-| ❌ FALSE | Claim is inaccurate |
-| ❔ UNVERIFIABLE | Insufficient evidence to judge |
-
----
+| Director | Claim selection and verdict synthesis | GPT-4o |
+| Researcher | Live web research with ReAct tool use | Claude |
+| `fetch_url` tool | Fetches and strips article HTML to plain text | `httpx` + BeautifulSoup |
+| Evidence Store | Persists raw source, summary, and source-metadata chunks | JSON artifacts |
+| Knowledge Graph | Links claims to source domains for cross-run context | `networkx` |
+| HybridRetriever | TF-IDF + BM25 retrieval with claim-local-first merge | `scikit-learn` + custom BM25 |
+| Verifier | Independent LLM-as-a-Judge rubric scoring | GPT-4o |
+| MCP Server | Exposes ClaimCheck as MCP tools | `mcp` SDK |
+| Publisher | Writes HTML and JSON reports | local renderer |
 
 ## Project Structure
 
-```
+```text
 ClaimCheck_Daily_v3/
 ├── agent/
-│   ├── models.py         Pydantic data models + LangGraph PipelineState
-│   ├── director.py       GPT-4o Director — claim selection
-│   ├── supervisor.py     Supervisor agent — domain routing to specialists
-│   ├── researcher.py     Specialist Researcher agents (science/politics/health/tech)
-│   ├── debate.py         Debate pattern — Advocate + Devil's Advocate + Judge
-│   ├── tools.py          fetch_url tool — live web article fetcher
-│   ├── feeds.py          RSS/Atom feed parser
-│   ├── store.py          Evidence store (raw_source + summary + source_metadata)
-│   ├── retriever.py      ChromaDB vector retriever + claim-local-first logic
-│   ├── graph.py          Knowledge graph (GraphRAG, networkx)
-│   ├── verifier.py       LLM-as-a-Judge (4-dimension rubric)
-│   ├── memory.py         Vector memory — entity, episodic, semantic recall
-│   ├── evals.py          Evaluation harness
-│   ├── pipeline.py       LangGraph StateGraph orchestration + HITL interrupt
-│   ├── publisher.py      HTML + JSON output renderer
-│   ├── mcp_server.py     MCP server — check_claim, search_evidence, get_verdict_history
-│   └── utils.py          retry, logging, env helpers
-├── docs/                 GitHub Pages output (auto-generated)
-├── outputs/              JSON archive + evidence store (auto-generated)
-│   ├── YYYY-MM-DD.json
-│   ├── evidence_YYYY-MM-DD.json
-│   ├── evidence_store.json
-│   ├── knowledge_graph.json
-│   └── chroma_db/        ChromaDB vector store (auto-generated)
+│   ├── __init__.py
+│   ├── director.py
+│   ├── evals.py
+│   ├── feeds.py
+│   ├── graph.py
+│   ├── mcp_server.py
+│   ├── models.py
+│   ├── pipeline.py
+│   ├── publisher.py
+│   ├── researcher.py
+│   ├── retriever.py
+│   ├── store.py
+│   ├── tools.py
+│   ├── utils.py
+│   └── verifier.py
+├── docs/
+├── docs_manual/
+├── outputs/
+├── outputs_manual/
 ├── feeds.yaml
-├── run.py                CLI entry point
-└── SPEC.md               Full technical specification
+├── requirements.txt
+├── run.py
+├── README.md
+└── SPEC.md
 ```
-
----
 
 ## Setup
 
@@ -145,33 +122,22 @@ ClaimCheck_Daily_v3/
 
 | Key | Where to get it |
 |---|---|
-| `ANTHROPIC_API_KEY` | https://console.anthropic.com → API Keys |
+| `ANTHROPIC_API_KEY` | https://console.anthropic.com |
 | `OPENAI_API_KEY` | https://platform.openai.com/api-keys |
 
-### Install & Run
+### Install and run
 
 ```bash
-# 1. Clone the repo
 git clone https://github.com/bharanirajendran-blip/ClaimCheck_Daily_v3.git
 cd ClaimCheck_Daily_v3
-
-# 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Set up API keys
 cp .env.example .env
-# Open .env and add your ANTHROPIC_API_KEY and OPENAI_API_KEY
+# add ANTHROPIC_API_KEY and OPENAI_API_KEY
 
-# 4. Dry run — feed harvest + claim selection only (no research, no cost)
 python run.py --dry-run
-
-# 5. Full pipeline run (~3–5 minutes)
 python run.py
-
-# 6. Test a specific claim
 python run.py --claim "Apollo 11 landed on the Moon in 1969."
-
-# 7. Start the MCP server
 python -m agent.mcp_server
 ```
 
@@ -184,44 +150,32 @@ python run.py --feeds my_feeds.yaml
 python run.py --outputs-dir my_outputs
 ```
 
-### Output files
+## Output Files
 
 | File | Description |
 |---|---|
-| `docs/YYYY-MM-DD.html` | Report with verdicts, debate results, HITL flags, evidence diversity, quality scores |
-| `docs/index.html` | Landing page with links to all past reports |
-| `outputs/YYYY-MM-DD.json` | Machine-readable verdicts with retrieved evidence and verifier report |
-| `outputs/evidence_store.json` | Cumulative chunked evidence store |
-| `outputs/chroma_db/` | Persistent ChromaDB vector store |
-
-Manual `--claim` runs write to `docs_manual/` and `outputs_manual/` — daily `docs/` is never touched.
-
----
-
-## Automated Daily Run (GitHub Actions)
-
-Configured to run at 08:00 UTC via `.github/workflows/daily.yml`. Currently **disabled** to avoid unintended API spend.
-
-**To enable:** Make repo private → add `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` as GitHub Secrets → enable workflow from Actions tab.
-
-**To disable:** Actions tab → select workflow → Disable workflow.
-
----
+| `docs/YYYY-MM-DD.html` | Daily HTML report |
+| `docs/index.html` | Daily report index |
+| `docs_manual/YYYY-MM-DD.html` | Manual-claim HTML report |
+| `docs_manual/index.html` | Manual report index |
+| `outputs/YYYY-MM-DD.json` | Daily JSON report |
+| `outputs/evidence_store.json` | Daily cumulative evidence store |
+| `outputs/knowledge_graph.json` | Daily cumulative knowledge graph |
+| `outputs_manual/YYYY-MM-DD.json` | Manual-claim JSON report |
+| `outputs_manual/evidence_store.json` | Manual-run cumulative evidence store |
+| `outputs_manual/knowledge_graph.json` | Manual-run cumulative knowledge graph |
 
 ## Tech Stack
 
-- [Anthropic Claude](https://www.anthropic.com) — specialist researchers with extended thinking + ReAct tool-use
-- [OpenAI GPT-4o](https://openai.com) — Director, Supervisor, Debate agents, Verifier
-- [LangGraph](https://langchain-ai.github.io/langgraph/) — stateful multi-agent pipeline with HITL interrupt + checkpointing
-- [ChromaDB](https://docs.trychroma.com/) — vector memory store for semantic retrieval
-- [Pydantic v2](https://docs.pydantic.dev) — data validation and state modelling
-- [MCP SDK](https://modelcontextprotocol.io) — MCP server exposing ClaimCheck as a tool provider
-- [networkx](https://networkx.org) — knowledge graph (GraphRAG)
-- [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) — HTML stripping for fetch_url tool
-- [GitHub Pages](https://pages.github.com) — automated publishing
+- [Anthropic Claude](https://www.anthropic.com) for deep research
+- [OpenAI GPT-4o](https://openai.com) for claim selection, verdict synthesis, and verification
+- [LangGraph](https://langchain-ai.github.io/langgraph/) for pipeline orchestration
+- [MCP SDK](https://modelcontextprotocol.io) for the MCP server
+- [Pydantic v2](https://docs.pydantic.dev) for typed models and state
+- [scikit-learn](https://scikit-learn.org) and `numpy` for hybrid retrieval
+- [networkx](https://networkx.org) for graph context
+- [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) for HTML stripping
 
----
+## Course Alignment
 
-## Course
-
-Grad5900 — Agentic AI
+This branch currently has a real implementation through the Week 9 MCP milestone. Week 10 and Week 11 features are still planned work, not shipped runtime behavior yet.

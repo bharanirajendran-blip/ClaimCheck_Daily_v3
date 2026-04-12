@@ -12,10 +12,9 @@ from __future__ import annotations
 import json
 import logging
 import re
-from dataclasses import asdict
 from pathlib import Path
 
-from .models import DailyReport, Claim, Verdict
+from .models import DailyReport
 
 
 def _bare_domain(url: str) -> str:
@@ -105,6 +104,12 @@ class Publisher:
                         if v.claim_id in report.verifier_reports
                         else None
                     ),
+                    "review_required": v.claim_id in report.review_queue,
+                    "review": (
+                        report.review_queue[v.claim_id].model_dump()
+                        if v.claim_id in report.review_queue
+                        else None
+                    ),
                 }
                 for v in report.verdicts
             ],
@@ -124,6 +129,7 @@ class Publisher:
                 f"<li>{e}</li>" for e in verdict.key_evidence
             )
             retrieved_hits = report.retrieval_hits.get(verdict.claim_id, [])
+            review_item = report.review_queue.get(verdict.claim_id)
 
             # Collect distinct domains for the sources-diversity summary
             seen_domains: list[str] = []
@@ -188,9 +194,18 @@ class Publisher:
             else:
                 verifier_html = ""
 
+            review_html = ""
+            if review_item:
+                review_html = (
+                    f'<div class="review-banner">'
+                    f'<strong>Pending human review.</strong> {review_item.reason}'
+                    f'</div>'
+                )
+
             cards += f"""
             <div class="card">
               <div class="verdict-badge" style="background:{color}">{label}</div>
+              {review_html}
               <h2 class="claim-text">"{claim.text}"</h2>
               <p class="source">Source: <a href="{claim.url or '#'}" target="_blank">{claim.source}</a></p>
               <p class="confidence">Confidence: {int(verdict.confidence * 100)}%</p>
@@ -299,6 +314,8 @@ def _page_template(title: str, body: str) -> str:
                    border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
                    font-size: .78rem; font-family: monospace; }}
     .chunk-domain {{ color: var(--accent); font-family: monospace; font-size: .8rem; }}
+    .review-banner {{ margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }}
   </style>
 </head>
 <body>

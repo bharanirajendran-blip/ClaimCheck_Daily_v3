@@ -36,6 +36,12 @@ class VerdictLabel(str, Enum):
     UNVERIFIABLE = "UNVERIFIABLE"
 
 
+class ReviewStatus(str, Enum):
+    PENDING_REVIEW = "PENDING_REVIEW"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+
+
 # ── Core models ───────────────────────────────────────────────────────────────
 
 class Claim(BaseModel):
@@ -125,6 +131,21 @@ class VerifierReport(BaseModel):
     should_retry:           bool      = False
 
 
+class ReviewQueueItem(BaseModel):
+    """Persisted human-review task created for low-confidence claims."""
+    review_id:       str
+    claim_id:        str
+    claim_text:      str
+    source:          str = ""
+    date_slug:       str
+    verdict:         VerdictLabel
+    confidence:      float = Field(..., ge=0.0, le=1.0)
+    verifier_score:  Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    reason:          str
+    status:          ReviewStatus = ReviewStatus.PENDING_REVIEW
+    created_at:      str = Field(default_factory=_utcnow)
+
+
 class DailyReport(BaseModel):
     """Complete report for one publishing cycle."""
     claims:           list[Claim]                     = Field(default_factory=list)
@@ -132,11 +153,15 @@ class DailyReport(BaseModel):
     # RAG evidence and verifier scores
     retrieval_hits:   dict[str, list[RetrievalHit]]   = Field(default_factory=dict)
     verifier_reports: dict[str, VerifierReport]        = Field(default_factory=dict)
+    review_queue:     dict[str, ReviewQueueItem]       = Field(default_factory=dict)
     generated_at:     str                             = Field(default_factory=_utcnow)
     date_slug:        str                             = Field(default_factory=_today_slug)
 
     def get_verdict(self, claim_id: str) -> Optional[Verdict]:
         return next((v for v in self.verdicts if v.claim_id == claim_id), None)
+
+    def get_review(self, claim_id: str) -> Optional[ReviewQueueItem]:
+        return self.review_queue.get(claim_id)
 
 
 # ── LangGraph pipeline state ──────────────────────────────────────────────────
@@ -166,3 +191,4 @@ class PipelineState(BaseModel):
     graph_context:    dict[str, str]                  = Field(default_factory=dict)
     verifier_reports: dict[str, VerifierReport]        = Field(default_factory=dict)
     retry_counts:     dict[str, int]                  = Field(default_factory=dict)
+    review_queue:     dict[str, ReviewQueueItem]       = Field(default_factory=dict)

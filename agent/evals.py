@@ -1,5 +1,5 @@
 """
-evals.py — Minimal evaluation harness for ClaimCheck Daily v2.
+evals.py — Minimal evaluation harness for ClaimCheck Daily v3.
 
 Runs simple aggregate metrics over generated reports so the project has
 an explicit evaluation artifact beyond single-run judge scores.

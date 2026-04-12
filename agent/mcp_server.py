@@ -7,8 +7,8 @@ Any MCP host (Claude Desktop, custom app) can connect and call:
   Tools
   ─────
   check_claim(text)            — run the full pipeline on a single claim
-  search_evidence(query, k?)   — semantic search over the evidence store
-  get_verdict_history(date?)   — retrieve past verdicts from the JSON archive
+  search_evidence(query, k?)   — hybrid search over the evidence store
+  get_verdict_history(date?)   — retrieve past verdicts from the daily/manual archive
 
 Usage
 ─────
@@ -128,8 +128,8 @@ mcp = FastMCP(
     instructions=(
         "ClaimCheck is a fact-checking tool. Use check_claim to verify whether "
         "a specific statement is true, false, or mixed. Use search_evidence to "
-        "find relevant past research from the evidence store. Use get_verdict_history "
-        "to retrieve previously fact-checked claims and their verdicts."
+        "find relevant stored evidence with ClaimCheck's hybrid retriever. Use "
+        "get_verdict_history to retrieve previously fact-checked claims and their verdicts."
     ),
 )
 
@@ -175,6 +175,7 @@ def check_claim(text: str) -> str:
     verdict = report.verdicts[0]
     verifier = report.verifier_reports.get(verdict.claim_id)
     hits = report.retrieval_hits.get(verdict.claim_id, [])
+    review = report.review_queue.get(verdict.claim_id)
 
     result = {
         "claim": text,
@@ -184,6 +185,9 @@ def check_claim(text: str) -> str:
         "key_evidence": verdict.key_evidence,
         "verifier_score": verifier.overall_score if verifier else None,
         "should_retry": verifier.should_retry if verifier else None,
+        "review_required": review is not None,
+        "review_status": review.status if review else None,
+        "review_reason": review.reason if review else None,
         "retrieved_evidence": [
             {
                 "source_url": h.chunk.source_url,
@@ -209,7 +213,7 @@ def check_claim(text: str) -> str:
         "across all past pipeline runs. "
         "Use this to find existing evidence about a topic before running a full check, "
         "or to explore what sources have been consulted about a subject. "
-        "Returns the top-k matching evidence chunks ranked by hybrid TF-IDF + BM25 score."
+        "Returns the top-k matching evidence chunks ranked by ClaimCheck's hybrid TF-IDF + BM25 retriever."
     )
 )
 def search_evidence(query: str, k: int = 5) -> str:
@@ -254,7 +258,8 @@ def search_evidence(query: str, k: int = 5) -> str:
 @mcp.tool(
     description=(
         "Retrieve past ClaimCheck verdicts from the JSON archive. "
-        "Returns all verdicts from a specific date, or the most recent run if no date is given. "
+        "Returns verdicts from a specific date, or the most recent run if no date is given. "
+        "Searches both daily and manual-run archives. "
         "Each verdict includes the claim text, verdict label, confidence, summary, and verifier score. "
         "Use this when the user asks what was fact-checked recently, or wants to look up a past verdict."
     )
@@ -310,6 +315,8 @@ def get_verdict_history(date: str | None = None) -> str:
                     "confidence": result.get("confidence"),
                     "summary": result.get("summary", ""),
                     "verifier_score": result.get("verifier_report", {}).get("overall_score"),
+                    "review_status": (result.get("review") or {}).get("status"),
+                    "review_required": result.get("review_required", False),
                     "source": result.get("source", ""),
                     "artifact": _display_path(path),
                 }
