@@ -5,6 +5,9 @@
 anthropic>=0.40.0          # Claude Researcher (extended thinking support)
 openai>=1.50.0             # GPT Director (json_object response format)
 
+# ── MCP Server (Week 9) ───────────────────────────────────
+mcp>=1.0.0                 # MCP SDK — FastMCP server + stdio transport
+
 # ── Orchestration ─────────────────────────────────────────
 langgraph>=0.2.0           # StateGraph pipeline orchestration
 langchain-core>=0.3.0      # Required by LangGraph
