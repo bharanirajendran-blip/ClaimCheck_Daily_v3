@@ -68,6 +68,60 @@ logger = logging.getLogger(__name__)
 OUTPUTS_DIR = Path(os.getenv("OUTPUTS_DIR", "outputs"))
 DOCS_DIR = Path(os.getenv("DOCS_DIR", "docs"))
 
+
+def _default_manual_dir(base_dir: Path) -> Path:
+    """Mirror the CLI's *_manual convention for single-claim runs."""
+    if base_dir.name.endswith("_manual"):
+        return base_dir
+    return base_dir.with_name(f"{base_dir.name}_manual")
+
+
+MANUAL_OUTPUTS_DIR = Path(
+    os.getenv("MANUAL_OUTPUTS_DIR", str(_default_manual_dir(OUTPUTS_DIR)))
+)
+MANUAL_DOCS_DIR = Path(
+    os.getenv("MANUAL_DOCS_DIR", str(_default_manual_dir(DOCS_DIR)))
+)
+
+
+def _artifact_output_dirs() -> list[Path]:
+    """Return all output directories that may hold ClaimCheck artifacts."""
+    dirs: list[Path] = []
+    for path in (OUTPUTS_DIR, MANUAL_OUTPUTS_DIR):
+        if path not in dirs:
+            dirs.append(path)
+    return dirs
+
+
+def _load_all_evidence_chunks():
+    """Load evidence from both daily and manual stores, deduplicated by chunk_id."""
+    merged: dict[str, object] = {}
+    for outputs_dir in _artifact_output_dirs():
+        for chunk in load_all_chunks(outputs_dir):
+            merged[chunk.chunk_id] = chunk
+    return list(merged.values())
+
+
+def _report_files_for_date(date: str | None = None) -> list[Path]:
+    """Find report JSON files across daily and manual output directories."""
+    pattern = f"{date}.json" if date else "20*.json"
+    paths: list[Path] = []
+    for outputs_dir in _artifact_output_dirs():
+        if not outputs_dir.exists():
+            continue
+        paths.extend(outputs_dir.glob(pattern))
+    return sorted(set(paths), key=lambda path: (path.stem, path.stat().st_mtime), reverse=True)
+
+
+def _display_path(path: Path) -> str:
+    """Return a stable, readable artifact path for API responses."""
+    if not path.is_absolute():
+        return str(path)
+    try:
+        return str(path.relative_to(Path.cwd()))
+    except ValueError:
+        return str(path)
+
 # ── Create MCP server ─────────────────────────────────────────────────────────
 mcp = FastMCP(
     name="claimcheck",
@@ -106,8 +160,8 @@ def check_claim(text: str) -> str:
 
     try:
         report = run_pipeline(
-            docs_dir=DOCS_DIR / "manual",
-            outputs_dir=OUTPUTS_DIR / "manual",
+            docs_dir=MANUAL_DOCS_DIR,
+            outputs_dir=MANUAL_OUTPUTS_DIR,
             manual_claim=text,
             log_level="WARNING",   # quieter in MCP context
         )
@@ -171,7 +225,7 @@ def search_evidence(query: str, k: int = 5) -> str:
     logger.info("[mcp] search_evidence called: %s (k=%d)", query[:80], k)
     k = min(max(1, k), 20)   # clamp to [1, 20]
 
-    chunks = load_all_chunks(OUTPUTS_DIR)
+    chunks = _load_all_evidence_chunks()
     if not chunks:
         return json.dumps({"query": query, "results": [], "message": "Evidence store is empty — run the pipeline first."})
 
@@ -222,37 +276,48 @@ def get_verdict_history(date: str | None = None) -> str:
             datetime.strptime(date, "%Y-%m-%d")
         except ValueError:
             return json.dumps({"error": f"Invalid date format '{date}'. Use YYYY-MM-DD."})
-        target_files = list(OUTPUTS_DIR.glob(f"{date}.json"))
+        target_files = _report_files_for_date(date)
     else:
-        # Most recent run
-        target_files = sorted(OUTPUTS_DIR.glob("20*.json"), reverse=True)
+        target_files = _report_files_for_date()
 
     if not target_files:
         msg = f"No verdicts found for {date}." if date else "No verdict history found — run the pipeline first."
         return json.dumps({"message": msg, "results": []})
 
-    path = target_files[0]
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        return json.dumps({"error": f"Could not read {path.name}: {exc}"})
+    # Without a date, show the newest run date across both daily/manual archives.
+    if not date:
+        latest_date = target_files[0].stem
+        target_files = [path for path in target_files if path.stem == latest_date]
 
-    results = data.get("results", [])
-    summary = [
-        {
-            "claim": r.get("claim", ""),
-            "verdict": r.get("verdict", ""),
-            "confidence": r.get("confidence"),
-            "summary": r.get("summary", ""),
-            "verifier_score": r.get("verifier_report", {}).get("overall_score"),
-            "source": r.get("source", ""),
-        }
-        for r in results
-    ]
+    summary = []
+    generated_at_values: list[str] = []
+
+    for path in target_files:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            return json.dumps({"error": f"Could not read {path.name}: {exc}"})
+
+        generated_at = data.get("generated_at")
+        if generated_at:
+            generated_at_values.append(generated_at)
+
+        for result in data.get("results", []):
+            summary.append(
+                {
+                    "claim": result.get("claim", ""),
+                    "verdict": result.get("verdict", ""),
+                    "confidence": result.get("confidence"),
+                    "summary": result.get("summary", ""),
+                    "verifier_score": result.get("verifier_report", {}).get("overall_score"),
+                    "source": result.get("source", ""),
+                    "artifact": _display_path(path),
+                }
+            )
 
     return json.dumps({
-        "date": data.get("date", path.stem),
-        "generated_at": data.get("generated_at"),
+        "date": date or target_files[0].stem,
+        "generated_at": max(generated_at_values) if generated_at_values else None,
         "verdict_count": len(summary),
         "verdicts": summary,
     }, indent=2, ensure_ascii=False)
