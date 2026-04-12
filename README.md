@@ -7,10 +7,11 @@ ClaimCheck Daily v3 is the current development branch of the ClaimCheck project.
 **Current implemented scope**
 - Core `v2` runtime: LangGraph pipeline, hybrid retrieval, knowledge graph, LLM-as-a-Judge verification, retry loop, HTML/JSON publishing
 - Week 9 addition: MCP server in [agent/mcp_server.py](/Users/Bharani/Desktop/DS/Grad5900App_AgenticAI/ClaimCheck_Daily_v3/agent/mcp_server.py:1)
+- Week 11 first slice: low-confidence review gate with persisted `review_queue.json`
 
 **Planned, not yet integrated into the runtime graph**
 - Week 10: supervisor/specialist routing, debate, reflection
-- Week 11: confidence-based HITL interrupts, persistent memory, checkpointing
+- Remaining Week 11 work: real interrupts, richer human review flow, persistent memory, checkpointing
 
 **Core idea today:** `research → store → retrieve → verify → revise`, with an MCP entry point for single-claim checks and archive lookup.
 
@@ -25,6 +26,7 @@ ClaimCheck Daily v3 is the current development branch of the ClaimCheck project.
 - Generates grounded verdicts with GPT-4o
 - Verifies verdict quality with an independent GPT-4o judge
 - Retries weak verdicts with refined retrieval queries and corroboration fetches
+- Queues low-confidence claims for human review and persists them to `review_queue.json`
 - Publishes HTML and JSON reports
 
 ### MCP server
@@ -66,7 +68,7 @@ verify_node           ← LLM-as-a-Judge
   │
   ├── retry? ──► revise_query_node ──► retrieve_node
   │
-  └── pass ──► publish_node ──► END
+  └── pass ──► review_gate_node ──► publish_node ──► END
 ```
 
 The MCP server is an interface layer on top of this runtime. It does not add extra LangGraph nodes today.
@@ -82,6 +84,7 @@ The MCP server is an interface layer on top of this runtime. It does not add ext
 | Knowledge Graph | Links claims to source domains for cross-run context | `networkx` |
 | HybridRetriever | TF-IDF + BM25 retrieval with claim-local-first merge | `scikit-learn` + custom BM25 |
 | Verifier | Independent LLM-as-a-Judge rubric scoring | GPT-4o |
+| Review Gate | Queues low-confidence claims for human review | local persistence |
 | MCP Server | Exposes ClaimCheck as MCP tools | `mcp` SDK |
 | Publisher | Writes HTML and JSON reports | local renderer |
 
@@ -101,6 +104,7 @@ ClaimCheck_Daily_v3/
 │   ├── publisher.py
 │   ├── researcher.py
 │   ├── retriever.py
+│   ├── review_queue.py
 │   ├── store.py
 │   ├── tools.py
 │   ├── utils.py
@@ -161,9 +165,11 @@ python run.py --outputs-dir my_outputs
 | `outputs/YYYY-MM-DD.json` | Daily JSON report |
 | `outputs/evidence_store.json` | Daily cumulative evidence store |
 | `outputs/knowledge_graph.json` | Daily cumulative knowledge graph |
+| `outputs/review_queue.json` | Daily persisted human review queue |
 | `outputs_manual/YYYY-MM-DD.json` | Manual-claim JSON report |
 | `outputs_manual/evidence_store.json` | Manual-run cumulative evidence store |
 | `outputs_manual/knowledge_graph.json` | Manual-run cumulative knowledge graph |
+| `outputs_manual/review_queue.json` | Manual-run persisted human review queue |
 
 ## Tech Stack
 
@@ -178,4 +184,4 @@ python run.py --outputs-dir my_outputs
 
 ## Course Alignment
 
-This branch currently has a real implementation through the Week 9 MCP milestone. Week 10 and Week 11 features are still planned work, not shipped runtime behavior yet.
+This branch currently has a real implementation through the Week 9 MCP milestone and an initial Week 11 review-queue slice. Week 10 orchestration and the rest of Week 11 memory/interrupt behavior are still planned work.

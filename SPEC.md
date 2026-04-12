@@ -16,12 +16,13 @@ Implemented now:
 - GPT-4o verdict generation
 - GPT-4o LLM-as-a-Judge verification
 - self-correcting retry loop
+- low-confidence review gate with persisted review queue
 - MCP server with `check_claim`, `search_evidence`, and `get_verdict_history`
 
 Planned but not yet integrated into the runtime graph:
 - supervisor/specialist multi-agent routing
 - debate or reflection nodes
-- human-in-the-loop interrupts
+- richer human-in-the-loop interrupts and approval flow
 - persistent vector memory
 - checkpointing
 
@@ -62,6 +63,11 @@ Planned but not yet integrated into the runtime graph:
 ### Verifier (`agent/verifier.py`)
 - Scores verdicts on groundedness, citation quality, contradiction, and assumption
 - Triggers retries when groundedness or citation quality is weak
+
+### Review Queue (`agent/review_queue.py`)
+- Persists pending human-review tasks for low-confidence claims
+- Writes `review_queue.json` into the current outputs directory
+- Lets published artifacts mark claims as `PENDING_REVIEW`
 
 ### Publisher (`agent/publisher.py`)
 - Writes HTML reports to `docs/` or `docs_manual/`
@@ -109,7 +115,7 @@ verify
   │
   ├── retry? ──► revise_query ──► retrieve
   │
-  └── pass ──► publish ──► END
+  └── pass ──► review_gate ──► publish ──► END
 ```
 
 This is still the `v2` runtime. The MCP server invokes this flow for manual single-claim checks.
@@ -145,6 +151,7 @@ ClaimCheck_Daily_v3/
 │   ├── publisher.py
 │   ├── researcher.py
 │   ├── retriever.py
+│   ├── review_queue.py
 │   ├── store.py
 │   ├── tools.py
 │   ├── utils.py
@@ -152,7 +159,9 @@ ClaimCheck_Daily_v3/
 ├── docs/
 ├── docs_manual/
 ├── outputs/
+├── outputs/review_queue.json
 ├── outputs_manual/
+├── outputs_manual/review_queue.json
 ├── feeds.yaml
 ├── requirements.txt
 ├── run.py
@@ -193,7 +202,8 @@ python -m agent.mcp_server
 
 ## 8. Known Limitations
 
-- The runtime graph does not yet include week 10 multi-agent nodes or week 11 HITL/memory behavior.
+- The runtime graph does not yet include week 10 multi-agent nodes or the full week 11 HITL/memory design.
+- The runtime graph now includes a simple review gate, but it does not yet pause execution or support reviewer approvals inside the graph.
 - Retrieval is still the existing TF-IDF + BM25 implementation, not ChromaDB or embedding-based vector memory.
 - The graph is still source-domain-centric rather than a richer entity/event GraphRAG design.
 - Retry loops re-run downstream verdict/verify work for the whole selected batch rather than only the failing claim.
