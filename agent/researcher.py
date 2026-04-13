@@ -28,6 +28,7 @@ from dataclasses import dataclass, field
 import anthropic
 
 from .models import Claim, ResearchResult
+from .observability import get_tracer
 from .tools import TOOL_DEFINITIONS, execute_tool
 from .utils import retry
 
@@ -206,7 +207,10 @@ class Researcher:
                 kwargs["temperature"] = 1
 
             try:
-                response = self._client.messages.create(**kwargs)
+                with get_tracer().span("corroborate_node", model=self.model) as span:
+                    response = self._client.messages.create(**kwargs)
+                    span.record_anthropic(response)
+                    span.set_extra(round=round_num, claim_id=claim_id)
             except Exception as exc:
                 logger.warning("[corroborate] API error on round %d: %s", round_num, exc)
                 return None
@@ -293,7 +297,10 @@ class Researcher:
                 }
                 kwargs["temperature"] = 1  # required for extended thinking
 
-            response = self._client.messages.create(**kwargs)
+            with get_tracer().span("research_node", model=self.model) as span:
+                response = self._client.messages.create(**kwargs)
+                span.record_anthropic(response)
+                span.set_extra(round=round_num, claim_id=getattr(claim, "id", "?"))
             logger.debug("Round %d stop_reason=%s", round_num, response.stop_reason)
 
             # ── Claude finished — collect all text blocks ─────────────

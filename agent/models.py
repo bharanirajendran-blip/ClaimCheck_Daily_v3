@@ -154,6 +154,8 @@ class DailyReport(BaseModel):
     retrieval_hits:   dict[str, list[RetrievalHit]]   = Field(default_factory=dict)
     verifier_reports: dict[str, VerifierReport]        = Field(default_factory=dict)
     review_queue:     dict[str, ReviewQueueItem]       = Field(default_factory=dict)
+    # Observability: LLM call trace summary for this run
+    trace_summary:    dict                            = Field(default_factory=dict)
     generated_at:     str                             = Field(default_factory=_utcnow)
     date_slug:        str                             = Field(default_factory=_today_slug)
 

@@ -26,6 +26,7 @@ from .models import (
     VerdictLabel,
     VerifierReport,
 )
+from .observability import get_tracer
 from .utils import retry
 
 logger = logging.getLogger(__name__)
@@ -190,13 +191,15 @@ class Director:
 
     @retry(times=3, delay=2)
     def _chat(self, user_content: str) -> dict[str, Any]:
-        response = self._client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user",   "content": user_content},
-            ],
-            response_format={"type": "json_object"},
-            temperature=0.2,
-        )
+        with get_tracer().span("director", model=self.model) as span:
+            response = self._client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user",   "content": user_content},
+                ],
+                response_format={"type": "json_object"},
+                temperature=0.2,
+            )
+            span.record_openai(response)
         return json.loads(response.choices[0].message.content)

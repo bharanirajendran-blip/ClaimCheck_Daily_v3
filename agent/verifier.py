@@ -33,6 +33,7 @@ from typing import Any
 from openai import OpenAI
 
 from .models import RetrievalHit, Verdict, VerifierReport
+from .observability import get_tracer
 
 logger = logging.getLogger(__name__)
 
@@ -114,23 +115,27 @@ def _verify_llm(
         "key_evidence": verdict.key_evidence,
     }, indent=2)
 
-    response = client.chat.completions.create(
-        model=os.getenv("OPENAI_MODEL", "gpt-4o"),
-        response_format={"type": "json_object"},
-        messages=[
-            {"role": "system", "content": VERIFIER_SYSTEM},
-            {
-                "role": "user",
-                "content": (
-                    f"Claim:\n{claim_text}\n\n"
-                    f"Verdict to evaluate:\n{verdict_text}\n\n"
-                    f"Retrieved evidence:\n{context_blocks}\n\n"
-                    "Return JSON only."
-                ),
-            },
-        ],
-        temperature=0.0,
-    )
+    _model = os.getenv("OPENAI_MODEL", "gpt-4o")
+    with get_tracer().span("verify_node", model=_model) as span:
+        response = client.chat.completions.create(
+            model=_model,
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": VERIFIER_SYSTEM},
+                {
+                    "role": "user",
+                    "content": (
+                        f"Claim:\n{claim_text}\n\n"
+                        f"Verdict to evaluate:\n{verdict_text}\n\n"
+                        f"Retrieved evidence:\n{context_blocks}\n\n"
+                        "Return JSON only."
+                    ),
+                },
+            ],
+            temperature=0.0,
+        )
+        span.record_openai(response)
+        span.set_extra(claim_id=verdict.claim_id)
 
     payload = _parse_json(response.choices[0].message.content or "{}")
 

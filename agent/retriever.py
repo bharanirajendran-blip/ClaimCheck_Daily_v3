@@ -1,5 +1,5 @@
 """
-retriever.py — Hybrid Evidence Retriever 
+retriever.py — Hybrid Evidence Retriever
 
 Combines two retrieval signals over the persistent evidence store:
 
@@ -12,7 +12,26 @@ Combines two retrieval signals over the persistent evidence store:
     Critical for fact-checking: "claims", "study finds", "according to"
     and named entities need exact-match weight, not just semantic drift.
 
-Hybrid score = 0.60 * vector_score + 0.40 * keyword_score
+Default hybrid score = 0.60 * vector_score + 0.40 * keyword_score
+
+Adaptive retrieval routing :
+  classify_query() inspects the claim text for entity signals — numbers,
+  percentages, dollar figures, dates, and quoted phrases — to decide
+  whether BM25 or TF-IDF should lead.
+
+  "entity"     (numbers / names / dates detected)
+    → BM25-dominant blend: 0.30 vector + 0.70 keyword
+    Rationale: "increased by 47%" must match "47%" exactly; TF-IDF
+    may conflate it with other numeric evidence in the store.
+
+  "conceptual"  (abstract / cause-effect / policy claims)
+    → TF-IDF-dominant blend: 0.70 vector + 0.30 keyword
+    Rationale: "climate policy increases inequality" needs semantic
+    coverage across many paraphrases, not just term overlap.
+
+  The routing hint is passed to HybridRetriever.search() from
+  pipeline.py's _search_chunks() after classify_query() runs on
+  the raw claim text (before graph-context enrichment).
 
 Both channels are min-max normalised before combining so neither
 dominates due to raw scale differences.
@@ -36,6 +55,58 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from .models import EvidenceChunk, RetrievalHit
 
 
+# ── Adaptive routing weight profiles ─────────────────────────────────────────
+
+# Default (no routing hint)
+_DEFAULT_VECTOR  = 0.60
+_DEFAULT_KEYWORD = 0.40
+
+# Entity-heavy: exact term match matters more than semantic drift
+_ENTITY_VECTOR  = 0.30
+_ENTITY_KEYWORD = 0.70
+
+# Conceptual: semantic coverage matters more than exact overlap
+_CONCEPTUAL_VECTOR  = 0.70
+_CONCEPTUAL_KEYWORD = 0.30
+
+# Regex patterns that signal entity-heavy queries
+_ENTITY_PATTERNS = [
+    r"\b\d+(?:\.\d+)?\s*%",           # percentages: "47%", "3.2 %"
+    r"\$\s*\d[\d,]*(?:\.\d+)?",       # dollar amounts: "$1,200", "$3.5 billion"
+    r"\b\d[\d,]*(?:\.\d+)?\s*(?:billion|million|trillion|thousand)\b",
+    r"\b(?:19|20)\d{2}\b",            # four-digit years: 2023, 1995
+    r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b",  # dates: 03/15/2024
+    r'"[^"]{3,}"',                    # quoted phrases (named claims / exact quotes)
+    r"'\w[\w\s]{2,}'",                # single-quoted names/phrases
+    r"\b(?:january|february|march|april|may|june|july|august|september|"
+    r"october|november|december)\s+\d{1,2}(?:,\s*\d{4})?\b",  # "March 15, 2023"
+]
+
+_ENTITY_RE = re.compile("|".join(_ENTITY_PATTERNS), re.IGNORECASE)
+
+
+def classify_query(text: str) -> str:
+    """
+    Classify a claim text as ``"entity"`` or ``"conceptual"``.
+
+    Entity-heavy claims contain numbers, percentages, dates, dollar figures,
+    or quoted phrases — signals that exact keyword matching (BM25) should
+    dominate retrieval so the retriever doesn't confuse similar-sounding
+    but numerically distinct evidence.
+
+    Conceptual claims lack those anchors and benefit from the broader
+    semantic coverage that TF-IDF cosine provides.
+
+    Returns
+    -------
+    "entity"     if the text contains ≥ 1 entity signal
+    "conceptual" otherwise
+    """
+    if _ENTITY_RE.search(text):
+        return "entity"
+    return "conceptual"
+
+
 class HybridRetriever:
     """
     Stateless retriever built from a flat list of EvidenceChunks.
@@ -43,8 +114,8 @@ class HybridRetriever:
     current cumulative store without any caching complexity.
     """
 
-    VECTOR_WEIGHT    = 0.60
-    KEYWORD_WEIGHT   = 0.40
+    VECTOR_WEIGHT    = _DEFAULT_VECTOR
+    KEYWORD_WEIGHT   = _DEFAULT_KEYWORD
     KIND_WEIGHTS = {
         "raw_source": 1.15,
         "summary": 0.95,
@@ -82,17 +153,38 @@ class HybridRetriever:
         query: str,
         top_k: int = 6,
         claim_id: str | None = None,
+        query_type: str = "default",
     ) -> list[RetrievalHit]:
         """
         Return top_k chunks ranked by hybrid score.
 
-        claim_id: when provided, chunks belonging to this claim receive a
-        SAME_CLAIM_BOOST multiplier so same-claim evidence is preferred over
-        cross-run evidence from unrelated claims before falling back to the
-        global store.
+        Parameters
+        ----------
+        query      : retrieval query string (claim text + optional graph context)
+        top_k      : number of results to return
+        claim_id   : when provided, chunks from this claim get a SAME_CLAIM_BOOST
+                     multiplier so same-claim evidence is preferred over cross-run
+                     evidence from unrelated prior claims
+        query_type : routing hint produced by classify_query()
+                     "entity"     → BM25-dominant (0.30 vector + 0.70 keyword)
+                                    best for claims with numbers / dates / names
+                     "conceptual" → TF-IDF-dominant (0.70 vector + 0.30 keyword)
+                                    best for abstract / cause-effect claims
+                     "default"    → original blend (0.60 vector + 0.40 keyword)
         """
         if not self.chunks or self._matrix is None:
             return []
+
+        # ── Select blend weights from routing hint ────────────────────────
+        if query_type == "entity":
+            v_weight = _ENTITY_VECTOR
+            k_weight = _ENTITY_KEYWORD
+        elif query_type == "conceptual":
+            v_weight = _CONCEPTUAL_VECTOR
+            k_weight = _CONCEPTUAL_KEYWORD
+        else:
+            v_weight = _DEFAULT_VECTOR
+            k_weight = _DEFAULT_KEYWORD
 
         # ── Channel 1: TF-IDF cosine ──────────────────────────────────────
         q_vec = self._vectorizer.transform([query])
@@ -107,7 +199,7 @@ class HybridRetriever:
         # ── Normalise both to [0, 1] then blend ──────────────────────────
         v_norm = _minmax(raw_vector)
         k_norm = _minmax(raw_keyword)
-        hybrid = self.VECTOR_WEIGHT * v_norm + self.KEYWORD_WEIGHT * k_norm
+        hybrid = v_weight * v_norm + k_weight * k_norm
 
         # ── Kind boost ────────────────────────────────────────────────────
         kind_boosts = np.array([

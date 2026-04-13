@@ -36,10 +36,11 @@ from .director import Director
 from .feeds import harvest_claims
 from .graph import get_related_context, update_graph
 from .models import Claim, DailyReport, PipelineState, ResearchResult, ReviewQueueItem
+from .observability import get_tracer, reset_tracer
 from .publisher import Publisher
 from .researcher import Researcher
 from .review_queue import upsert_review_queue
-from .retriever import HybridRetriever, build_retrieval_query
+from .retriever import HybridRetriever, build_retrieval_query, classify_query
 from .store import load_all_chunks, store_research
 import re as _re
 from .utils import setup_logging
@@ -171,8 +172,12 @@ def retrieve_node(state: PipelineState) -> dict[str, Any]:
     """
     Node 6 — HybridRetriever ranks claim-local evidence first, then falls back
     to the cumulative evidence store only when strong cross-claim matches exist.
-    Combines TF-IDF cosine (60%) + BM25 keyword (40%), both min-max normalised.
-    Uses graph_context to enrich retrieval queries across prior runs.
+
+    Adaptive routing: classify_query() inspects the raw claim text (before
+    graph-context enrichment so the signal is clean) and selects a BM25-heavy
+    blend for entity-rich claims (numbers, dates, names) or a TF-IDF-heavy
+    blend for conceptual/abstract claims. The routing hint is passed to every
+    search() call so both the local and fallback passes use the same weights.
     """
     all_chunks = load_all_chunks(state.outputs_dir)
     has_local_chunks = any(state.evidence_chunks.get(claim.id) for claim in state.selected)
@@ -188,10 +193,22 @@ def retrieve_node(state: PipelineState) -> dict[str, Any]:
         revised_query = state.graph_context.get(f"{claim.id}::revised_query", "")
         query_text = revised_query if revised_query else claim.text
         query = build_retrieval_query(query_text, graph_ctx)
+
+        # Classify on the raw claim text (before context enrichment) so
+        # the classification reflects the claim's inherent entity density,
+        # not the length-inflated graph context string.
+        query_type = classify_query(claim.text)
+        logger.info(
+            "[retrieve] claim=%s query_type=%s (%s%s)",
+            claim.id, query_type,
+            "BM25-dominant" if query_type == "entity" else "TF-IDF-dominant",
+            " [retry]" if revised_query else "",
+        )
+
         try:
             local_chunks = state.evidence_chunks.get(claim.id, [])
-            local_hits = _search_chunks(local_chunks, query, claim.id, top_k=6)
-            fallback_hits = _search_chunks(all_chunks, query, claim.id, top_k=12)
+            local_hits = _search_chunks(local_chunks, query, claim.id, top_k=6, query_type=query_type)
+            fallback_hits = _search_chunks(all_chunks, query, claim.id, top_k=12, query_type=query_type)
             hits = _merge_retrieval_hits(local_hits, fallback_hits, claim.id, top_k=6)
             retrieval_hits[claim.id] = hits
             logger.info(
@@ -213,10 +230,11 @@ def _search_chunks(
     query: str,
     claim_id: str,
     top_k: int,
+    query_type: str = "default",
 ) -> list:
     if not chunks:
         return []
-    return HybridRetriever(chunks).search(query, top_k=top_k, claim_id=claim_id)
+    return HybridRetriever(chunks).search(query, top_k=top_k, claim_id=claim_id, query_type=query_type)
 
 
 def _merge_retrieval_hits(
@@ -442,7 +460,12 @@ def publish_node(state: PipelineState) -> dict[str, Any]:
         verifier_reports=state.verifier_reports,
         review_queue=state.review_queue,
     )
+    # Attach trace summary to report before publishing
+    tracer = get_tracer()
+    report.trace_summary = tracer.summary()
     Publisher(docs_dir=state.docs_dir, outputs_dir=state.outputs_dir).publish(report)
+    # Flush raw trace events to outputs/traces.jsonl
+    tracer.flush(state.outputs_dir)
     logger.info("[publish] Report written → %s/%s.html", state.docs_dir, report.date_slug)
     return {"report": report}
 
@@ -538,6 +561,7 @@ def run_pipeline(
 ) -> DailyReport:
     """Compile and invoke the LangGraph; return the final DailyReport."""
     setup_logging(log_level)
+    reset_tracer()   # fresh tracer for this run
     logger.info("=== ClaimCheck Daily pipeline starting (LangGraph) ===")
 
     selected: list[Claim] = []
