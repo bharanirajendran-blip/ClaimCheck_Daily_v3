@@ -7,16 +7,22 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import os
 import re
 from pathlib import Path
 from typing import Iterator
 
 import feedparser
+import httpx
 import yaml
 
 from .models import Claim
 
 logger = logging.getLogger(__name__)
+
+# How long to wait for a single feed before giving up (seconds).
+# Override with FEED_TIMEOUT env var.
+FEED_TIMEOUT = int(os.getenv("FEED_TIMEOUT", "15"))
 
 # Heuristics: headline patterns that often contain checkable claims
 CLAIM_SIGNALS = re.compile(
@@ -46,12 +52,30 @@ def harvest_claims(
         logger.info("Parsing feed: %s", name)
 
         try:
-            parsed = feedparser.parse(url)
-            for entry in parsed.entries[:max_per_feed]:
-                for claim in _extract_claims(entry, feed_name=name):
-                    claims.append(claim)
+            # Fetch with an explicit timeout so a slow/dead feed can't hang
+            # the whole pipeline.  feedparser.parse() has no built-in timeout,
+            # so we pre-fetch with httpx and hand the content to feedparser.
+            resp = httpx.get(
+                url,
+                timeout=FEED_TIMEOUT,
+                follow_redirects=True,
+                headers={"User-Agent": "ClaimCheckDaily/3.0 (+https://github.com/bharanirajendran-blip/ClaimCheck_Daily)"},
+            )
+            resp.raise_for_status()
+            parsed = feedparser.parse(resp.text)
+        except httpx.TimeoutException:
+            logger.warning("Feed timed out after %ds, skipping: %s", FEED_TIMEOUT, name)
+            continue
+        except httpx.HTTPError as exc:
+            logger.warning("Failed to fetch feed %s: %s", name, exc)
+            continue
         except Exception as exc:
             logger.warning("Failed to parse feed %s: %s", name, exc)
+            continue
+
+        for entry in parsed.entries[:max_per_feed]:
+            for claim in _extract_claims(entry, feed_name=name):
+                claims.append(claim)
 
     logger.info("Harvested %d candidate claims from %d feeds.", len(claims), len(feeds))
     return claims
@@ -69,8 +93,12 @@ def _extract_claims(entry, feed_name: str) -> Iterator[Claim]:
     if not text:
         return
 
-    # Stable ID based on content hash
-    claim_id = hashlib.md5(text.encode()).hexdigest()[:8]
+    # Stable, collision-resistant ID: SHA-256 over (text + url), 16 hex chars.
+    # Using the URL breaks ties when two headlines are identical across outlets.
+    # 16 chars (8 bytes) gives a birthday-collision threshold of ~2^32 — safe
+    # for tens of thousands of claims.  The old 8-char MD5 had a 2^16 threshold.
+    hash_input = f"{text}\0{link}".encode()
+    claim_id = hashlib.sha256(hash_input).hexdigest()[:16]
 
     yield Claim(
         id=claim_id,

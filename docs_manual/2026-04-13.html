@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-13</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-13</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main>
+            <div class="card">
+              <div class="verdict-badge" style="background:#ef4444">❌ False</div>
+              
+              <h2 class="claim-text">"Vaccines cause autism."</h2>
+              <p class="source">Source: <a href="#" target="_blank">Manual Input</a></p>
+              <p class="confidence">Confidence: 95%</p>
+              <p class="sources-summary">Evidence sources (3): <span class="domain-tag">who.int</span><span class="domain-tag">nhs.uk</span><span class="domain-tag">unknown source</span></p>
+              <p class="summary">There is no scientific evidence supporting the claim that vaccines cause autism. Vaccines are designed to protect against diseases without causing the diseases themselves or related complications.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>Vaccines contain only killed or weakened forms of germs like viruses or bacteria, and they do not cause the disease or put you at risk of its complications. (Source: WHO)</li><li>The MMR vaccine helps protect against measles, mumps, and rubella, and there is no evidence linking it to autism. (Source: NHS)</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">who.int</span> · <strong>raw_source</strong> · Fetched Source 2.2 · score 1.44<div class="retrieved-text">se vaccines contain only killed or weakened forms of germs like viruses or bacteria, they do not cause the disease or put you at risk of its complications.
+Most vaccines are given by an injection, but some are given orally (by mouth) or sprayed into the nose.
+
+
+                                        How does a vaccine work?
+                                    
+
+Vaccines reduce risks of getting a disease by working with your body’s natural defenses to build protection. When you get a vaccine, your immune system responds. It:
+recognizes the invading germ, such as the virus or bacteria; 
+produces antibodies. Antibodies are proteins produced naturally by the immune system to fight disease; an</div></li><li><span class="chunk-domain">nhs.uk</span> · <strong>raw_source</strong> · Fetched Source 6.2 · score 1.11<div class="retrieved-text">ine when they are 12 months and 18 months old. Older children born on or after 1 January 2020 are also offered 1 or 2 doses of the vaccine.
+Find out more about the MMRV vaccine
+
+What the MMR vaccine is for
+
+The MMR vaccine helps protect against:
+measles
+mumps
+rubella (german measles)
+These 3 infections spread easily between people and can lead to serious problems including meningitis, blindness and hearing loss.
+If you're pregnant, getting measles can cause premature birth, miscarriage or still birth. And getting rubella can cause serious problems for your baby such as damage to their sight and hearing.
+2 doses of the MMR vaccine gives you long-term protection.
+Getting vaccinated also helps </div></li><li><span class="chunk-domain">who.int</span> · <strong>raw_source</strong> · Fetched Source 2.4 · score 1.26<div class="retrieved-text">                    
+
+Without vaccines, we are at risk of serious illness and disability from diseases like measles, meningitis, pneumonia, tetanus and polio. Many of these diseases can be life-threatening. WHO estimates that childhood vaccines alone save over 4 million lives every year.
+Although some diseases may have become uncommon, the germs that cause them continue to circulate in some or all parts of the world. In today’s world, infectious diseases can easily cross borders, and infect anyone who is not protected
+Two key reasons to get vaccinated are to protect ourselves and to protect those around us. Because not everyone can be vaccinated – including very young babies, those who are s</div></li><li><span class="chunk-domain">who.int</span> · <strong>raw_source</strong> · Fetched Source 2.5 · score 1.08<div class="retrieved-text">eriously ill or have certain allergies – they depend on others being vaccinated to ensure they are also safe from vaccine-preventable diseases.
+
+
+                                        When should I get vaccinated (or vaccinate my child)?
+                                    
+
+Vaccines protect us throughout life and at different ages, from birth to childhood, as teenagers and into old age. In most countries you will be given a vaccination card that tells you what vaccines you or your child have had and when the next vaccines or booster doses are due. It is important to make sure that all these vaccines are up to date.
+If we delay vaccination, we are at risk of getting seriously sick. If we</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:85%;background:hsl(102,70%,45%)"></div></div><span class="score-pct">85%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-13T19:24:57Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

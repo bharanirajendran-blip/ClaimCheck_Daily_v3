@@ -142,7 +142,36 @@ cp .env.example .env
 python run.py --dry-run
 python run.py
 python run.py --claim "Apollo 11 landed on the Moon in 1969."
-python -m agent.mcp_server
+python run.py --serve-mcp
+```
+
+`python run.py --serve-mcp` is the recommended local MCP entrypoint. It is the path verified with Claude Desktop and avoids Python package-resolution issues that can occur with `python -m agent.mcp_server`.
+
+Important MCP notes:
+- `--serve-mcp` is a standalone mode. Do not combine it with `--claim`, `--feeds`, `--workers`, or `--dry-run`.
+- For Claude Desktop, the most reliable setup is to provide `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and absolute artifact paths in the MCP server `env` block.
+- The MCP server is a stdio server, so it should be launched by a host like Claude Desktop, not used interactively in a plain terminal.
+
+Example Claude Desktop MCP config:
+
+```json
+{
+  "mcpServers": {
+    "claimcheck": {
+      "command": "/absolute/path/to/ClaimCheck_Daily_v3/.venv/bin/python",
+      "args": ["/absolute/path/to/ClaimCheck_Daily_v3/run.py", "--serve-mcp"],
+      "cwd": "/absolute/path/to/ClaimCheck_Daily_v3",
+      "env": {
+        "OPENAI_API_KEY": "your-openai-key",
+        "ANTHROPIC_API_KEY": "your-anthropic-key",
+        "OUTPUTS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/outputs",
+        "DOCS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/docs",
+        "MANUAL_OUTPUTS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/outputs_manual",
+        "MANUAL_DOCS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/docs_manual"
+      }
+    }
+  }
+}
 ```
 
 ### Optional flags
@@ -181,6 +210,36 @@ python run.py --outputs-dir my_outputs
 - [scikit-learn](https://scikit-learn.org) and `numpy` for hybrid retrieval
 - [networkx](https://networkx.org) for graph context
 - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) for HTML stripping
+
+## Cost Notes
+
+As of April 12, 2026, the code defaults are:
+- Claude research: `claude-opus-4-5-20251101` in [agent/researcher.py](/Users/Bharani/Desktop/DS/Grad5900App_AgenticAI/ClaimCheck_Daily_v3/agent/researcher.py:143)
+- OpenAI selection, verdicts, and verification: `gpt-4o` in [agent/director.py](/Users/Bharani/Desktop/DS/Grad5900App_AgenticAI/ClaimCheck_Daily_v3/agent/director.py:96) and [agent/verifier.py](/Users/Bharani/Desktop/DS/Grad5900App_AgenticAI/ClaimCheck_Daily_v3/agent/verifier.py:118)
+
+Current official API pricing:
+- Claude Opus 4.5: $5 / 1M input tokens, $25 / 1M output tokens
+- Claude Sonnet 4.5: $3 / 1M input tokens, $15 / 1M output tokens
+- GPT-4o: $2.50 / 1M input tokens, $10 / 1M output tokens
+
+Practical ballpark for this repo:
+- Single manual `--claim` run, no retry: about `$0.10–$0.22` total with Claude Opus 4.5, or about `$0.07–$0.15` if you switch Claude to Sonnet 4.5
+- Typical daily run with 3 selected claims, no retry: about `$0.31–$0.69` total with Claude Opus 4.5, or about `$0.22–$0.48` with Sonnet 4.5
+- Retries increase cost, because [agent/pipeline.py](/Users/Bharani/Desktop/DS/Grad5900App_AgenticAI/ClaimCheck_Daily_v3/agent/pipeline.py:329) can trigger another Claude corroboration pass plus extra GPT verdict/verifier calls
+
+These are estimates, not measured billing numbers. They are inferred from the code path and typical prompt sizes:
+- Claude does the expensive research step, including tool-use rounds and extended thinking
+- OpenAI is used for one selection call per daily run, then verdict synthesis plus verification per checked claim
+
+Pricing sources:
+- [OpenAI GPT-4o pricing](https://developers.openai.com/api/docs/models/gpt-4o)
+- [Anthropic Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing)
+
+Live cost tracking is now surfaced in the program output:
+- CLI runs print total estimated cost and OpenAI / Anthropic breakdown after completion
+- JSON reports include `trace_summary`
+- HTML reports include a `Run Cost & Usage` section
+- MCP `check_claim` responses include `cost_summary`
 
 ## Course Alignment
 

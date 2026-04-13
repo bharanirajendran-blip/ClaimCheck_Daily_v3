@@ -28,7 +28,11 @@
     details summary { cursor: pointer; color: var(--accent); }
     ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
     .archive { list-style: none; padding: 0; }
-    .archive li { margin: .4rem 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
     footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
               border-top: 1px solid #334155; padding-top: 1rem; }
     /* LLM-as-a-Judge score bars */
@@ -47,14 +51,19 @@
                    border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
                    font-size: .78rem; font-family: monospace; }
     .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
   </style>
 </head>
 <body>
 
-            <header><h1>ClaimCheck Daily v3</h1><p>Automated fact-checking with multi-agent workflows, MCP server, and HITL memory.</p></header>
+            <header><h1>ClaimCheck Daily</h1><p>Automated fact-checking, every day.</p></header>
             <main>
-              <p style="color:var(--muted);margin-top:1rem;">No reports yet — run the pipeline to generate the first report.</p>
+              <h2>Latest: <a href="2026-04-13.html">2026-04-13</a></h2>
+              <p class="archive-nav"><a href="../docs_manual/index.html">View Manual Claims Archive</a></p>
+              <h3>Archive</h3>
+              <ul class="archive"><li class="archive-item"><a href="2026-04-13.html">2026-04-13</a><div class="archive-preview">Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut</div><div class="archive-meta">3 claims</div></li></ul>
             </main>
-            <footer>Powered by Claude + GPT-4o · <a href="https://github.com/bharanirajendran-blip/ClaimCheck_Daily_v3">Source</a></footer>
+            <footer>Powered by Claude + GPT-4o · <a href="https://github.com">Source</a></footer>
 </body>
 </html>

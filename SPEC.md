@@ -197,7 +197,34 @@ cp .env.example .env
 python run.py --dry-run
 python run.py
 python run.py --claim "Apollo 11 landed on the Moon in 1969."
-python -m agent.mcp_server
+python run.py --serve-mcp
+```
+
+The `run.py --serve-mcp` path is the recommended local MCP startup path for demos and Claude Desktop integration. It avoids the package-resolution issues that can occur with `python -m agent.mcp_server`.
+
+MCP usage notes:
+- `--serve-mcp` is a standalone mode and should not be combined with `--claim`, `--feeds`, `--workers`, or `--dry-run`.
+- The server is a stdio MCP server, so it should be launched by an MCP host instead of being used directly in a plain terminal session.
+- In Claude Desktop, the most reliable configuration is to pass `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and absolute `OUTPUTS_DIR` / `DOCS_DIR` paths in the MCP server `env` block.
+
+Example Claude Desktop server entry:
+
+```json
+{
+  "claimcheck": {
+    "command": "/absolute/path/to/ClaimCheck_Daily_v3/.venv/bin/python",
+    "args": ["/absolute/path/to/ClaimCheck_Daily_v3/run.py", "--serve-mcp"],
+    "cwd": "/absolute/path/to/ClaimCheck_Daily_v3",
+    "env": {
+      "OPENAI_API_KEY": "your-openai-key",
+      "ANTHROPIC_API_KEY": "your-anthropic-key",
+      "OUTPUTS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/outputs",
+      "DOCS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/docs",
+      "MANUAL_OUTPUTS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/outputs_manual",
+      "MANUAL_DOCS_DIR": "/absolute/path/to/ClaimCheck_Daily_v3/docs_manual"
+    }
+  }
+}
 ```
 
 ## 8. Known Limitations
@@ -209,7 +236,35 @@ python -m agent.mcp_server
 - Retry loops re-run downstream verdict/verify work for the whole selected batch rather than only the failing claim.
 - Feed headlines are used as claim text and may be imprecise.
 
-## 9. Current Roadmap
+## 9. Cost Notes
+
+As of April 12, 2026, the code defaults are:
+- Claude research uses `claude-opus-4-5-20251101`
+- OpenAI selection, verdict synthesis, and verification use `gpt-4o`
+
+Official API pricing at that date:
+- Claude Opus 4.5: $5 / 1M input tokens, $25 / 1M output tokens
+- Claude Sonnet 4.5: $3 / 1M input tokens, $15 / 1M output tokens
+- GPT-4o: $2.50 / 1M input tokens, $10 / 1M output tokens
+
+Estimated program cost:
+- Single manual claim run, no retry: about `$0.10–$0.22` total with Claude Opus 4.5, or about `$0.07–$0.15` with Claude Sonnet 4.5
+- Daily run with 3 selected claims, no retry: about `$0.31–$0.69` total with Claude Opus 4.5, or about `$0.22–$0.48` with Claude Sonnet 4.5
+- Retries raise cost because the pipeline may add another Claude corroboration step and extra GPT verdict / verifier passes
+
+These figures are estimates from the current code path, not metered billing logs. Exact cost depends on article length, number of tool rounds, verifier retries, and which Claude model is configured.
+
+Pricing sources:
+- [OpenAI GPT-4o pricing](https://developers.openai.com/api/docs/models/gpt-4o)
+- [Anthropic Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing)
+
+Current runtime behavior:
+- CLI runs print total estimated cost plus provider breakdown
+- JSON reports persist `trace_summary`
+- HTML reports render a `Run Cost & Usage` section
+- MCP `check_claim` responses include `cost_summary`
+
+## 10. Current Roadmap
 
 The next major implementation milestones for this branch are:
 

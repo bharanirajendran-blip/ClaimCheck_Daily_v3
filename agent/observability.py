@@ -5,7 +5,7 @@ Zero external dependencies. Wraps every LLM call to capture:
   - model name
   - prompt + completion token counts
   - wall-clock latency (ms)
-  - estimated cost (USD) using published 2025-Q4 pricing
+  - estimated cost (USD) using current published API pricing
   - which pipeline node made the call
   - whether the call succeeded or raised an exception
 
@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -45,17 +46,23 @@ from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
-# ── Cost table (USD per 1M tokens, 2025-Q4 pricing) ──────────────────────────
-# Source: openai.com/pricing, anthropic.com/pricing
+# ── Cost table (USD per 1M tokens, verified 2026-04-13) ──────────────────────
+# Sources:
+# - https://platform.openai.com/docs/models/gpt-4o
+# - https://www.anthropic.com/news/claude-opus-4-5
 _COST_PER_M: dict[str, dict[str, float]] = {
     # OpenAI
-    "gpt-4o":              {"input": 2.50,  "output": 10.00},
-    "gpt-4o-mini":         {"input": 0.15,  "output": 0.60},
-    "gpt-4-turbo":         {"input": 10.00, "output": 30.00},
+    "gpt-4o":                   {"input": 2.50,  "output": 10.00},
+    "gpt-4o-mini":              {"input": 0.15,  "output": 0.60},
+    "chatgpt-4o-latest":        {"input": 5.00,  "output": 15.00},
+    "gpt-4-turbo":              {"input": 10.00, "output": 30.00},
     # Anthropic
-    "claude-opus-4-6":     {"input": 15.00, "output": 75.00},
-    "claude-sonnet-4-6":   {"input": 3.00,  "output": 15.00},
-    "claude-haiku-4-5":    {"input": 0.80,  "output": 4.00},
+    "claude-opus-4-5":          {"input": 5.00,  "output": 25.00},
+    "claude-opus-4-5-20251101": {"input": 5.00,  "output": 25.00},
+    "claude-opus-4-6":          {"input": 15.00, "output": 75.00},
+    "claude-sonnet-4-5":        {"input": 3.00,  "output": 15.00},
+    "claude-sonnet-4-6":        {"input": 3.00,  "output": 15.00},
+    "claude-haiku-4-5":         {"input": 0.80,  "output": 4.00},
     # Legacy aliases still used in some configs
     "claude-3-opus-20240229":   {"input": 15.00, "output": 75.00},
     "claude-3-sonnet-20240229": {"input": 3.00,  "output": 15.00},
@@ -64,11 +71,46 @@ _COST_PER_M: dict[str, dict[str, float]] = {
 _DEFAULT_COST = {"input": 5.00, "output": 15.00}  # safe fallback
 
 
+def _canonical_model_name(model: str) -> str:
+    """Map dated/aliased model strings onto a stable pricing key."""
+    raw = (model or "").split(":")[0].strip()
+    if raw in _COST_PER_M:
+        return raw
+
+    # Trim trailing date/version suffixes while preserving family names.
+    simplified = re.sub(r"-20\d{6,8}$", "", raw)
+    if simplified in _COST_PER_M:
+        return simplified
+
+    for prefix in (
+        "gpt-4o-mini",
+        "gpt-4o",
+        "chatgpt-4o-latest",
+        "gpt-4-turbo",
+        "claude-opus-4-5",
+        "claude-opus-4-6",
+        "claude-sonnet-4-5",
+        "claude-sonnet-4-6",
+        "claude-haiku-4-5",
+    ):
+        if raw.startswith(prefix):
+            return prefix
+
+    return raw
+
+
+def _provider_for_model(model: str) -> str:
+    canonical = _canonical_model_name(model)
+    if canonical.startswith("gpt-") or canonical.startswith("chatgpt-"):
+        return "openai"
+    if canonical.startswith("claude-"):
+        return "anthropic"
+    return "other"
+
+
 def _estimate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
     """Return estimated USD cost for one LLM call."""
-    # Strip date suffixes like -20240229
-    base = model.split(":")[0]  # handle "provider/model:version"
-    rates = _COST_PER_M.get(base, _DEFAULT_COST)
+    rates = _COST_PER_M.get(_canonical_model_name(model), _DEFAULT_COST)
     return round(
         (input_tokens  / 1_000_000) * rates["input"]
         + (output_tokens / 1_000_000) * rates["output"],
@@ -189,18 +231,59 @@ class Tracer:
 
         # per-node breakdown
         by_node: dict[str, dict] = {}
+        by_provider: dict[str, dict] = {}
+        by_model: dict[str, dict] = {}
         for e in self._events:
             if e.node not in by_node:
-                by_node[e.node] = {"calls": 0, "tokens": 0, "cost_usd": 0.0, "latency_ms": 0.0}
+                by_node[e.node] = {
+                    "calls": 0,
+                    "tokens": 0,
+                    "cost_usd": 0.0,
+                    "latency_ms": 0.0,
+                }
             by_node[e.node]["calls"]      += 1
             by_node[e.node]["tokens"]     += e.total_tokens
             by_node[e.node]["cost_usd"]   += e.cost_usd
             by_node[e.node]["latency_ms"] += e.latency_ms
 
+            provider = _provider_for_model(e.model)
+            if provider not in by_provider:
+                by_provider[provider] = {
+                    "calls": 0,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "total_tokens": 0,
+                    "cost_usd": 0.0,
+                }
+            by_provider[provider]["calls"] += 1
+            by_provider[provider]["input_tokens"] += e.input_tokens
+            by_provider[provider]["output_tokens"] += e.output_tokens
+            by_provider[provider]["total_tokens"] += e.total_tokens
+            by_provider[provider]["cost_usd"] += e.cost_usd
+
+            canonical_model = _canonical_model_name(e.model)
+            if canonical_model not in by_model:
+                by_model[canonical_model] = {
+                    "calls": 0,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "total_tokens": 0,
+                    "cost_usd": 0.0,
+                }
+            by_model[canonical_model]["calls"] += 1
+            by_model[canonical_model]["input_tokens"] += e.input_tokens
+            by_model[canonical_model]["output_tokens"] += e.output_tokens
+            by_model[canonical_model]["total_tokens"] += e.total_tokens
+            by_model[canonical_model]["cost_usd"] += e.cost_usd
+
         # round node stats
         for nd in by_node.values():
             nd["cost_usd"]   = round(nd["cost_usd"],   5)
             nd["latency_ms"] = round(nd["latency_ms"],  1)
+        for stats in by_provider.values():
+            stats["cost_usd"] = round(stats["cost_usd"], 5)
+        for stats in by_model.values():
+            stats["cost_usd"] = round(stats["cost_usd"], 5)
 
         slowest = max(self._events, key=lambda e: e.latency_ms)
 
@@ -215,6 +298,8 @@ class Tracer:
             "slowest_node":  slowest.node,
             "slowest_ms":    slowest.latency_ms,
             "by_node":       by_node,
+            "by_provider":   by_provider,
+            "by_model":      by_model,
         }
 
     def flush(self, outputs_dir: str | Path) -> Path:

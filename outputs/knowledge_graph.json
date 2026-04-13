@@ -1,0 +1,185 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "claim",
+      "text": "The U.S. Treasury Didn’t Declare the Country ‘Insolvent’",
+      "id": "6bf393d7"
+    },
+    {
+      "type": "source",
+      "id": "factcheck.org"
+    },
+    {
+      "type": "source",
+      "id": "fiscal.treasury.gov"
+    },
+    {
+      "type": "claim",
+      "text": "110,000-year-old discovery rewrites human history: Neanderthals and Homo sapiens worked together",
+      "id": "5332e1de"
+    },
+    {
+      "type": "source",
+      "id": "sciencedaily.com"
+    },
+    {
+      "type": "claim",
+      "text": "What’s in a name? Moderna’s “vaccine” vs. “therapy” dilemma",
+      "id": "93d6e6a1"
+    },
+    {
+      "type": "source",
+      "id": "technologyreview.com"
+    },
+    {
+      "type": "claim",
+      "text": "Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut",
+      "id": "0efa6fa2426f67ad"
+    },
+    {
+      "type": "source",
+      "id": "epa.gov"
+    },
+    {
+      "type": "claim",
+      "text": "New toothpaste stops gum disease without killing good bacteria",
+      "id": "042ca03f52c521fb"
+    },
+    {
+      "type": "source",
+      "id": "izi.fraunhofer.de"
+    },
+    {
+      "type": "claim",
+      "text": "Why opinion on AI is so divided",
+      "id": "0e3d35f06b80a80d"
+    },
+    {
+      "type": "source",
+      "id": "aiindex.stanford.edu"
+    }
+  ],
+  "edges": [
+    {
+      "rel": "CITES",
+      "source": "6bf393d7",
+      "target": "factcheck.org"
+    },
+    {
+      "rel": "CITES",
+      "source": "6bf393d7",
+      "target": "fiscal.treasury.gov"
+    },
+    {
+      "rel": "RELATED_TO",
+      "via": "factcheck.org",
+      "source": "6bf393d7",
+      "target": "0efa6fa2426f67ad"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "factcheck.org",
+      "target": "6bf393d7"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "factcheck.org",
+      "target": "0efa6fa2426f67ad"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "fiscal.treasury.gov",
+      "target": "6bf393d7"
+    },
+    {
+      "rel": "CITES",
+      "source": "5332e1de",
+      "target": "sciencedaily.com"
+    },
+    {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "5332e1de",
+      "target": "042ca03f52c521fb"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "sciencedaily.com",
+      "target": "5332e1de"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "sciencedaily.com",
+      "target": "042ca03f52c521fb"
+    },
+    {
+      "rel": "CITES",
+      "source": "93d6e6a1",
+      "target": "technologyreview.com"
+    },
+    {
+      "rel": "RELATED_TO",
+      "via": "technologyreview.com",
+      "source": "93d6e6a1",
+      "target": "0e3d35f06b80a80d"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "technologyreview.com",
+      "target": "93d6e6a1"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "technologyreview.com",
+      "target": "0e3d35f06b80a80d"
+    },
+    {
+      "rel": "CITES",
+      "source": "0efa6fa2426f67ad",
+      "target": "factcheck.org"
+    },
+    {
+      "rel": "CITES",
+      "source": "0efa6fa2426f67ad",
+      "target": "epa.gov"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "epa.gov",
+      "target": "0efa6fa2426f67ad"
+    },
+    {
+      "rel": "CITES",
+      "source": "042ca03f52c521fb",
+      "target": "sciencedaily.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "042ca03f52c521fb",
+      "target": "izi.fraunhofer.de"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "izi.fraunhofer.de",
+      "target": "042ca03f52c521fb"
+    },
+    {
+      "rel": "CITES",
+      "source": "0e3d35f06b80a80d",
+      "target": "technologyreview.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "0e3d35f06b80a80d",
+      "target": "aiindex.stanford.edu"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "aiindex.stanford.edu",
+      "target": "0e3d35f06b80a80d"
+    }
+  ]
+}

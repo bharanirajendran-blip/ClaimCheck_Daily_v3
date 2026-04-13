@@ -1,0 +1,77 @@
+{
+  "date": "2026-04-13",
+  "generated_at": "2026-04-13T19:24:57Z",
+  "results": [
+    {
+      "claim": "Vaccines cause autism.",
+      "source": "Manual Input",
+      "verdict": "FALSE",
+      "confidence": 0.95,
+      "summary": "There is no scientific evidence supporting the claim that vaccines cause autism. Vaccines are designed to protect against diseases without causing the diseases themselves or related complications.",
+      "key_evidence": [
+        "Vaccines contain only killed or weakened forms of germs like viruses or bacteria, and they do not cause the disease or put you at risk of its complications. (Source: WHO)",
+        "The MMR vaccine helps protect against measles, mumps, and rubella, and there is no evidence linking it to autism. (Source: NHS)"
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "9e7f4abda066",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.2",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 1.438,
+          "text": "se vaccines contain only killed or weakened forms of germs like viruses or bacteria, they do not cause the disease or put you at risk of its complications.\nMost vaccines are given by an injection, but some are given orally (by mouth) or sprayed into the nose.\n\n\r\n                                        How does a vaccine work?\r\n                                    \n\nVaccines reduce risks of getting a disease by working with your body’s natural defenses to build protection. When you get a vaccine, your immune system responds. It:\nrecognizes the invading germ, such as the virus or bacteria; \nproduces antibodies. Antibodies are proteins produced naturally by the immune system to fight disease; an"
+        },
+        {
+          "chunk_id": "cf97f3905d26",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 6.2",
+          "source_url": "https://www.nhs.uk/conditions/vaccinations/mmr-vaccine/",
+          "hybrid_score": 1.109,
+          "text": "ine when they are 12 months and 18 months old. Older children born on or after 1 January 2020 are also offered 1 or 2 doses of the vaccine.\nFind out more about the MMRV vaccine\n\nWhat the MMR vaccine is for\n\nThe MMR vaccine helps protect against:\nmeasles\nmumps\nrubella (german measles)\nThese 3 infections spread easily between people and can lead to serious problems including meningitis, blindness and hearing loss.\nIf you're pregnant, getting measles can cause premature birth, miscarriage or still birth. And getting rubella can cause serious problems for your baby such as damage to their sight and hearing.\n2 doses of the MMR vaccine gives you long-term protection.\nGetting vaccinated also helps "
+        },
+        {
+          "chunk_id": "f92c449a4078",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.4",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 1.256,
+          "text": "                    \n\nWithout vaccines, we are at risk of serious illness and disability from diseases like measles, meningitis, pneumonia, tetanus and polio. Many of these diseases can be life-threatening. WHO estimates that childhood vaccines alone save over 4 million lives every year.\nAlthough some diseases may have become uncommon, the germs that cause them continue to circulate in some or all parts of the world. In today’s world, infectious diseases can easily cross borders, and infect anyone who is not protected\nTwo key reasons to get vaccinated are to protect ourselves and to protect those around us. Because not everyone can be vaccinated – including very young babies, those who are s"
+        },
+        {
+          "chunk_id": "8fa3d55b3514",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.5",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 1.082,
+          "text": "eriously ill or have certain allergies – they depend on others being vaccinated to ensure they are also safe from vaccine-preventable diseases.\n\n\r\n                                        When should I get vaccinated (or vaccinate my child)?\r\n                                    \n\nVaccines protect us throughout life and at different ages, from birth to childhood, as teenagers and into old age. In most countries you will be given a vaccination card that tells you what vaccines you or your child have had and when the next vaccines or booster doses are due. It is important to make sure that all these vaccines are up to date.\nIf we delay vaccination, we are at risk of getting seriously sick. If we"
+        },
+        {
+          "chunk_id": "a80bfa8df127",
+          "chunk_kind": "summary",
+          "section": "Overview",
+          "source_url": "",
+          "hybrid_score": 0.0,
+          "text": "Research incomplete: maximum tool rounds reached."
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.8,
+        "citation_score": 0.8,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.8,
+        "overall_score": 0.85,
+        "unsupported_statements": [
+          "There is no scientific evidence supporting the claim that vaccines cause autism."
+        ],
+        "contradictions": [],
+        "missing_citations": [
+          "There is no scientific evidence supporting the claim that vaccines cause autism."
+        ],
+        "rewrite_suggestion": "The claim that vaccines cause autism is false. Vaccines contain only killed or weakened forms of germs like viruses or bacteria, and they do not cause the disease or put you at risk of its complications. The MMR vaccine, which protects against measles, mumps, and rubella, has no evidence linking it to autism.",
+        "should_retry": false
+      },
+      "review_required": false,
+      "review": null
+    }
+  ]
+}

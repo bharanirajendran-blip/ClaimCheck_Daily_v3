@@ -15,6 +15,7 @@ Flow:
 from __future__ import annotations
 
 import logging
+import os
 import re
 
 import httpx
@@ -22,8 +23,12 @@ from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
-# Maximum characters of article text to pass back to Claude per fetch
-MAX_CONTENT_CHARS = 4000
+# Maximum characters of article text returned to Claude per fetch.
+# Increase via MAX_CONTENT_CHARS env var when using a larger context window.
+MAX_CONTENT_CHARS = int(os.getenv("MAX_CONTENT_CHARS", "4000"))
+
+# Per-request HTTP timeout in seconds.  Increase for slow networks.
+HTTP_TIMEOUT = float(os.getenv("HTTP_TIMEOUT", "15"))
 
 # Anthropic tool definition — passed directly to messages.create(tools=[...])
 TOOL_DEFINITIONS = [
@@ -32,7 +37,7 @@ TOOL_DEFINITIONS = [
         "description": (
             "Fetch the text content of a web page or article. "
             "Use this to read the full text of a source article when researching a claim. "
-            "Returns the cleaned plain text of the page up to 4000 characters."
+            f"Returns the cleaned plain text of the page up to {MAX_CONTENT_CHARS} characters."
         ),
         "input_schema": {
             "type": "object",
@@ -66,7 +71,7 @@ def fetch_url(url: str) -> str:
     try:
         response = httpx.get(
             url,
-            timeout=15,
+            timeout=HTTP_TIMEOUT,
             follow_redirects=True,
             headers={
                 "User-Agent": (

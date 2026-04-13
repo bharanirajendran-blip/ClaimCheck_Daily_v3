@@ -142,12 +142,30 @@ def _block_to_dict(block) -> dict | None:
 @dataclass
 class Researcher:
     model: str = field(default_factory=lambda: os.getenv("ANTHROPIC_MODEL", "claude-opus-4-5-20251101"))
-    max_tokens: int = 10000        # must be greater than thinking_budget
+    # max_tokens must exceed thinking_budget; override via CLAUDE_MAX_TOKENS.
+    max_tokens: int = field(default_factory=lambda: int(os.getenv("CLAUDE_MAX_TOKENS", "10000")))
     use_extended_thinking: bool = True
-    thinking_budget: int = 3000    # enough to process fetched article content
+    # Controls how deeply Claude reasons before committing to a finding.
+    # Override via CLAUDE_THINKING_BUDGET (must stay below max_tokens).
+    thinking_budget: int = field(default_factory=lambda: int(os.getenv("CLAUDE_THINKING_BUDGET", "3000")))
     _client: anthropic.Anthropic = field(
         default_factory=anthropic.Anthropic, init=False, repr=False
     )
+
+    def __post_init__(self) -> None:
+        # Fail fast if the token budget config is invalid rather than letting
+        # every research call blow up with an opaque Anthropic API error.
+        # We clamp rather than hard-error so a partial misconfiguration
+        # (e.g. someone sets CLAUDE_THINKING_BUDGET too high) still runs.
+        min_gap = 1024  # Anthropic requires max_tokens > thinking_budget
+        if self.thinking_budget >= self.max_tokens:
+            clamped = max(self.max_tokens - min_gap, 1)
+            logger.warning(
+                "CLAUDE_THINKING_BUDGET (%d) must be less than CLAUDE_MAX_TOKENS (%d). "
+                "Clamping thinking_budget to %d.",
+                self.thinking_budget, self.max_tokens, clamped,
+            )
+            self.thinking_budget = clamped
 
     # ------------------------------------------------------------------
     # Public API

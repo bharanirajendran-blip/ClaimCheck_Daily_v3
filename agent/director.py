@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from typing import Any
 
 from openai import OpenAI
@@ -94,9 +95,17 @@ VERDICT_SCHEMA = {
 class Director:
     """GPT-4o powered Director agent."""
 
-    def __init__(self, model: str = "gpt-4o", max_claims_per_day: int = 3):
-        self.model = model
-        self.max_claims_per_day = max_claims_per_day
+    def __init__(
+        self,
+        model: str | None = None,
+        max_claims_per_day: int | None = None,
+    ):
+        # Both params can be overridden via env vars so the same codebase runs
+        # across dev / CI / different GPT tiers without touching source files.
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o")
+        self.max_claims_per_day = max_claims_per_day or int(
+            os.getenv("MAX_CLAIMS_PER_DAY", "3")
+        )
         self._client = OpenAI()
 
     # ------------------------------------------------------------------
@@ -158,12 +167,25 @@ class Director:
             f"Respond with JSON matching schema:\n{json.dumps(VERDICT_SCHEMA)}"
         )
 
-        # Pydantic validates verdict enum + confidence range here
+        # Parse verdict enum — fall back to UNVERIFIABLE rather than crashing
+        # if GPT returns a value that isn't in the enum (e.g. a typo or a new
+        # label the model invented).  The bad value is logged so it's auditable.
+        raw_verdict = response.get("verdict", "")
+        try:
+            verdict_label = VerdictLabel(raw_verdict)
+        except ValueError:
+            logger.warning(
+                "Director returned unknown verdict label %r for claim %s; "
+                "defaulting to UNVERIFIABLE.",
+                raw_verdict, claim.id,
+            )
+            verdict_label = VerdictLabel("UNVERIFIABLE")
+
         return Verdict(
             claim_id=claim.id,
-            verdict=VerdictLabel(response["verdict"]),
-            confidence=float(response["confidence"]),
-            summary=response["summary"],
+            verdict=verdict_label,
+            confidence=float(response.get("confidence", 0.0)),
+            summary=response.get("summary", "Verdict could not be determined."),
             key_evidence=response.get("key_evidence", []),
         )
 

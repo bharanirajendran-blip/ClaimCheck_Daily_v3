@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-13</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-13</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main>
+            <div class="card">
+              <div class="verdict-badge" style="background:#f59e0b">🟡 Mixed</div>
+              
+              <h2 class="claim-text">"Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut"</h2>
+              <p class="source">Source: <a href="https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/" target="_blank">FactCheck.org</a></p>
+              <p class="confidence">Confidence: 85%</p>
+              <p class="sources-summary">Evidence sources (2): <span class="domain-tag">factcheck.org</span><span class="domain-tag">epa.gov</span></p>
+              <p class="summary">The claim that glyphosate causes cancer is not clear-cut. While some evidence links glyphosate to cancer, particularly non-Hodgkin lymphoma in agricultural workers, findings are inconsistent. Regulatory agencies, including the EPA, have generally concluded that glyphosate is unlikely to be carcinogenic at typical exposure levels. Politicians' definitive claims that glyphosate 'causes cancer' oversimplify the nuanced scientific evidence.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>The WHO's International Agency for Research on Cancer classified glyphosate as 'probably carcinogenic to humans' based on animal studies and limited human evidence.</li><li>A large NIH study found no association between glyphosate and non-Hodgkin lymphoma or other cancers in agricultural workers.</li><li>The EPA's 2020 assessment stated glyphosate is unlikely to be a human carcinogen, but this was vacated by the Ninth Circuit Court, leaving the regulatory status in flux.</li><li>There is little evidence to suggest glyphosate causes cancer in the trace amounts found in food, distinguishing it from occupational exposure.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">factcheck.org</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.91<div class="retrieved-text">Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut - FactCheck.org
+
+Facebook
+
+Twitter
+
+Tumblr
+
+Close
+
+Skip to main content
+
+            FactCheck
+.org
+®
+
+A Project of The Annenberg Public Policy Center
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Following an executive order from the Trump administration that promotes production of glyphosate, some Democrats have claimed that the herbicide causes cancer. The science, however, is nuanced. While there is some evidence linking glyphosate to cancers in lab animals or to the blood cancer non-Hodgkin lymphoma in agricultural workers, the findings have been inconsistent. 
+
+Regulatory agencies around the world, 
+including
+ the U.S. Environmenta</div></li><li><span class="chunk-domain">epa.gov</span> · <strong>raw_source</strong> · Fetched Source 2.4 · score 0.61<div class="retrieved-text">s of human health and ecological risk, the weighing of such risks against the benefits of glyphosate and the interim risk mitigation measures, and alleged that EPA violated the Endangered Species Act (ESA). On May 18, 2021, EPA sought partial voluntary remand without vacatur of the ecological portion of the ID so the Agency could revisit aspects of its analysis in light of EPA’s November 2020 draft biological evaluation for glyphosate and recent court decisions for other herbicides, among other reasons.
+
+On June 17, 2022, the U.S. Court of Appeals for the Ninth Circuit vacated the human health portion of the glyphosate ID and held that EPA’s registration review decision under FIFRA was an ‘a</div></li><li><span class="chunk-domain">epa.gov</span> · <strong>raw_source</strong> · Fetched Source 2.3 · score 0.60<div class="retrieved-text"> found that glyphosate is unlikely to be a human carcinogen. The ID also identified potential ecological risks to non-target organisms, primarily non-target plants through spray drift. The ID identified interim risk mitigation measures in the form of label changes, including spray drift management language, herbicide resistance management language, a non-target organism advisory, and certain label consistency measures. It concluded that the benefits of glyphosate outweigh the potential ecological risks when glyphosate is used in accordance with labels.
+
+On March 20, 2020, the glyphosate ID was challenged in the U.S. Court of Appeals for the Ninth Circuit. Petitioners challenged EPA’s analysi</div></li><li><span class="chunk-domain">epa.gov</span> · <strong>raw_source</strong> · Fetched Source 2.5 · score 0.44<div class="retrieved-text">ction’ that triggered ESA obligations. The court also granted EPA’s request for voluntary remand, without vacatur, of the ecological portion of the ID but imposed an Oct. 1, 2022 deadline for EPA to issue a new ecological portion. EPA sought relief from this deadline, which the court denied on Aug. 5, 2022.
+
+EPA determined that withdrawal of the glyphosate ID was appropriate in consideration of the Ninth Circuit’s June 17, 2022 decision. The Agency was unable to finalize a new ecological portion in a registration review decision for glyphosate by the court-imposed Oct. 1, 2022, deadline because of the time needed to address the issues for which EPA sought remand of the ecological portion and</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:75%;background:hsl(90,70%,45%)"></div></div><span class="score-pct">75%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:83%;background:hsl(100,70%,45%)"></div></div><span class="score-pct">83%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              
+              <h2 class="claim-text">"New toothpaste stops gum disease without killing good bacteria"</h2>
+              <p class="source">Source: <a href="https://www.sciencedaily.com/releases/2026/04/260413043141.htm" target="_blank">Science Daily — Top Science</a></p>
+              <p class="confidence">Confidence: 85%</p>
+              <p class="sources-summary">Evidence sources (2): <span class="domain-tag">sciencedaily.com</span><span class="domain-tag">izi.fraunhofer.de</span></p>
+              <p class="summary">The claim that a new toothpaste stops gum disease without killing good bacteria is mostly true. The Fraunhofer Institute developed a compound that inhibits harmful bacteria like Porphyromonas gingivalis without affecting beneficial bacteria, which helps maintain oral microbiome balance. However, the claim simplifies the product's role in preventing rather than curing gum disease.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>Fraunhofer IZI's research confirms the development of a compound that selectively blocks harmful pathogens such as Porphyromonas gingivalis without affecting other bacteria.</li><li>The compound inhibits bacterial growth rather than killing bacteria, allowing beneficial microbes to thrive and restore balance.</li><li>Stephan Schilling, Head of Fraunhofer IZI branch, explains the mechanism as inhibiting the growth of harmful bacteria, which allows beneficial bacteria to occupy ecological niches.</li><li>The toothpaste product is confirmed to be on the market, developed by PerioTrap Pharmaceuticals GmbH.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 1.44<div class="retrieved-text">New toothpaste stops gum disease without killing good bacteria | ScienceDaily
+
+Science News
+
+from research organizations
+
+New toothpaste stops gum disease without killing good bacteria
+
+Date:
+
+April 13, 2026
+
+Source:
+
+Fraunhofer-Gesellschaft
+
+Summary:
+
+Scientists have developed a new way to fight gum disease without wiping out the mouth’s helpful bacteria—a major shift from traditional treatments. Instead of killing everything, this targeted approach blocks only the harmful microbes that drive periodontitis, allowing beneficial bacteria to thrive and restore balance naturally.
+
+Share:
+
+Facebook
+
+Twitter
+
+Pinterest
+
+LinkedIN
+
+Email
+
+FULL STORY
+
+A new “smart” toothpaste fights gum disease by d</div></li><li><span class="chunk-domain">izi.fraunhofer.de</span> · <strong>raw_source</strong> · Fetched Source 3.6 · score 0.11<div class="retrieved-text">epartment of Cell and Gene Therapy Development at the Fraunhofer Institute for Cell Therapy and Immunology IZI, has been appointed to the new professorship in Clinical Immunology and Cell Therapy at Magdeburg University Hospital, effective October 1, 2025. At the same time, he will also assume leadership of the Institute for Clinical Immunology and Cell Therapy at the University of Magdeburg.
+
+more info
+
+Decentralized Manufacturing of CAR-T Cell Therapeutics
+
+News
+ / 
+August 27, 2025
+
+Fraunhofer
+
+[Content truncated]</div></li><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.4 · score 0.83<div class="retrieved-text">s gingivalis often regain dominance quickly because they thrive in inflamed gum tissue. Beneficial bacteria grow more slowly, which can lead to an imbalance known as dysbiosis and allow the disease to return.
+
+A New Way to Block Harmful Bacteria
+
+Researchers at the Fraunhofer Institute for Cell Therapy and Immunology IZI in Halle identified a substance that targets harmful pathogens without affecting the rest of the microbial community. This compound, called guanidinoethylbenzylamino imidazopyridine acetate, works by preventing the growth of bacteria like Porphyromonas gingivalis rather than killing them outright.
+
+Stephan Schilling, Head of the Fraunhofer IZI branch Molecular Drug Biochemis</div></li><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.5 · score 0.51<div class="retrieved-text">try and Therapy Development, explains: "Rather than simply killing gingivitis pathogens, it inhibits their growth. They are unable to exert their toxic effects, so beneficial bacteria can occupy niches that would otherwise be inaccessible to them. In this way, the substance works in harmony with healthy bacteria to gently rebuild and stabilize the microbial balance in the mouth," says Schilling.
+
+From Research Project to Toothpaste
+
+The underlying technology was first developed through an EU-funded research project involving international partners. In 2018, Periotrap Pharmaceuticals GmbH was established in Halle to turn this discovery into practical oral care solutions. Working closely with </div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#22c55e">✅ True</div>
+              
+              <h2 class="claim-text">"Why opinion on AI is so divided"</h2>
+              <p class="source">Source: <a href="https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/" target="_blank">MIT Technology Review</a></p>
+              <p class="confidence">Confidence: 95%</p>
+              <p class="sources-summary">Evidence sources (2): <span class="domain-tag">technologyreview.com</span><span class="domain-tag">aiindex.stanford.edu</span></p>
+              <p class="summary">The claim that opinion on AI is 'so divided' is accurate and well-documented. The Stanford AI Index 2026 provides data showing a significant 50-point gap between expert and public sentiment on AI's job impact, and the MIT Technology Review article offers explanations based on differing user experiences and AI capabilities.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>The Stanford AI Index 2026 report notes a 50 percentage point gap in AI job impact sentiment: 73% of US AI experts are positive, compared to 23% of the general public.</li><li>The 'jagged frontier' concept explains inconsistent AI performance, with models excelling at tasks like coding but failing at simpler tasks like reading analog clocks.</li><li>Stanford HAI acknowledges a 'widening gap between what AI can do and how prepared we are to manage it.'</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.3 · score 0.55<div class="retrieved-text">I can’t even read a clock.” (The Stanford report notes that Google DeepMind’s top reasoning model, Gemini Deep Think, scored a gold medal in the International Math Olympiad but is unable to read analog clocks half the time.)
+ 
+Michelle does a great job covering the report’s highlights. But I wanted to dwell on a question that I can’t shake. Why is it so hard to know exactly what’s going on in AI right now?  
+ 
+
+The widest gap seems to be between experts and non-experts. “AI experts and the general public view the technology’s trajectory very differently,” the authors of the AI Index write. “Assessing AI’s impact on jobs, 73% of U.S. experts are positive, compared with only 23% of the public,</div></li><li><span class="chunk-domain">aiindex.stanford.edu</span> · <strong>raw_source</strong> · Fetched Source 2.2 · score 0.43<div class="retrieved-text">s a widening gap between what AI can do and how prepared we are to manage it. While AI continues its rapid integration into the global economy – with technical capabilities improving, investment accelerating, and adoption spreading – the frameworks needed to govern, evaluate, and understand this technology are falling behind. In a field where data transparency is declining, independent, rigorous measurement has never been more critical. This report provides the most comprehensive analysis of AI's trajectory available.
+Read the Report
+AI’s influence on society has never been more pronounced.
+At Stanford HAI, we believe AI is poised to be the most transformative technology of the 21st century.</div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.5 · score 0.16<div class="retrieved-text">se technical tasks like coding have right or wrong results, it is easier to train models to do them, compared with tasks that are more open-ended. What’s more, models that can code are proving to be profitable, so model makers are throwing resources at improving them.
+ 
+This means that people who use those tools for coding or other technical work are experiencing this technology at its best. Outside of those use cases, you get more of a mixed bag. LLMs still make dumb mistakes. This phenomenon has become known as the “jagged frontier”: Models are very good at doing some things and less good at others.
+ 
+The influential AI researcher 
+Andrej Karpathy
+ also had some thoughts. “Judging by my [t</div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.16<div class="retrieved-text">Why opinion on AI is so divided | MIT Technology Review
+
+Skip to Content
+ 
+This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, 
+sign up here
+.
+ 
+In an industry that doesn’t stand still, Stanford’s AI Index, 
+an annual roundup of key results and trends
+, is a chance to take a breath. (It’s a
+ marathon, not a sprint
+, after all.)
+ 
+ 
+This year’s report
+, which dropped today, is full of striking stats. A lot of the value comes from having numbers to back up gut feelings you might already have, such as the sense that the US is gunning harder for AI than everyone else: It hosts 5,427 data centers (and counting). That’s more t</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:92%;background:hsl(111,70%,45%)"></div></div><span class="score-pct">92%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-13T19:49:05Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

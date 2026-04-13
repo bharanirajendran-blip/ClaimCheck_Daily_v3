@@ -12,17 +12,18 @@ Any MCP host (Claude Desktop, custom app) can connect and call:
 
 Usage
 ─────
-  # stdio transport (Claude Desktop / local MCP host)
-  python -m agent.mcp_server
+  # recommended stdio transport entrypoint (Claude Desktop / local MCP host)
+  python run.py --serve-mcp
 
-  # or directly
+  # direct module entrypoint still works in some environments
+  python -m agent.mcp_server
   python agent/mcp_server.py
 
 Then add to Claude Desktop's mcp_servers config:
   {
     "claimcheck": {
-      "command": "python",
-      "args": ["-m", "agent.mcp_server"],
+      "command": "/absolute/path/to/.venv/bin/python",
+      "args": ["/absolute/path/to/ClaimCheck_Daily_v3/run.py", "--serve-mcp"],
       "cwd": "/path/to/ClaimCheck_Daily_v3"
     }
   }
@@ -56,13 +57,39 @@ load_dotenv()
 # ── Add project root to path so agent.* imports work ─────────────────────────
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mcp.server.fastmcp import FastMCP
-
-from agent.pipeline import run_pipeline
-from agent.retriever import HybridRetriever
-from agent.store import load_all_chunks
+_MCP_IMPORT_ERROR: ModuleNotFoundError | None = None
+try:
+    from mcp.server.fastmcp import FastMCP
+except ModuleNotFoundError as exc:  # pragma: no cover - exercised in dependency-light envs
+    FastMCP = None  # type: ignore[assignment]
+    _MCP_IMPORT_ERROR = exc
 
 logger = logging.getLogger(__name__)
+
+
+class _MissingFastMCPServer:
+    """Fallback object so the module remains importable without the mcp SDK."""
+
+    def tool(self, *args, **kwargs):
+        def decorator(func):
+            return func
+
+        return decorator
+
+    def run(self, *args, **kwargs) -> None:
+        raise RuntimeError(
+            "Missing optional dependency 'mcp'. Install project dependencies with "
+            "`pip install -r requirements.txt` before starting the MCP server."
+        )
+
+
+def _dependency_error_message(exc: ModuleNotFoundError) -> str:
+    """Convert missing Python dependency errors into actionable text."""
+    package = exc.name or "a required package"
+    return (
+        f"Missing Python dependency '{package}'. Install project dependencies with "
+        "`pip install -r requirements.txt` before using this MCP tool."
+    )
 
 # ── Server configuration ──────────────────────────────────────────────────────
 OUTPUTS_DIR = Path(os.getenv("OUTPUTS_DIR", "outputs"))
@@ -95,6 +122,11 @@ def _artifact_output_dirs() -> list[Path]:
 
 def _load_all_evidence_chunks():
     """Load evidence from both daily and manual stores, deduplicated by chunk_id."""
+    try:
+        from agent.store import load_all_chunks
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(_dependency_error_message(exc)) from exc
+
     merged: dict[str, object] = {}
     for outputs_dir in _artifact_output_dirs():
         for chunk in load_all_chunks(outputs_dir):
@@ -122,15 +154,28 @@ def _display_path(path: Path) -> str:
     except ValueError:
         return str(path)
 
+
+def _require_mcp_dependency() -> None:
+    """Raise a user-friendly error if the optional MCP dependency is unavailable."""
+    if _MCP_IMPORT_ERROR is not None:
+        raise RuntimeError(
+            "Missing optional dependency 'mcp'. Install project dependencies with "
+            "`pip install -r requirements.txt` before starting the MCP server."
+        ) from _MCP_IMPORT_ERROR
+
 # ── Create MCP server ─────────────────────────────────────────────────────────
-mcp = FastMCP(
-    name="claimcheck",
-    instructions=(
-        "ClaimCheck is a fact-checking tool. Use check_claim to verify whether "
-        "a specific statement is true, false, or mixed. Use search_evidence to "
-        "find relevant stored evidence with ClaimCheck's hybrid retriever. Use "
-        "get_verdict_history to retrieve previously fact-checked claims and their verdicts."
-    ),
+mcp = (
+    FastMCP(
+        name="claimcheck",
+        instructions=(
+            "ClaimCheck is a fact-checking tool. Use check_claim to verify whether "
+            "a specific statement is true, false, or mixed. Use search_evidence to "
+            "find relevant stored evidence with ClaimCheck's hybrid retriever. Use "
+            "get_verdict_history to retrieve previously fact-checked claims and their verdicts."
+        ),
+    )
+    if FastMCP is not None
+    else _MissingFastMCPServer()
 )
 
 
@@ -144,7 +189,7 @@ mcp = FastMCP(
         "it with an independent LLM-as-a-Judge verifier. "
         "Use this when the user asks you to verify, fact-check, or assess the accuracy of a claim. "
         "Returns a JSON string with: claim, verdict, confidence, summary, key_evidence, "
-        "verifier_score, and retrieved_evidence."
+        "verifier_score, cost_summary, and retrieved_evidence."
     )
 )
 def check_claim(text: str) -> str:
@@ -157,6 +202,10 @@ def check_claim(text: str) -> str:
         JSON string with verdict, confidence, summary, evidence, and quality scores.
     """
     logger.info("[mcp] check_claim called: %s", text[:80])
+    try:
+        from agent.pipeline import run_pipeline
+    except ModuleNotFoundError as exc:
+        return json.dumps({"error": _dependency_error_message(exc), "claim": text})
 
     try:
         report = run_pipeline(
@@ -176,6 +225,7 @@ def check_claim(text: str) -> str:
     verifier = report.verifier_reports.get(verdict.claim_id)
     hits = report.retrieval_hits.get(verdict.claim_id, [])
     review = report.review_queue.get(verdict.claim_id)
+    trace_summary = report.trace_summary or {}
 
     result = {
         "claim": text,
@@ -188,6 +238,13 @@ def check_claim(text: str) -> str:
         "review_required": review is not None,
         "review_status": review.status if review else None,
         "review_reason": review.reason if review else None,
+        "cost_summary": {
+            "total_cost_usd": trace_summary.get("total_cost_usd", 0.0),
+            "total_tokens": trace_summary.get("total_tokens", 0),
+            "total_input_tokens": trace_summary.get("total_input_tokens", 0),
+            "total_output_tokens": trace_summary.get("total_output_tokens", 0),
+            "by_provider": trace_summary.get("by_provider", {}),
+        },
         "retrieved_evidence": [
             {
                 "source_url": h.chunk.source_url,
@@ -229,7 +286,12 @@ def search_evidence(query: str, k: int = 5) -> str:
     logger.info("[mcp] search_evidence called: %s (k=%d)", query[:80], k)
     k = min(max(1, k), 20)   # clamp to [1, 20]
 
-    chunks = _load_all_evidence_chunks()
+    try:
+        from agent.retriever import HybridRetriever
+        chunks = _load_all_evidence_chunks()
+    except (ModuleNotFoundError, RuntimeError) as exc:
+        return json.dumps({"error": str(exc), "query": query})
+
     if not chunks:
         return json.dumps({"query": query, "results": [], "message": "Evidence store is empty — run the pipeline first."})
 
@@ -332,7 +394,18 @@ def get_verdict_history(date: str | None = None) -> str:
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
+def main() -> int:
+    """Run the ClaimCheck MCP server over stdio."""
     logging.basicConfig(level=logging.INFO)
+    try:
+        _require_mcp_dependency()
+    except RuntimeError as exc:
+        logger.error(str(exc))
+        return 1
     logger.info("Starting ClaimCheck MCP server (stdio transport)...")
     mcp.run(transport="stdio")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -44,6 +44,21 @@ VERDICT_LABELS = {
 }
 
 
+def _truncate(text: str, limit: int = 90) -> str:
+    """Shorten long archive previews without breaking the page layout."""
+    text = (text or "").strip()
+    if len(text) <= limit:
+        return text
+    return text[: limit - 1].rstrip() + "…"
+
+
+def _format_cost(cost: float | int | None) -> str:
+    """Render a small USD value consistently."""
+    if cost is None:
+        return "$0.00000"
+    return f"${float(cost):.5f}"
+
+
 class Publisher:
     def __init__(
         self,
@@ -76,6 +91,7 @@ class Publisher:
         data = {
             "date": slug,
             "generated_at": report.generated_at,
+            "trace_summary": report.trace_summary,
             "results": [
                 {
                     "claim": next(
@@ -119,6 +135,8 @@ class Publisher:
     def _write_daily_page(self, report: DailyReport, slug: str) -> None:
         path = self.docs_dir / f"{slug}.html"
         cards = ""
+        trace_summary = report.trace_summary or {}
+        cost_summary_html = self._cost_summary_html(trace_summary)
         for verdict in report.verdicts:
             claim = next((c for c in report.claims if c.id == verdict.claim_id), None)
             if not claim:
@@ -230,7 +248,7 @@ class Publisher:
               <p class="date">{slug}</p>
               <a href="index.html">← All reports</a>
             </header>
-            <main>{cards}</main>
+            <main>{cost_summary_html}{cards}</main>
             <footer>
               Generated {report.generated_at} · Powered by Claude + GPT-4o
             </footer>""",
@@ -243,8 +261,12 @@ class Publisher:
             [p.stem for p in self.docs_dir.glob("20*.html")],
             reverse=True,
         )
-        links = "".join(
-            f'<li><a href="{s}.html">{s}</a></li>' for s in slugs
+        links = "".join(self._archive_link_html(s) for s in slugs)
+        sibling_link = self._sibling_archive_link()
+        sibling_html = (
+            f'<p class="archive-nav"><a href="{sibling_link["href"]}">{sibling_link["label"]}</a></p>'
+            if sibling_link
+            else ""
         )
         html = _page_template(
             title="ClaimCheck Daily — Archive",
@@ -252,12 +274,90 @@ class Publisher:
             <header><h1>ClaimCheck Daily</h1><p>Automated fact-checking, every day.</p></header>
             <main>
               <h2>Latest: <a href="{latest_slug}.html">{latest_slug}</a></h2>
+              {sibling_html}
               <h3>Archive</h3>
               <ul class="archive">{links}</ul>
             </main>
             <footer>Powered by Claude + GPT-4o · <a href="https://github.com">Source</a></footer>""",
         )
         (self.docs_dir / "index.html").write_text(html, encoding="utf-8")
+
+    def _archive_link_html(self, slug: str) -> str:
+        """Render one archive entry with a short preview from the JSON artifact."""
+        artifact = self.outputs_dir / f"{slug}.json"
+        preview = "Report available"
+        count_text = ""
+
+        try:
+            data = json.loads(artifact.read_text(encoding="utf-8"))
+            results = data.get("results", [])
+        except Exception:
+            results = []
+
+        if results:
+            if len(results) == 1:
+                preview = _truncate(results[0].get("claim", "") or "Manual claim report")
+                count_text = "1 claim"
+            else:
+                preview = _truncate(results[0].get("claim", "") or "Daily fact-check report")
+                count_text = f"{len(results)} claims"
+
+        meta_html = (
+            f'<div class="archive-meta">{count_text}</div>' if count_text else ""
+        )
+        return (
+            f'<li class="archive-item">'
+            f'<a href="{slug}.html">{slug}</a>'
+            f'<div class="archive-preview">{preview}</div>'
+            f'{meta_html}'
+            f'</li>'
+        )
+
+    def _sibling_archive_link(self) -> dict[str, str] | None:
+        """Return a cross-link between daily and manual archives when available."""
+        name = self.docs_dir.name
+        if name.endswith("_manual"):
+            sibling = self.docs_dir.with_name(name.removesuffix("_manual"))
+            label = "View Daily Archive"
+        else:
+            sibling = self.docs_dir.with_name(f"{name}_manual")
+            label = "View Manual Claims Archive"
+
+        if sibling == self.docs_dir or not sibling.exists():
+            return None
+
+        href = f"../{sibling.name}/index.html"
+        return {"href": href, "label": label}
+
+    def _cost_summary_html(self, trace_summary: dict) -> str:
+        """Render a compact per-run cost/tokens summary above the verdict cards."""
+        if not trace_summary or not trace_summary.get("spans"):
+            return ""
+
+        provider_stats = trace_summary.get("by_provider", {})
+        provider_lines = "".join(
+            (
+                f'<li><strong>{provider.title()}</strong>: '
+                f'{_format_cost(stats.get("cost_usd"))} · '
+                f'{stats.get("total_tokens", 0):,} tokens '
+                f'({stats.get("calls", 0)} call{"s" if stats.get("calls", 0) != 1 else ""})'
+                f'</li>'
+            )
+            for provider, stats in sorted(provider_stats.items())
+        )
+
+        return (
+            f'<section class="run-summary">'
+            f'<h2>Run Cost & Usage</h2>'
+            f'<div class="run-metrics">'
+            f'<div class="run-metric"><span>Total Cost</span><strong>{_format_cost(trace_summary.get("total_cost_usd"))}</strong></div>'
+            f'<div class="run-metric"><span>Total Tokens</span><strong>{trace_summary.get("total_tokens", 0):,}</strong></div>'
+            f'<div class="run-metric"><span>LLM Calls</span><strong>{trace_summary.get("spans", 0)}</strong></div>'
+            f'<div class="run-metric"><span>Slowest Node</span><strong>{trace_summary.get("slowest_node", "n/a")}</strong></div>'
+            f'</div>'
+            f'<ul class="provider-costs">{provider_lines}</ul>'
+            f'</section>'
+        )
 
 
 # ------------------------------------------------------------------
@@ -295,7 +395,21 @@ def _page_template(title: str, body: str) -> str:
     details summary {{ cursor: pointer; color: var(--accent); }}
     ul {{ margin: .5rem 0 0 1.25rem; line-height: 1.8; }}
     .archive {{ list-style: none; padding: 0; }}
-    .archive li {{ margin: .4rem 0; }}
+    .archive-item {{ margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }}
+    .archive-preview {{ margin-top: .3rem; color: var(--text); line-height: 1.5; }}
+    .archive-meta {{ margin-top: .2rem; color: var(--muted); font-size: .82rem; }}
+    .archive-nav {{ margin: .6rem 0 1.2rem; }}
+    .run-summary {{ background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }}
+    .run-summary h2 {{ font-size: 1.15rem; margin-bottom: .9rem; }}
+    .run-metrics {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }}
+    .run-metric {{ background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }}
+    .run-metric span {{ display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }}
+    .run-metric strong {{ font-size: 1rem; }}
+    .provider-costs {{ margin: 1rem 0 0 1.1rem; color: var(--muted); }}
+    .provider-costs li {{ margin: .35rem 0; }}
     footer {{ margin-top: 3rem; color: var(--muted); font-size: .85rem;
               border-top: 1px solid #334155; padding-top: 1rem; }}
     /* LLM-as-a-Judge score bars */
