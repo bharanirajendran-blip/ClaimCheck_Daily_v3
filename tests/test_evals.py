@@ -251,13 +251,18 @@ class TestVerifierRubric:
                 chunk=EvidenceChunk(
                     chunk_id=f"c{i}",
                     claim_id="test-claim-001",
+                    # claim_text is required (added when knowledge graph was introduced)
+                    claim_text="The claim being tested.",
                     source_url=f"https://example.com/{i}",
                     section="body",
                     text=f"Evidence statement {i} supporting the claim.",
                     chunk_kind="raw_source",
                     date_slug="2026-04-12",
                 ),
-                score=0.85,
+                # RetrievalHit has three score fields, not a single score=
+                vector_score=0.85,
+                keyword_score=0.80,
+                hybrid_score=0.83,
             )
             for i in range(4)
         ]

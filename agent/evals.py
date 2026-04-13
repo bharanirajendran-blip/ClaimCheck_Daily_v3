@@ -275,7 +275,8 @@ def compute_ragas_scores(outputs_dir: str | Path) -> RAGASScores:
         verdict  = r.get("verdict", "UNKNOWN")
         conf     = float(r.get("confidence", 0.0))
         ev       = r.get("key_evidence", [])
-        vs       = r.get("verifier_score", None)
+        # publisher.py writes the key as "verifier_report" (a full model_dump dict)
+        vs       = r.get("verifier_report", None)
         retried  = r.get("retried", False)
         review_req = r.get("review_required", False)
 
@@ -472,7 +473,17 @@ def _verdicts_compatible(actual: str, expected: str) -> bool:
 
 
 def _run_single_claim(claim_text: str, outputs_path: Path):
-    """Run the full pipeline for one claim (requires API keys)."""
+    """
+    Run the full pipeline for one claim (requires API keys).
+
+    DailyReport stores results in two parallel lists:
+      report.claims   — list[Claim] with .id and .text
+      report.verdicts — list[Verdict] with .claim_id, .verdict, .confidence
+
+    Verifier details live in report.verifier_reports[claim_id] (a VerifierReport).
+    This function matches the produced verdict back to the requested claim_text
+    by normalising both strings, then returns (verdict_label, verifier_scores_dict).
+    """
     try:
         from agent.pipeline import run_pipeline
         report = run_pipeline(
@@ -481,10 +492,18 @@ def _run_single_claim(claim_text: str, outputs_path: Path):
             manual_claim=claim_text,
             log_level="WARNING",
         )
-        for r in report.results:
-            if _normalize(r.claim) == _normalize(claim_text):
-                vs = r.verifier_score if hasattr(r, "verifier_score") else None
-                return r.verdict, vs
+        # Build a claim_id → claim_text lookup from report.claims
+        claim_id_by_text = {
+            _normalize(c.text): c.id for c in report.claims
+        }
+        target_id = claim_id_by_text.get(_normalize(claim_text))
+
+        for verdict in report.verdicts:
+            if target_id and verdict.claim_id != target_id:
+                continue
+            vr = report.verifier_reports.get(verdict.claim_id)
+            vs = vr.model_dump() if vr is not None else None
+            return verdict.verdict, vs
     except Exception as exc:
         logger.warning("[evals] single-claim run failed: %s", exc)
     return None, None
