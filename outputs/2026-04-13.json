@@ -1,18 +1,81 @@
 {
   "date": "2026-04-13",
-  "generated_at": "2026-04-13T19:49:05Z",
+  "generated_at": "2026-04-13T20:30:57Z",
+  "trace_summary": {
+    "spans": 17,
+    "failures": 0,
+    "total_input_tokens": 38680,
+    "total_output_tokens": 6267,
+    "total_tokens": 44947,
+    "total_cost_usd": 0.28747,
+    "total_latency_ms": 112816.4,
+    "slowest_node": "research_node",
+    "slowest_ms": 25440.8,
+    "by_node": {
+      "director": {
+        "calls": 4,
+        "tokens": 11685,
+        "cost_usd": 0.03533,
+        "latency_ms": 11777.0
+      },
+      "research_node": {
+        "calls": 10,
+        "tokens": 27616,
+        "cost_usd": 0.23258,
+        "latency_ms": 93360.4
+      },
+      "verify_node": {
+        "calls": 3,
+        "tokens": 5646,
+        "cost_usd": 0.01956,
+        "latency_ms": 7679.0
+      }
+    },
+    "by_provider": {
+      "openai": {
+        "calls": 7,
+        "input_tokens": 15789,
+        "output_tokens": 1542,
+        "total_tokens": 17331,
+        "cost_usd": 0.05489
+      },
+      "anthropic": {
+        "calls": 10,
+        "input_tokens": 22891,
+        "output_tokens": 4725,
+        "total_tokens": 27616,
+        "cost_usd": 0.23258
+      }
+    },
+    "by_model": {
+      "gpt-4o": {
+        "calls": 7,
+        "input_tokens": 15789,
+        "output_tokens": 1542,
+        "total_tokens": 17331,
+        "cost_usd": 0.05489
+      },
+      "claude-opus-4-5-20251101": {
+        "calls": 10,
+        "input_tokens": 22891,
+        "output_tokens": 4725,
+        "total_tokens": 27616,
+        "cost_usd": 0.23258
+      }
+    }
+  },
   "results": [
     {
       "claim": "Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut",
       "source": "FactCheck.org",
       "verdict": "MIXED",
-      "confidence": 0.85,
-      "summary": "The claim that glyphosate causes cancer is not clear-cut. While some evidence links glyphosate to cancer, particularly non-Hodgkin lymphoma in agricultural workers, findings are inconsistent. Regulatory agencies, including the EPA, have generally concluded that glyphosate is unlikely to be carcinogenic at typical exposure levels. Politicians' definitive claims that glyphosate 'causes cancer' oversimplify the nuanced scientific evidence.",
+      "confidence": 0.8,
+      "summary": "The claim that politicians say glyphosate causes cancer but the evidence is not clear-cut is accurate. Politicians have made strong claims about glyphosate causing cancer, but the scientific evidence is contested. While the IARC classified glyphosate as 'probably carcinogenic,' major regulatory agencies and a key NIH study have found it unlikely to pose carcinogenic risks. The evidence is nuanced and not definitive.",
       "key_evidence": [
-        "The WHO's International Agency for Research on Cancer classified glyphosate as 'probably carcinogenic to humans' based on animal studies and limited human evidence.",
-        "A large NIH study found no association between glyphosate and non-Hodgkin lymphoma or other cancers in agricultural workers.",
-        "The EPA's 2020 assessment stated glyphosate is unlikely to be a human carcinogen, but this was vacated by the Ninth Circuit Court, leaving the regulatory status in flux.",
-        "There is little evidence to suggest glyphosate causes cancer in the trace amounts found in food, distinguishing it from occupational exposure."
+        "Politicians, including Senator Cory Booker and Senator Ed Markey, have made strong claims that glyphosate causes cancer, as documented by FactCheck.org.",
+        "The IARC classified glyphosate as 'probably carcinogenic to humans' based on limited evidence in humans and sufficient evidence in animals, but this classification assesses hazard, not risk.",
+        "The U.S. Environmental Protection Agency and other regulatory bodies have concluded that glyphosate is unlikely to pose carcinogenic risks at real-world exposure levels.",
+        "A major NIH study did not find an association between glyphosate and non-Hodgkin lymphoma or other cancers, highlighting the inconsistency in findings across studies."
       ],
       "retrieved_evidence": [
         {
@@ -20,58 +83,55 @@
           "chunk_kind": "raw_source",
           "section": "Fetched Source 1.1",
           "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
-          "hybrid_score": 0.907,
+          "hybrid_score": 0.797,
           "text": "Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut - FactCheck.org\n\nFacebook\n\nTwitter\n\nTumblr\n\nClose\n\nSkip to main content\n\n            FactCheck\n.org\n®\n\nA Project of The Annenberg Public Policy Center\n\n \n\n \n\n \n\n \n\n \n\n \n\n \n\nFollowing an executive order from the Trump administration that promotes production of glyphosate, some Democrats have claimed that the herbicide causes cancer. The science, however, is nuanced. While there is some evidence linking glyphosate to cancers in lab animals or to the blood cancer non-Hodgkin lymphoma in agricultural workers, the findings have been inconsistent. \n\nRegulatory agencies around the world, \nincluding\n the U.S. Environmenta"
         },
         {
-          "chunk_id": "95501e0b4ff7",
+          "chunk_id": "260c2a8ce3da",
           "chunk_kind": "raw_source",
           "section": "Fetched Source 2.4",
-          "source_url": "https://www.epa.gov/ingredients-used-pesticide-products/glyphosate",
-          "hybrid_score": 0.609,
-          "text": "s of human health and ecological risk, the weighing of such risks against the benefits of glyphosate and the interim risk mitigation measures, and alleged that EPA violated the Endangered Species Act (ESA). On May 18, 2021, EPA sought partial voluntary remand without vacatur of the ecological portion of the ID so the Agency could revisit aspects of its analysis in light of EPA’s November 2020 draft biological evaluation for glyphosate and recent court decisions for other herbicides, among other reasons.\n\nOn June 17, 2022, the U.S. Court of Appeals for the Ninth Circuit vacated the human health portion of the glyphosate ID and held that EPA’s registration review decision under FIFRA was an ‘a"
+          "source_url": "https://www.iarc.who.int/featured-news/media-centre-iarc-news-glyphosate/",
+          "hybrid_score": 0.177,
+          "text": "ent studies, by independent experts, free from vested interests. It follows strict scientific criteria, and the classification system is recognized and used as a reference all around the world. This is because IARC evaluations are based on independent scientific review and rigorous criteria and procedures.\n\nTo reach these conclusions, IARC reviewed about 1000 studies. Some of the studies looked at people exposed through their jobs, such as farmers. Others were experimental studies on cancer and cancerrelated effects in experimental systems.\n\nCould the carcinogenic effects of glyphosate be related to the other chemicals in the formulations?\n\nNo. The IARC Monographs evaluation is based on the "
         },
         {
-          "chunk_id": "d2c51440d5bc",
+          "chunk_id": "199f6cfb92d6",
           "chunk_kind": "raw_source",
-          "section": "Fetched Source 2.3",
-          "source_url": "https://www.epa.gov/ingredients-used-pesticide-products/glyphosate",
-          "hybrid_score": 0.603,
-          "text": " found that glyphosate is unlikely to be a human carcinogen. The ID also identified potential ecological risks to non-target organisms, primarily non-target plants through spray drift. The ID identified interim risk mitigation measures in the form of label changes, including spray drift management language, herbicide resistance management language, a non-target organism advisory, and certain label consistency measures. It concluded that the benefits of glyphosate outweigh the potential ecological risks when glyphosate is used in accordance with labels.\n\nOn March 20, 2020, the glyphosate ID was challenged in the U.S. Court of Appeals for the Ninth Circuit. Petitioners challenged EPA’s analysi"
+          "section": "Fetched Source 1.4",
+          "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
+          "hybrid_score": 0.229,
+          "text": " has continued to \nindicate\n that glyphosate is dangerous. In a Feb. 27 appearance on the “Joe Rogan Experience,” for example, he \nmentioned\n the link to NHL, the blood cancer found in some but not other studies of people who apply glyphosate.\n\nOther Republicans, such as Rep. Nancy Mace of South Carolina, have also responded, although she did not make as strong of a claim about cancer, saying only that glyphosate “has been linked” to cancer.\n\n“Glyphosate and other pesticides don’t belong on our food or in our children’s bodies,” she wrote in a March 8 \npost\n on X. “We are systematically poisoning ourselves.”\n\nThere is little to suggest glyphosate causes cancer in the trace amounts present in"
         },
         {
-          "chunk_id": "0724b026c325",
+          "chunk_id": "cf4a8e80d253",
           "chunk_kind": "raw_source",
-          "section": "Fetched Source 2.5",
-          "source_url": "https://www.epa.gov/ingredients-used-pesticide-products/glyphosate",
-          "hybrid_score": 0.441,
-          "text": "ction’ that triggered ESA obligations. The court also granted EPA’s request for voluntary remand, without vacatur, of the ecological portion of the ID but imposed an Oct. 1, 2022 deadline for EPA to issue a new ecological portion. EPA sought relief from this deadline, which the court denied on Aug. 5, 2022.\n\nEPA determined that withdrawal of the glyphosate ID was appropriate in consideration of the Ninth Circuit’s June 17, 2022 decision. The Agency was unable to finalize a new ecological portion in a registration review decision for glyphosate by the court-imposed Oct. 1, 2022, deadline because of the time needed to address the issues for which EPA sought remand of the ecological portion and"
+          "section": "Fetched Source 1.3",
+          "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
+          "hybrid_score": 0.178,
+          "text": "as long \nsaid\n that glyphosate \ncauses\n cancer, although he \ndefended\n the executive order.\n\nDemocrats quickly noted the contradiction — and proceeded to make claims of their own about glyphosate.\n\n“This executive order is a slap in the face to the thousands of Americans who have gotten cancer from glyphosate,” Sen. Cory Booker, a Democrat from New Jersey, said in a Feb. 19 \nstatement\n. \n\nDemocratic Sen. Ed Markey of Massachusetts, meanwhile, brought up glyphosate during the Feb. 25 \nconfirmation hearing\n for the surgeon general nominee, \nstating\n that Trump is “siding with the chemical manufacturing company that is, in fact, causing the cancers.”\n\nEven as he defended Trump’s action, Kennedy"
         },
         {
-          "chunk_id": "297999e59050",
+          "chunk_id": "d6504abb59b9",
           "chunk_kind": "summary",
           "section": "Key Sources",
           "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
-          "hybrid_score": 0.95,
-          "text": "| Title | URL | Reliability |\n|-------|-----|-------------|\n| FactCheck.org Analysis | https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/ | High |\n| U.S. EPA - Glyphosate | https://www.epa.gov/ingredients-used-pesticide-products/glyphosate | High |\n\n---"
+          "hybrid_score": 0.967,
+          "text": "| Title | URL | Reliability |\n|-------|-----|-------------|\n| FactCheck.org: Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut | https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/ | **High** – Annenberg Public Policy Center; independent fact-checker |\n| IARC (WHO) Q&A on Glyphosate Monograph | https://www.iarc.who.int/featured-news/media-centre-iarc-news-glyphosate/ | **High** – Official WHO cancer research agency; primary source for 2015 classification |\n\n---"
         }
       ],
       "verifier_report": {
-        "groundedness_score": 0.8,
-        "citation_score": 0.75,
+        "groundedness_score": 0.9,
+        "citation_score": 0.8,
         "no_contradiction_score": 1.0,
-        "no_assumption_score": 0.8,
-        "overall_score": 0.8375,
-        "unsupported_statements": [
-          "A large NIH study found no association between glyphosate and non-Hodgkin lymphoma or other cancers in agricultural workers.",
-          "There is little evidence to suggest glyphosate causes cancer in the trace amounts found in food, distinguishing it from occupational exposure."
-        ],
+        "no_assumption_score": 0.9,
+        "overall_score": 0.9,
+        "unsupported_statements": [],
         "contradictions": [],
         "missing_citations": [
-          "A large NIH study found no association between glyphosate and non-Hodgkin lymphoma or other cancers in agricultural workers.",
-          "There is little evidence to suggest glyphosate causes cancer in the trace amounts found in food, distinguishing it from occupational exposure."
+          "The U.S. Environmental Protection Agency and other regulatory bodies have concluded that glyphosate is unlikely to pose carcinogenic risks at real-world exposure levels.",
+          "A major NIH study did not find an association between glyphosate and non-Hodgkin lymphoma or other cancers."
         ],
-        "rewrite_suggestion": "The claim that glyphosate causes cancer is not clear-cut. While some evidence links glyphosate to cancer, particularly non-Hodgkin lymphoma in agricultural workers, findings are inconsistent. Regulatory agencies, including the EPA, have generally concluded that glyphosate is unlikely to be carcinogenic at typical exposure levels. Politicians' definitive claims that glyphosate 'causes cancer' oversimplify the nuanced scientific evidence. The WHO's International Agency for Research on Cancer classified glyphosate as 'probably carcinogenic to humans' based on animal studies and limited human evidence. The EPA's 2020 assessment stated glyphosate is unlikely to be a human carcinogen, but this was vacated by the Ninth Circuit Court, leaving the regulatory status in flux.",
+        "rewrite_suggestion": "The claim that politicians say glyphosate causes cancer but the evidence is not clear-cut is accurate. Politicians, including Senator Cory Booker and Senator Ed Markey, have made strong claims about glyphosate causing cancer. The IARC classified glyphosate as 'probably carcinogenic to humans,' but this classification assesses hazard, not risk. While some studies suggest a link to cancer, major regulatory agencies and a key NIH study have found it unlikely to pose carcinogenic risks, highlighting the inconsistency in findings.",
         "should_retry": false
       },
       "review_required": false,
@@ -81,13 +141,12 @@
       "claim": "New toothpaste stops gum disease without killing good bacteria",
       "source": "Science Daily — Top Science",
       "verdict": "MOSTLY_TRUE",
-      "confidence": 0.85,
-      "summary": "The claim that a new toothpaste stops gum disease without killing good bacteria is mostly true. The Fraunhofer Institute developed a compound that inhibits harmful bacteria like Porphyromonas gingivalis without affecting beneficial bacteria, which helps maintain oral microbiome balance. However, the claim simplifies the product's role in preventing rather than curing gum disease.",
+      "confidence": 0.8,
+      "summary": "The claim that a new toothpaste stops gum disease without killing good bacteria is largely supported by evidence from the Fraunhofer Institute. The toothpaste uses a compound that inhibits harmful bacteria growth, allowing beneficial bacteria to thrive, which is a scientifically plausible approach. However, the claim may overstate the product's effectiveness as it is described as preventing rather than stopping gum disease. Clinical trial data and regulatory approval status are not clear from the available evidence.",
       "key_evidence": [
-        "Fraunhofer IZI's research confirms the development of a compound that selectively blocks harmful pathogens such as Porphyromonas gingivalis without affecting other bacteria.",
-        "The compound inhibits bacterial growth rather than killing bacteria, allowing beneficial microbes to thrive and restore balance.",
-        "Stephan Schilling, Head of Fraunhofer IZI branch, explains the mechanism as inhibiting the growth of harmful bacteria, which allows beneficial bacteria to occupy ecological niches.",
-        "The toothpaste product is confirmed to be on the market, developed by PerioTrap Pharmaceuticals GmbH."
+        "The toothpaste uses guanidinoethylbenzylamino imidazopyridine acetate to inhibit harmful bacteria like Porphyromonas gingivalis without killing beneficial bacteria. (Source: Science Daily)",
+        "The technology was developed by the Fraunhofer Institute, a reputable research organization, and commercialized by PerioTrap Pharmaceuticals GmbH. (Source: Science Daily)",
+        "The approach is bacteriostatic, preventing harmful bacteria growth, which contrasts with traditional bactericidal treatments. (Source: Science Daily)"
       ],
       "retrieved_evidence": [
         {
@@ -99,19 +158,19 @@
           "text": "New toothpaste stops gum disease without killing good bacteria | ScienceDaily\n\nScience News\n\nfrom research organizations\n\nNew toothpaste stops gum disease without killing good bacteria\n\nDate:\n\nApril 13, 2026\n\nSource:\n\nFraunhofer-Gesellschaft\n\nSummary:\n\nScientists have developed a new way to fight gum disease without wiping out the mouth’s helpful bacteria—a major shift from traditional treatments. Instead of killing everything, this targeted approach blocks only the harmful microbes that drive periodontitis, allowing beneficial bacteria to thrive and restore balance naturally.\n\nShare:\n\nFacebook\n\nTwitter\n\nPinterest\n\nLinkedIN\n\nEmail\n\nFULL STORY\n\nA new “smart” toothpaste fights gum disease by d"
         },
         {
-          "chunk_id": "cc445e986083",
+          "chunk_id": "26e8169636a2",
           "chunk_kind": "raw_source",
-          "section": "Fetched Source 3.6",
-          "source_url": "https://www.izi.fraunhofer.de/en/press/press-releases.html",
-          "hybrid_score": 0.114,
-          "text": "epartment of Cell and Gene Therapy Development at the Fraunhofer Institute for Cell Therapy and Immunology IZI, has been appointed to the new professorship in Clinical Immunology and Cell Therapy at Magdeburg University Hospital, effective October 1, 2025. At the same time, he will also assume leadership of the Institute for Clinical Immunology and Cell Therapy at the University of Magdeburg.\n\nmore info\n\nDecentralized Manufacturing of CAR-T Cell Therapeutics\n\nNews\n / \nAugust 27, 2025\n\nFraunhofer\n\n[Content truncated]"
+          "section": "Fetched Source 1.2",
+          "source_url": "https://www.sciencedaily.com/releases/2026/04/260413043141.htm",
+          "hybrid_score": 0.376,
+          "text": "isarming bad bacteria—without harming the good ones. Credit: Shutterstock\n\nPeriodontitis is a common condition that can affect much more than just oral health. Scientists at Fraunhofer have discovered a compound that specifically blocks the bacteria responsible for this disease while leaving the rest of the oral microbiome intact. This innovation has since been developed into a range of oral care products by the spin-off company PerioTrap.\n\nThe human mouth contains more than 700 types of bacteria, but only a small number are linked to periodontitis. These harmful microbes collect in dental plaque, especially along the gum line, where they can trigger inflammation (gingivitis). If left untrea"
         },
         {
           "chunk_id": "537956226b88",
           "chunk_kind": "raw_source",
           "section": "Fetched Source 1.4",
           "source_url": "https://www.sciencedaily.com/releases/2026/04/260413043141.htm",
-          "hybrid_score": 0.832,
+          "hybrid_score": 0.313,
           "text": "s gingivalis often regain dominance quickly because they thrive in inflamed gum tissue. Beneficial bacteria grow more slowly, which can lead to an imbalance known as dysbiosis and allow the disease to return.\n\nA New Way to Block Harmful Bacteria\n\nResearchers at the Fraunhofer Institute for Cell Therapy and Immunology IZI in Halle identified a substance that targets harmful pathogens without affecting the rest of the microbial community. This compound, called guanidinoethylbenzylamino imidazopyridine acetate, works by preventing the growth of bacteria like Porphyromonas gingivalis rather than killing them outright.\n\nStephan Schilling, Head of the Fraunhofer IZI branch Molecular Drug Biochemis"
         },
         {
@@ -119,28 +178,31 @@
           "chunk_kind": "raw_source",
           "section": "Fetched Source 1.5",
           "source_url": "https://www.sciencedaily.com/releases/2026/04/260413043141.htm",
-          "hybrid_score": 0.514,
+          "hybrid_score": 0.3,
           "text": "try and Therapy Development, explains: \"Rather than simply killing gingivitis pathogens, it inhibits their growth. They are unable to exert their toxic effects, so beneficial bacteria can occupy niches that would otherwise be inaccessible to them. In this way, the substance works in harmony with healthy bacteria to gently rebuild and stabilize the microbial balance in the mouth,\" says Schilling.\n\nFrom Research Project to Toothpaste\n\nThe underlying technology was first developed through an EU-funded research project involving international partners. In 2018, Periotrap Pharmaceuticals GmbH was established in Halle to turn this discovery into practical oral care solutions. Working closely with "
         },
         {
-          "chunk_id": "d81c946e29d2",
-          "chunk_kind": "summary",
+          "chunk_id": "35f10181f731",
+          "chunk_kind": "source_metadata",
           "section": "Key Sources",
-          "source_url": "https://www.sciencedaily.com/releases/2026/04/260413043141.htm",
-          "hybrid_score": 0.622,
-          "text": "| Title | URL | Reliability |\n|-------|-----|-------------|\n| Science Daily: \"New toothpaste stops gum disease without killing good bacteria\" | https://www.sciencedaily.com/releases/2026/04/260413043141.htm | **Medium-High** (Science news aggregator citing institutional research) |\n| Fraunhofer IZI Official Press Releases | https://www.izi.fraunhofer.de/en/press/press-releases.html | **High** (Primary research institution, official source) |\n\n---\n\n**Verdict**: The claim is **substantially accurate** but slightly simplified. The Fraunhofer research and resulting toothpaste product are real, and the mechanism does preserve beneficial bacteria. However, \"stops gum disease\" should more precisely"
+          "source_url": "https://www.fraunhofer.de",
+          "hybrid_score": 0.0,
+          "text": "Source: Fraunhofer Institute (attempted). URL: https://www.fraunhofer.de. Reliability: High (could not access; authoritative German research organization)."
         }
       ],
       "verifier_report": {
         "groundedness_score": 0.9,
         "citation_score": 0.9,
-        "no_contradiction_score": 1.0,
-        "no_assumption_score": 0.8,
-        "overall_score": 0.9,
-        "unsupported_statements": [],
+        "no_contradiction_score": 0.8,
+        "no_assumption_score": 0.7,
+        "overall_score": 0.85,
+        "unsupported_statements": [
+          "The claim may overstate the product's effectiveness as it is described as preventing rather than stopping gum disease.",
+          "Clinical trial data and regulatory approval status are not clear from the available evidence."
+        ],
         "contradictions": [],
         "missing_citations": [],
-        "rewrite_suggestion": "The claim that a new toothpaste stops gum disease without killing good bacteria is mostly true. The Fraunhofer Institute developed a compound that inhibits harmful bacteria like Porphyromonas gingivalis without affecting beneficial bacteria, which helps maintain oral microbiome balance. However, the claim simplifies the product's role in preventing rather than curing gum disease. The toothpaste product is confirmed to be on the market, developed by PerioTrap Pharmaceuticals GmbH.",
+        "rewrite_suggestion": "The claim that a new toothpaste stops gum disease without killing good bacteria is largely supported by evidence from the Fraunhofer Institute. The toothpaste uses a compound that inhibits harmful bacteria growth, allowing beneficial bacteria to thrive, which is a scientifically plausible approach. However, the claim may overstate the product's effectiveness as it is described as preventing rather than stopping gum disease. Additionally, the evidence does not provide details on clinical trial data or regulatory approval status.",
         "should_retry": false
       },
       "review_required": false,
@@ -149,66 +211,70 @@
     {
       "claim": "Why opinion on AI is so divided",
       "source": "MIT Technology Review",
-      "verdict": "TRUE",
-      "confidence": 0.95,
-      "summary": "The claim that opinion on AI is 'so divided' is accurate and well-documented. The Stanford AI Index 2026 provides data showing a significant 50-point gap between expert and public sentiment on AI's job impact, and the MIT Technology Review article offers explanations based on differing user experiences and AI capabilities.",
+      "verdict": "MOSTLY_TRUE",
+      "confidence": 0.9,
+      "summary": "The claim that opinion on AI is divided is mostly true, supported by the Stanford AI Index 2026 report and the MIT Technology Review article. The report highlights a significant gap between expert and public opinions on AI's impact, particularly on jobs, with 73% of experts viewing it positively compared to 23% of the public. The article provides context for this divide, citing differences in AI usage and understanding.",
       "key_evidence": [
-        "The Stanford AI Index 2026 report notes a 50 percentage point gap in AI job impact sentiment: 73% of US AI experts are positive, compared to 23% of the general public.",
-        "The 'jagged frontier' concept explains inconsistent AI performance, with models excelling at tasks like coding but failing at simpler tasks like reading analog clocks.",
-        "Stanford HAI acknowledges a 'widening gap between what AI can do and how prepared we are to manage it.'"
+        "The Stanford AI Index 2026 report confirms a widening gap between AI capabilities and public understanding, as noted in the MIT Technology Review article.",
+        "The MIT Technology Review article cites a 50-percentage-point gap between expert and public sentiment on AI's job impact, with 73% of experts positive versus 23% of the public.",
+        "The article discusses reasons for the divide, including different lived experiences and access to AI tools, as well as the rapid pace of AI advancements."
       ],
       "retrieved_evidence": [
-        {
-          "chunk_id": "c3eedd52a862",
-          "chunk_kind": "raw_source",
-          "section": "Fetched Source 1.3",
-          "source_url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
-          "hybrid_score": 0.549,
-          "text": "I can’t even read a clock.” (The Stanford report notes that Google DeepMind’s top reasoning model, Gemini Deep Think, scored a gold medal in the International Math Olympiad but is unable to read analog clocks half the time.)\n \nMichelle does a great job covering the report’s highlights. But I wanted to dwell on a question that I can’t shake. Why is it so hard to know exactly what’s going on in AI right now?  \n \n\nThe widest gap seems to be between experts and non-experts. “AI experts and the general public view the technology’s trajectory very differently,” the authors of the AI Index write. “Assessing AI’s impact on jobs, 73% of U.S. experts are positive, compared with only 23% of the public,"
-        },
-        {
-          "chunk_id": "9f7974c9f0f5",
-          "chunk_kind": "raw_source",
-          "section": "Fetched Source 2.2",
-          "source_url": "https://aiindex.stanford.edu/report/",
-          "hybrid_score": 0.427,
-          "text": "s a widening gap between what AI can do and how prepared we are to manage it. While AI continues its rapid integration into the global economy – with technical capabilities improving, investment accelerating, and adoption spreading – the frameworks needed to govern, evaluate, and understand this technology are falling behind. In a field where data transparency is declining, independent, rigorous measurement has never been more critical. This report provides the most comprehensive analysis of AI's trajectory available.\nRead the Report\nAI’s influence on society has never been more pronounced.\nAt Stanford HAI, we believe AI is poised to be the most transformative technology of the 21st century."
-        },
-        {
-          "chunk_id": "38a14d0fbb52",
-          "chunk_kind": "raw_source",
-          "section": "Fetched Source 1.5",
-          "source_url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
-          "hybrid_score": 0.159,
-          "text": "se technical tasks like coding have right or wrong results, it is easier to train models to do them, compared with tasks that are more open-ended. What’s more, models that can code are proving to be profitable, so model makers are throwing resources at improving them.\n \nThis means that people who use those tools for coding or other technical work are experiencing this technology at its best. Outside of those use cases, you get more of a mixed bag. LLMs still make dumb mistakes. This phenomenon has become known as the “jagged frontier”: Models are very good at doing some things and less good at others.\n \nThe influential AI researcher \nAndrej Karpathy\n also had some thoughts. “Judging by my [t"
-        },
         {
           "chunk_id": "bd56cab09255",
           "chunk_kind": "raw_source",
           "section": "Fetched Source 1.1",
           "source_url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
-          "hybrid_score": 0.158,
+          "hybrid_score": 0.665,
           "text": "Why opinion on AI is so divided | MIT Technology Review\n\nSkip to Content\n \nThis story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, \nsign up here\n.\n \nIn an industry that doesn’t stand still, Stanford’s AI Index, \nan annual roundup of key results and trends\n, is a chance to take a breath. (It’s a\n marathon, not a sprint\n, after all.)\n \n \nThis year’s report\n, which dropped today, is full of striking stats. A lot of the value comes from having numbers to back up gut feelings you might already have, such as the sense that the US is gunning harder for AI than everyone else: It hosts 5,427 data centers (and counting). That’s more t"
         },
         {
-          "chunk_id": "d75776a414bb",
-          "chunk_kind": "summary",
-          "section": "Supporting evidence",
+          "chunk_id": "7e2ea35f60f2",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.3",
+          "source_url": "https://aiindex.stanford.edu/report/",
+          "hybrid_score": 0.274,
+          "text": " But its benefits won’t be evenly distributed unless we guide its development thoughtfully. The AI Index offers one of the most comprehensive, data-driven views of artificial intelligence. Recognized as a trusted resource by global media, governments, and leading companies, the AI Index equips policymakers, business leaders, and the public with rigorous, objective insights into AI’s technical progress, economic influence, and societal impact.\nRecognized Globally\nThe AI Index is recognized globally as one of the most credible and authoritative sources for data and insights on artificial intelligence. \nPrevious editions have been cited in major newspapers, including the The New York Times, Blo"
+        },
+        {
+          "chunk_id": "c3eedd52a862",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.3",
           "source_url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
-          "hybrid_score": 1.188,
-          "text": "- **Stanford AI Index 2026**: 73% of US AI experts are positive about AI's impact on jobs vs. 23% of the general public (50 percentage point gap)\n- **Andrej Karpathy** (influential AI researcher) noted a \"growing gap in understanding of AI capability\" between power users and others\n- The \"jagged frontier\" concept explains inconsistent AI performance: Google DeepMind's Gemini Deep Think won a gold medal at the International Math Olympiad but fails at reading analog clocks ~50% of the time\n- Stanford HAI acknowledges a \"widening gap between what AI can do and how prepared we are to manage it\"\n\n---"
+          "hybrid_score": 0.278,
+          "text": "I can’t even read a clock.” (The Stanford report notes that Google DeepMind’s top reasoning model, Gemini Deep Think, scored a gold medal in the International Math Olympiad but is unable to read analog clocks half the time.)\n \nMichelle does a great job covering the report’s highlights. But I wanted to dwell on a question that I can’t shake. Why is it so hard to know exactly what’s going on in AI right now?  \n \n\nThe widest gap seems to be between experts and non-experts. “AI experts and the general public view the technology’s trajectory very differently,” the authors of the AI Index write. “Assessing AI’s impact on jobs, 73% of U.S. experts are positive, compared with only 23% of the public,"
+        },
+        {
+          "chunk_id": "d6608f2d8c98",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.4",
+          "source_url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
+          "hybrid_score": 0.213,
+          "text": " a 50 percentage point gap. Similar divides emerge with respect to the economy and medical care.”\n \nThat’s a \nhuge\n gap. What’s going on? What do experts know that the public doesn’t? (“Experts” here means US-based researchers who took part in AI conferences in 2023 and 2024.)\n \nI suspect part of what’s going on is that experts and non-experts base their views on very different experiences. “The degree to which you are awed by AI is perfectly correlated with how much you use AI to code,” a software developer \nposted on X the other day\n. Maybe that’s tongue-in-cheek, but there’s definitely something to it.\n \nThe latest models from the top labs are now better than ever at producing code. Becau"
+        },
+        {
+          "chunk_id": "81b0a817d046",
+          "chunk_kind": "summary",
+          "section": "Key Sources",
+          "source_url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
+          "hybrid_score": 1.065,
+          "text": "| Title | URL | Reliability |\n|-------|-----|-------------|\n| \"Why opinion on AI is so divided\" - MIT Technology Review | https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/ | **High** – Established tech publication citing primary research |\n| Stanford HAI AI Index Report 2026 | https://aiindex.stanford.edu/report/ | **High** – Primary academic source, globally cited by governments and media |\n\n---\n\n**Verdict**: The claim that \"opinion on AI is so divided\" is **well-supported** by the evidence. The MIT Technology Review article accurately summarizes findings from the authoritative Stanford AI Index, which documents a significant 50-percentage-point gap betwee"
         }
       ],
       "verifier_report": {
-        "groundedness_score": 0.9,
-        "citation_score": 0.9,
+        "groundedness_score": 0.8,
+        "citation_score": 0.8,
         "no_contradiction_score": 1.0,
-        "no_assumption_score": 0.9,
-        "overall_score": 0.925,
-        "unsupported_statements": [],
+        "no_assumption_score": 0.8,
+        "overall_score": 0.85,
+        "unsupported_statements": [
+          "The report highlights a significant gap between expert and public opinions on AI's impact, particularly on jobs, with 73% of experts viewing it positively compared to 23% of the public."
+        ],
         "contradictions": [],
-        "missing_citations": [],
-        "rewrite_suggestion": "",
+        "missing_citations": [
+          "The report highlights a significant gap between expert and public opinions on AI's impact, particularly on jobs, with 73% of experts viewing it positively compared to 23% of the public."
+        ],
+        "rewrite_suggestion": "The claim that opinion on AI is divided is mostly true, supported by the Stanford AI Index 2026 report and the MIT Technology Review article. The report notes a significant gap between expert and public opinions on AI's impact, with experts generally more positive. The article provides context for this divide, citing differences in AI usage and understanding.",
         "should_retry": false
       },
       "review_required": false,

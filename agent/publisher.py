@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import shutil
 from pathlib import Path
 
 from .models import DailyReport
@@ -80,6 +81,7 @@ class Publisher:
         self._write_json(report, slug)
         self._write_daily_page(report, slug)
         self._write_index(slug)
+        self._sync_web_manual_archive(slug)
         logger.info("Published: docs/%s.html", slug)
 
     # ------------------------------------------------------------------
@@ -319,15 +321,56 @@ class Publisher:
         if name.endswith("_manual"):
             sibling = self.docs_dir.with_name(name.removesuffix("_manual"))
             label = "View Daily Archive"
+            href = f"../{sibling.name}/index.html"
+            if name == "docs_manual":
+                href = "../docs/index.html"
         else:
             sibling = self.docs_dir.with_name(f"{name}_manual")
             label = "View Manual Claims Archive"
+            href = "manual/index.html" if name == "docs" else f"../{sibling.name}/index.html"
 
         if sibling == self.docs_dir or not sibling.exists():
             return None
 
-        href = f"../{sibling.name}/index.html"
         return {"href": href, "label": label}
+
+    def _sync_web_manual_archive(self, latest_slug: str) -> None:
+        """
+        Mirror docs_manual into docs/manual so the published docs site can link to it.
+
+        GitHub Pages serves the configured `docs/` directory as the site root, so a
+        sibling `docs_manual/` folder is not web-accessible there. We keep the local
+        docs_manual archive for CLI/manual runs, but also mirror it into docs/manual
+        for web navigation from docs/index.html.
+        """
+        if self.docs_dir.name != "docs_manual":
+            return
+
+        public_root = self.docs_dir.with_name("docs")
+        if public_root == self.docs_dir:
+            return
+
+        web_manual_dir = public_root / "manual"
+        web_manual_dir.mkdir(parents=True, exist_ok=True)
+
+        for page in self.docs_dir.glob("20*.html"):
+            shutil.copy2(page, web_manual_dir / page.name)
+
+        slugs = sorted([p.stem for p in self.docs_dir.glob("20*.html")], reverse=True)
+        links = "".join(self._archive_link_html(s) for s in slugs)
+        html = _page_template(
+            title="ClaimCheck Daily — Manual Archive",
+            body=f"""
+            <header><h1>ClaimCheck Daily</h1><p>Manual claim archive.</p></header>
+            <main>
+              <h2>Latest: <a href="{latest_slug}.html">{latest_slug}</a></h2>
+              <p class="archive-nav"><a href="../index.html">View Daily Archive</a></p>
+              <h3>Manual Archive</h3>
+              <ul class="archive">{links}</ul>
+            </main>
+            <footer>Powered by GPT-4o · <a href="https://github.com">Source</a></footer>""",
+        )
+        (web_manual_dir / "index.html").write_text(html, encoding="utf-8")
 
     def _cost_summary_html(self, trace_summary: dict) -> str:
         """Render a compact per-run cost/tokens summary above the verdict cards."""

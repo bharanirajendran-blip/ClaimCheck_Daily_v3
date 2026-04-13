@@ -1,73 +1,136 @@
 {
   "date": "2026-04-13",
-  "generated_at": "2026-04-13T19:24:57Z",
+  "generated_at": "2026-04-13T20:28:48Z",
+  "trace_summary": {
+    "spans": 4,
+    "failures": 0,
+    "total_input_tokens": 9163,
+    "total_output_tokens": 1620,
+    "total_tokens": 10783,
+    "total_cost_usd": 0.06875,
+    "total_latency_ms": 26427.3,
+    "slowest_node": "research_node",
+    "slowest_ms": 14263.0,
+    "by_node": {
+      "research_node": {
+        "calls": 2,
+        "tokens": 6136,
+        "cost_usd": 0.05356,
+        "latency_ms": 19892.2
+      },
+      "director": {
+        "calls": 1,
+        "tokens": 2743,
+        "cost_usd": 0.00903,
+        "latency_ms": 4090.1
+      },
+      "verify_node": {
+        "calls": 1,
+        "tokens": 1904,
+        "cost_usd": 0.00616,
+        "latency_ms": 2445.0
+      }
+    },
+    "by_provider": {
+      "anthropic": {
+        "calls": 2,
+        "input_tokens": 4992,
+        "output_tokens": 1144,
+        "total_tokens": 6136,
+        "cost_usd": 0.05356
+      },
+      "openai": {
+        "calls": 2,
+        "input_tokens": 4171,
+        "output_tokens": 476,
+        "total_tokens": 4647,
+        "cost_usd": 0.01519
+      }
+    },
+    "by_model": {
+      "claude-opus-4-5-20251101": {
+        "calls": 2,
+        "input_tokens": 4992,
+        "output_tokens": 1144,
+        "total_tokens": 6136,
+        "cost_usd": 0.05356
+      },
+      "gpt-4o": {
+        "calls": 2,
+        "input_tokens": 4171,
+        "output_tokens": 476,
+        "total_tokens": 4647,
+        "cost_usd": 0.01519
+      }
+    }
+  },
   "results": [
     {
-      "claim": "Vaccines cause autism.",
+      "claim": "Apollo 11 landed on the Moon in 1969.",
       "source": "Manual Input",
-      "verdict": "FALSE",
-      "confidence": 0.95,
-      "summary": "There is no scientific evidence supporting the claim that vaccines cause autism. Vaccines are designed to protect against diseases without causing the diseases themselves or related complications.",
+      "verdict": "TRUE",
+      "confidence": 1.0,
+      "summary": "The claim that Apollo 11 landed on the Moon in 1969 is fully verified. Both NASA and Britannica confirm that Apollo 11's lunar module Eagle landed on the Moon on July 20, 1969, with Neil Armstrong and Buzz Aldrin becoming the first humans to walk on the lunar surface.",
       "key_evidence": [
-        "Vaccines contain only killed or weakened forms of germs like viruses or bacteria, and they do not cause the disease or put you at risk of its complications. (Source: WHO)",
-        "The MMR vaccine helps protect against measles, mumps, and rubella, and there is no evidence linking it to autism. (Source: NHS)"
+        "Apollo 11, the first space mission to put people on the Moon, was launched on July 16, 1969. Almost every major aspect of the flight of Apollo 11 was witnessed via television by hundreds of millions of people in nearly every part of the globe, until splashdown in the Pacific Ocean on July 24. (Britannica)",
+        "Apollo 11’s mission objective was to land astronauts on the Moon and return them safely back to Earth. It succeeded in its objective by landing Neil Armstrong and Buzz Aldrin on the Moon on July 20, 1969. (Britannica)",
+        "The lunar module Eagle of the Apollo 11 mission landed on the Moon on July 20, 1969. Neil Armstrong and Buzz Aldrin became the first people to land on the Moon and walk on the lunar surface. (Britannica)",
+        "NASA maintains an official dedicated mission page for Apollo 11 at nasa.gov/mission/apollo-11/ (NASA)"
       ],
       "retrieved_evidence": [
         {
-          "chunk_id": "9e7f4abda066",
-          "chunk_kind": "raw_source",
-          "section": "Fetched Source 2.2",
-          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
-          "hybrid_score": 1.438,
-          "text": "se vaccines contain only killed or weakened forms of germs like viruses or bacteria, they do not cause the disease or put you at risk of its complications.\nMost vaccines are given by an injection, but some are given orally (by mouth) or sprayed into the nose.\n\n\r\n                                        How does a vaccine work?\r\n                                    \n\nVaccines reduce risks of getting a disease by working with your body’s natural defenses to build protection. When you get a vaccine, your immune system responds. It:\nrecognizes the invading germ, such as the virus or bacteria; \nproduces antibodies. Antibodies are proteins produced naturally by the immune system to fight disease; an"
-        },
-        {
-          "chunk_id": "cf97f3905d26",
-          "chunk_kind": "raw_source",
-          "section": "Fetched Source 6.2",
-          "source_url": "https://www.nhs.uk/conditions/vaccinations/mmr-vaccine/",
-          "hybrid_score": 1.109,
-          "text": "ine when they are 12 months and 18 months old. Older children born on or after 1 January 2020 are also offered 1 or 2 doses of the vaccine.\nFind out more about the MMRV vaccine\n\nWhat the MMR vaccine is for\n\nThe MMR vaccine helps protect against:\nmeasles\nmumps\nrubella (german measles)\nThese 3 infections spread easily between people and can lead to serious problems including meningitis, blindness and hearing loss.\nIf you're pregnant, getting measles can cause premature birth, miscarriage or still birth. And getting rubella can cause serious problems for your baby such as damage to their sight and hearing.\n2 doses of the MMR vaccine gives you long-term protection.\nGetting vaccinated also helps "
-        },
-        {
-          "chunk_id": "f92c449a4078",
-          "chunk_kind": "raw_source",
-          "section": "Fetched Source 2.4",
-          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
-          "hybrid_score": 1.256,
-          "text": "                    \n\nWithout vaccines, we are at risk of serious illness and disability from diseases like measles, meningitis, pneumonia, tetanus and polio. Many of these diseases can be life-threatening. WHO estimates that childhood vaccines alone save over 4 million lives every year.\nAlthough some diseases may have become uncommon, the germs that cause them continue to circulate in some or all parts of the world. In today’s world, infectious diseases can easily cross borders, and infect anyone who is not protected\nTwo key reasons to get vaccinated are to protect ourselves and to protect those around us. Because not everyone can be vaccinated – including very young babies, those who are s"
-        },
-        {
-          "chunk_id": "8fa3d55b3514",
+          "chunk_id": "257a6981287e",
           "chunk_kind": "raw_source",
           "section": "Fetched Source 2.5",
-          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
-          "hybrid_score": 1.082,
-          "text": "eriously ill or have certain allergies – they depend on others being vaccinated to ensure they are also safe from vaccine-preventable diseases.\n\n\r\n                                        When should I get vaccinated (or vaccinate my child)?\r\n                                    \n\nVaccines protect us throughout life and at different ages, from birth to childhood, as teenagers and into old age. In most countries you will be given a vaccination card that tells you what vaccines you or your child have had and when the next vaccines or booster doses are due. It is important to make sure that all these vaccines are up to date.\nIf we delay vaccination, we are at risk of getting seriously sick. If we"
+          "source_url": "https://www.britannica.com/topic/Apollo-11",
+          "hybrid_score": 0.905,
+          "text": " Questions\n            \n \n When was Apollo 11 launched? \n \nApollo 11, the first space mission to put people on the Moon, was launched on July 16, 1969. Almost every major aspect of the flight of Apollo 11 was witnessed via television by hundreds of millions of people in nearly every part of the globe, until splashdown in the Pacific Ocean on July 24.\n \n \n What was the mission objective of Apollo 11? \n \nApollo 11’s mission objective was to land \nastronauts\n on the \nMoon\n and return them safely back to \nEarth\n. It succeeded in its objective by landing \nNeil Armstrong\n and \nBuzz Aldrin\n on the Moon on July 20, 1969.\n \n \n Who were the crew members of Apollo 11? \n \nApollo 11’s crew members were c"
         },
         {
-          "chunk_id": "a80bfa8df127",
+          "chunk_id": "30247007f22e",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.1",
+          "source_url": "https://www.nasa.gov/mission/apollo-11/",
+          "hybrid_score": 0.265,
+          "text": "Apollo 11 - NASA\n\n \n\nSuggested Searches\n\nClimate Change\n\nArtemis\n\nExpedition 64\n\nMars perseverance\n\nSpaceX Crew-2\n\nInternational Space Station\n\nView All Topics A-Z\n\nHome\nMissions\nHumans in Space\nEarth\nThe Solar System\nThe Universe\nScience\nAeronautics\nTechnology\nLearning Resources\nAbout NASA\nEspañol\n \n\nNews & Events\n\nMultimedia\n\nNASA+\n\nFeatured\n12 min read\nNASA Answers Your Most Pressing Artemis II Questions\narticle\n1 week ago\n11 min read\nNASA’s Artemis II Moon Mission Daily Agenda\narticle\n1 month ago\n\nBack\n\nMissions\nSearch All NASA Missions\nA to Z List of Missions\nUpcoming Launches and Landings\nSpaceships and Rockets\nCommunicating with Missions\nArtemis\nJames Webb Space Telescope\nHubble Space"
+        },
+        {
+          "chunk_id": "114950c63201",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.6",
+          "source_url": "https://www.britannica.com/topic/Apollo-11",
+          "hybrid_score": 0.896,
+          "text": "ommander \nNeil Armstrong\n, lunar module pilot \nBuzz Aldrin\n, and command module pilot \nMichael Collins\n.\n \n \n When did Apollo 11 land on the Moon? \n \nThe lunar module \nEagle\n of the Apollo 11 mission landed on the Moon on July 20, 1969. \nNeil Armstrong\n and \nBuzz Aldrin\n became the first people to land on the Moon and walk on the lunar surface.\n \n \n How fast did Apollo 11 travel? \n \nThe fastest speed Apollo 11 achieved was 39,715 kilometers (24,678 miles) per hour when the command module reenter\n\n[Content truncated]"
+        },
+        {
+          "chunk_id": "3f382cf9f5c4",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.4",
+          "source_url": "https://www.britannica.com/topic/Apollo-11",
+          "hybrid_score": 0.555,
+          "text": "ia (Ages 11 and up)\n\nBuzz Aldrin on the Moon\n\nU.S. astronaut Buzz Aldrin walking on the Moon, July 20, 1969.\n\n(more)\n\nApollo 11\n\nUnited States spaceflight\n\n  \n  Ask Anything\n\n  \n  Quick Summary\n\n  \n  Homework Help\n\nWritten and fact-checked by\n\nBritannica Editors\n\nEncyclopaedia Britannica's editors oversee subject areas in which they have extensive knowledge, whether from years of experience gained by working on that content or via study for an advanced degree....\n\n    Britannica Editors\n\nLast updated\n\nApr. 4, 2026\n\n•\nHistory\n\nBritannica AI\n\n  \n  Ask Anything\n\n  \n  Quick Summary\n\n\t\n\t\t\t\tTable of Contents\n\t\t\n\n\t\n\t\t\t\tTable of Contents\n\t\t\n\n  \n  Quick Summary\n\n  \n  Ask Anything\n\n                Top"
+        },
+        {
+          "chunk_id": "2ac232ef5bbe",
           "chunk_kind": "summary",
-          "section": "Overview",
-          "source_url": "",
-          "hybrid_score": 0.0,
-          "text": "Research incomplete: maximum tool rounds reached."
+          "section": "Verdict: ✅ TRUE",
+          "source_url": "https://www.nasa.gov/mission/apollo-11/",
+          "hybrid_score": 1.188,
+          "text": "The claim \"Apollo 11 landed on the Moon in 1969\" is **fully verified**. Both NASA and Britannica confirm that Apollo 11's lunar module Eagle landed on the Moon on **July 20, 1969**, making Neil Armstrong and Buzz Aldrin the first humans to walk on the lunar surface."
         }
       ],
       "verifier_report": {
-        "groundedness_score": 0.8,
+        "groundedness_score": 1.0,
         "citation_score": 0.8,
         "no_contradiction_score": 1.0,
-        "no_assumption_score": 0.8,
-        "overall_score": 0.85,
-        "unsupported_statements": [
-          "There is no scientific evidence supporting the claim that vaccines cause autism."
-        ],
+        "no_assumption_score": 1.0,
+        "overall_score": 0.95,
+        "unsupported_statements": [],
         "contradictions": [],
         "missing_citations": [
-          "There is no scientific evidence supporting the claim that vaccines cause autism."
+          "The statement about NASA confirming the landing is not directly supported by the retrieved evidence, as the NASA source provided does not contain specific details about the landing."
         ],
-        "rewrite_suggestion": "The claim that vaccines cause autism is false. Vaccines contain only killed or weakened forms of germs like viruses or bacteria, and they do not cause the disease or put you at risk of its complications. The MMR vaccine, which protects against measles, mumps, and rubella, has no evidence linking it to autism.",
+        "rewrite_suggestion": "The claim that Apollo 11 landed on the Moon in 1969 is fully verified. Britannica confirms that Apollo 11's lunar module Eagle landed on the Moon on July 20, 1969, with Neil Armstrong and Buzz Aldrin becoming the first humans to walk on the lunar surface.",
         "should_retry": false
       },
       "review_required": false,

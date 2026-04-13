@@ -33,6 +33,16 @@
     .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
     .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
     .archive-nav { margin: .6rem 0 1.2rem; }
+    .run-summary { background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }
+    .run-summary h2 { font-size: 1.15rem; margin-bottom: .9rem; }
+    .run-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }
+    .run-metric { background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }
+    .run-metric span { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .run-metric strong { font-size: 1rem; }
+    .provider-costs { margin: 1rem 0 0 1.1rem; color: var(--muted); }
+    .provider-costs li { margin: .35rem 0; }
     footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
               border-top: 1px solid #334155; padding-top: 1rem; }
     /* LLM-as-a-Judge score bars */
@@ -60,7 +70,7 @@
             <header><h1>ClaimCheck Daily</h1><p>Automated fact-checking, every day.</p></header>
             <main>
               <h2>Latest: <a href="2026-04-13.html">2026-04-13</a></h2>
-              <p class="archive-nav"><a href="../docs_manual/index.html">View Manual Claims Archive</a></p>
+              <p class="archive-nav"><a href="manual/index.html">View Manual Claims Archive</a></p>
               <h3>Archive</h3>
               <ul class="archive"><li class="archive-item"><a href="2026-04-13.html">2026-04-13</a><div class="archive-preview">Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut</div><div class="archive-meta">3 claims</div></li></ul>
             </main>

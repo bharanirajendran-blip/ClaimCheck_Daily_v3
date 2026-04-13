@@ -60,6 +60,14 @@
     {
       "type": "source",
       "id": "aiindex.stanford.edu"
+    },
+    {
+      "type": "source",
+      "id": "iarc.who.int"
+    },
+    {
+      "type": "source",
+      "id": "fraunhofer.de"
     }
   ],
   "edges": [
@@ -147,6 +155,11 @@
       "target": "epa.gov"
     },
     {
+      "rel": "CITES",
+      "source": "0efa6fa2426f67ad",
+      "target": "iarc.who.int"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "epa.gov",
       "target": "0efa6fa2426f67ad"
@@ -160,6 +173,11 @@
       "rel": "CITES",
       "source": "042ca03f52c521fb",
       "target": "izi.fraunhofer.de"
+    },
+    {
+      "rel": "CITES",
+      "source": "042ca03f52c521fb",
+      "target": "fraunhofer.de"
     },
     {
       "rel": "SUPPORTS",
@@ -180,6 +198,16 @@
       "rel": "SUPPORTS",
       "source": "aiindex.stanford.edu",
       "target": "0e3d35f06b80a80d"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "iarc.who.int",
+      "target": "0efa6fa2426f67ad"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "fraunhofer.de",
+      "target": "042ca03f52c521fb"
     }
   ]
 }
