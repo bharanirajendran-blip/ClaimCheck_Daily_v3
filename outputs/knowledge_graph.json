@@ -68,6 +68,24 @@
     {
       "type": "source",
       "id": "fraunhofer.de"
+    },
+    {
+      "type": "claim",
+      "text": "Scientists just recreated a rare cosmic reaction never seen before",
+      "id": "dffb7d6f79a9bacf"
+    },
+    {
+      "type": "source",
+      "id": "frib.msu.edu"
+    },
+    {
+      "type": "claim",
+      "text": "NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work?",
+      "id": "ee905fff98b8e76a"
+    },
+    {
+      "type": "source",
+      "id": "nasa.gov"
     }
   ],
   "edges": [
@@ -114,6 +132,12 @@
       "target": "042ca03f52c521fb"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "5332e1de",
+      "target": "dffb7d6f79a9bacf"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "sciencedaily.com",
       "target": "5332e1de"
@@ -122,6 +146,11 @@
       "rel": "SUPPORTS",
       "source": "sciencedaily.com",
       "target": "042ca03f52c521fb"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "sciencedaily.com",
+      "target": "dffb7d6f79a9bacf"
     },
     {
       "rel": "CITES",
@@ -135,6 +164,12 @@
       "target": "0e3d35f06b80a80d"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "technologyreview.com",
+      "source": "93d6e6a1",
+      "target": "ee905fff98b8e76a"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "technologyreview.com",
       "target": "93d6e6a1"
@@ -143,6 +178,11 @@
       "rel": "SUPPORTS",
       "source": "technologyreview.com",
       "target": "0e3d35f06b80a80d"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "technologyreview.com",
+      "target": "ee905fff98b8e76a"
     },
     {
       "rel": "CITES",
@@ -180,6 +220,12 @@
       "target": "fraunhofer.de"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "042ca03f52c521fb",
+      "target": "dffb7d6f79a9bacf"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "izi.fraunhofer.de",
       "target": "042ca03f52c521fb"
@@ -195,6 +241,12 @@
       "target": "aiindex.stanford.edu"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "technologyreview.com",
+      "source": "0e3d35f06b80a80d",
+      "target": "ee905fff98b8e76a"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "aiindex.stanford.edu",
       "target": "0e3d35f06b80a80d"
@@ -208,6 +260,36 @@
       "rel": "SUPPORTS",
       "source": "fraunhofer.de",
       "target": "042ca03f52c521fb"
+    },
+    {
+      "rel": "CITES",
+      "source": "dffb7d6f79a9bacf",
+      "target": "sciencedaily.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "dffb7d6f79a9bacf",
+      "target": "frib.msu.edu"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "frib.msu.edu",
+      "target": "dffb7d6f79a9bacf"
+    },
+    {
+      "rel": "CITES",
+      "source": "ee905fff98b8e76a",
+      "target": "technologyreview.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "ee905fff98b8e76a",
+      "target": "nasa.gov"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "nasa.gov",
+      "target": "ee905fff98b8e76a"
     }
   ]
 }

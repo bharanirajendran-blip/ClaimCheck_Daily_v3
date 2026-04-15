@@ -35,11 +35,19 @@ Planned but not yet integrated into the runtime graph:
 
 ### Researcher (`agent/researcher.py`)
 - Investigates one claim at a time
-- Uses a ReAct-style tool loop with `fetch_url`
+- Uses a ReAct-style tool loop: `web_search` to discover authoritative URLs, then `fetch_url` to read them
+- Extended thinking enabled for deep reasoning before committing to a finding
 - Stores fetched page content for downstream chunking
-- Supports targeted corroboration during retry
+- Supports targeted corroboration during retry (fetches one extra source from a different domain)
 
-### fetch_url tool (`agent/tools.py`)
+### Research Tools (`agent/tools.py`)
+
+**`web_search`** (primary URL discovery)
+- Queries the Serper API (Google results) to find relevant, authoritative sources
+- Returns titles, URLs, and snippets for the top results
+- Requires `SERPER_API_KEY`; gracefully degrades to URL inference when key is absent
+
+**`fetch_url`** (content retrieval)
 - Fetches a URL with `httpx`
 - Strips HTML to plain text with BeautifulSoup
 - Returns bounded page text for LLM consumption
@@ -182,6 +190,7 @@ ClaimCheck_Daily_v3/
 | `networkx` | Graph context |
 | `feedparser` | RSS/Atom ingestion |
 | `httpx` + `beautifulsoup4` | Fetch and strip article content |
+| Serper API | Google web search for the `web_search` tool (optional; see `SERPER_API_KEY`) |
 | `python-dotenv` + `pyyaml` | Configuration loading |
 
 ## 7. Running Locally
@@ -193,6 +202,7 @@ pip install -r requirements.txt
 
 cp .env.example .env
 # add ANTHROPIC_API_KEY and OPENAI_API_KEY
+# optionally add SERPER_API_KEY for Google web search (https://serper.dev, 2,500 free queries)
 
 python run.py --dry-run
 python run.py

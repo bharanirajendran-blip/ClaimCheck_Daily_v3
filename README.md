@@ -19,7 +19,7 @@ ClaimCheck Daily v3 is the current development branch of the ClaimCheck project.
 
 ### Fact-checking pipeline
 - Pulls claims from RSS feeds or accepts a manual `--claim`
-- Researches each claim with Claude using a ReAct-style `fetch_url` loop
+- Researches each claim with Claude using a ReAct-style `web_search` + `fetch_url` loop
 - Stores reusable evidence chunks across runs
 - Retrieves evidence with hybrid TF-IDF + BM25 ranking
 - Injects lightweight graph context from prior claims sharing source domains
@@ -78,7 +78,8 @@ The MCP server is an interface layer on top of this runtime. It does not add ext
 | Component | Role | Model / Library |
 |---|---|---|
 | Director | Claim selection and verdict synthesis | GPT-4o |
-| Researcher | Live web research with ReAct tool use | Claude |
+| Researcher | Live web research with ReAct tool-use loop | Claude |
+| `web_search` tool | Searches Google via Serper API to discover authoritative URLs | Serper API |
 | `fetch_url` tool | Fetches and strips article HTML to plain text | `httpx` + BeautifulSoup |
 | Evidence Store | Persists raw source, summary, and source-metadata chunks | JSON artifacts |
 | Knowledge Graph | Links claims to source domains for cross-run context | `networkx` |
@@ -124,10 +125,11 @@ ClaimCheck_Daily_v3/
 
 ### Requirements
 
-| Key | Where to get it |
-|---|---|
-| `ANTHROPIC_API_KEY` | https://console.anthropic.com |
-| `OPENAI_API_KEY` | https://platform.openai.com/api-keys |
+| Key | Where to get it | Required? |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | https://console.anthropic.com | Yes |
+| `OPENAI_API_KEY` | https://platform.openai.com/api-keys | Yes |
+| `SERPER_API_KEY` | https://serper.dev (2,500 free queries, no credit card) | Optional |
 
 ### Install and run
 
@@ -138,6 +140,8 @@ pip install -r requirements.txt
 
 cp .env.example .env
 # add ANTHROPIC_API_KEY and OPENAI_API_KEY
+# optionally add SERPER_API_KEY to enable Google web search for the Researcher
+# (without it, Claude falls back to fetching URLs inferred from training knowledge)
 
 python run.py --dry-run
 python run.py
@@ -202,7 +206,8 @@ python run.py --outputs-dir my_outputs
 
 ## Tech Stack
 
-- [Anthropic Claude](https://www.anthropic.com) for deep research
+- [Anthropic Claude](https://www.anthropic.com) for deep research with `web_search` + `fetch_url` ReAct loop
+- [Serper](https://serper.dev) for real-time Google search results (optional; enables `web_search` tool)
 - [OpenAI GPT-4o](https://openai.com) for claim selection, verdict synthesis, and verification
 - [LangGraph](https://langchain-ai.github.io/langgraph/) for pipeline orchestration
 - [MCP SDK](https://modelcontextprotocol.io) for the MCP server

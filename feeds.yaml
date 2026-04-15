@@ -40,10 +40,25 @@ feeds:
     category: health
     enabled: true
 
+  - name: CDC — MMWR
+    url: https://tools.cdc.gov/medialibrary/Index.aspx#/feed/id/342778
+    category: health
+    enabled: true
+
+  - name: Nature Medicine
+    url: https://www.nature.com/nm/current_issue/rss/
+    category: science
+    enabled: true
+
   # --- Tech ---
   - name: MIT Technology Review
     url: https://www.technologyreview.com/feed/
     category: technology
+    enabled: true
+
+  - name: BBC News — World
+    url: https://feeds.bbci.co.uk/news/world/rss.xml
+    category: news
     enabled: true
 
 # Pipeline settings applied to all feeds

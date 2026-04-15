@@ -5,11 +5,12 @@ Responsibilities:
   1. Accept a single Claim from the Director
   2. Use Claude (claude-opus-4-5) with:
        - Extended thinking (10k budget tokens) for deep reasoning
-       - fetch_url tool so Claude can read live article content
+       - web_search tool to find relevant URLs via Serper (Google results)
+       - fetch_url tool to read full article text from those URLs
   3. Run an agentic tool-use loop:
-       - Claude reasons, decides to fetch a URL
-       - We fetch it, return the text as a tool_result
-       - Claude continues reasoning with real content
+       - Claude reasons, calls web_search to find sources
+       - Claude calls fetch_url to read the best ones
+       - Each result is returned as a tool_result
        - Loop ends when Claude returns a final text response
   4. Return a ResearchResult (findings + extracted sources)
 
@@ -36,21 +37,28 @@ logger = logging.getLogger(__name__)
 
 RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
     You are a meticulous research analyst for ClaimCheck Daily.
-    You have access to a fetch_url tool to read live web articles.
+    You have two tools: web_search and fetch_url.
 
-    Your task is to evaluate a claim by fetching and reading its source article.
+    Your task is to evaluate a claim by finding and reading authoritative sources.
+
+    TOOL USAGE STRATEGY:
+    - If a specific source URL is provided: fetch it first as your primary source.
+    - To find corroborating or additional sources: use web_search with a specific
+      query, then fetch_url on the most relevant result.
+    - If no source URL is provided (e.g. a manual claim check):
+        * If web_search is available: search first, then fetch the best results.
+        * If web_search is unavailable (returns a configuration error): infer the
+          most likely authoritative URLs from your knowledge and fetch them directly.
+          Prefer well-known outlets (.gov, .edu, Reuters, AP, Nature, PolitiFact).
 
     IMPORTANT RULES:
-    - Fetch the source URL provided first. That is your primary evidence.
-    - Fetch ONE corroborating source from a DIFFERENT domain when any of these apply:
+    - Use at most 2 fetch_url calls total (primary source + one corroboration).
+    - Use web_search when available — it finds better sources than guessing.
+    - Do NOT chase dead links; if a fetch fails move on immediately.
+    - Always fetch a corroborating source from a DIFFERENT domain when any of these apply:
         * the claim contains a specific date, statistic, or named event
         * the primary source is a news summary, blog, or indirect reference
-          (not the original study, official document, or primary source)
         * the claim is contested or involves numbers that could be misrepresented
-      If none of the above apply and the primary source is itself authoritative
-      (e.g. a .gov site, original study, official archive), you may skip the second fetch.
-    - Do NOT fetch more than 2 sources total.
-    - Do NOT chase dead links or keep fetching if URLs return errors; move on immediately.
     - Match your corroborating source to the claim type:
         * Science / health claim  → primary institution or journal
                                     + science news outlet (ScienceDaily, Nature News)
@@ -59,7 +67,7 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
         * Historical claim        → official archive (NASA, Smithsonian, national records)
                                     + established reference (Britannica, major encyclopedia)
         * General factual claim   → authoritative news outlet + independent verification
-    - Base your verdict on what you successfully read.
+    - Base your verdict only on what you successfully read.
 
     Structure your final response as follows:
 
@@ -82,19 +90,25 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
     [list of {"title": "...", "url": "...", "reliability": "high|medium|low"}]
 """)
 
-MAX_TOOL_ROUNDS = 5  # enough rounds to fetch + synthesize findings
+MAX_TOOL_ROUNDS = 8  # web_search + fetch_url (×2 sources) + synthesis + slack for retries
 
 CORROBORATE_SYSTEM_PROMPT = textwrap.dedent("""\
     You are a fact-checking researcher tasked with finding ONE corroborating source.
 
     You will receive a claim and a list of domains already consulted.
-    Fetch EXACTLY ONE URL from a different, authoritative domain that can independently
-    support or refute the claim. Then write a brief summary of what you found.
+    Find and read EXACTLY ONE authoritative source from a different domain that can
+    independently support or refute the claim.
+
+    TOOL USAGE:
+    - Use web_search first to find a relevant URL from an authoritative source
+      that is NOT in the list of already-consulted domains.
+    - Then use fetch_url to read that URL.
+    - Do NOT guess URLs — search first, then fetch the best result.
 
     RULES:
-    - Fetch exactly ONE URL — choose the most authoritative source available.
+    - Fetch exactly ONE URL — choose the most authoritative result from your search.
     - Do NOT fetch from any domain listed as already consulted.
-    - Prefer: .gov, .edu, established journals, recognized reference sources.
+    - Prefer results from: .gov, .edu, established journals, recognized references.
     - If the fetch fails, say so and do not retry.
 
     Return your findings as:
@@ -211,8 +225,8 @@ class Researcher:
         messages = [{"role": "user", "content": user_msg}]
         fetched_pages: list[dict] = []
 
-        # Lightweight loop — max 2 rounds (one fetch + one synthesis)
-        for round_num in range(1, 3):
+        # Lightweight loop — max 4 rounds (web_search + fetch_url + synthesis + slack)
+        for round_num in range(1, 5):
             kwargs: dict = dict(
                 model=self.model,
                 max_tokens=4000,
@@ -221,7 +235,10 @@ class Researcher:
                 messages=messages,
             )
             if self.use_extended_thinking:
-                kwargs["thinking"] = {"type": "enabled", "budget_tokens": 1000}
+                # Anthropic minimum is 1024; corroborate is lightweight so
+                # we use the minimum unless the user has set a larger budget.
+                corroborate_budget = max(1024, min(self.thinking_budget, 2000))
+                kwargs["thinking"] = {"type": "enabled", "budget_tokens": corroborate_budget}
                 kwargs["temperature"] = 1
 
             try:

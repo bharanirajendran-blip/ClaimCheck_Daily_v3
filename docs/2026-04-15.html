@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-15</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    .run-summary { background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }
+    .run-summary h2 { font-size: 1.15rem; margin-bottom: .9rem; }
+    .run-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }
+    .run-metric { background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }
+    .run-metric span { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .run-metric strong { font-size: 1rem; }
+    .provider-costs { margin: 1rem 0 0 1.1rem; color: var(--muted); }
+    .provider-costs li { margin: .35rem 0; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-15</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main><section class="run-summary"><h2>Run Cost & Usage</h2><div class="run-metrics"><div class="run-metric"><span>Total Cost</span><strong>$0.31598</strong></div><div class="run-metric"><span>Total Tokens</span><strong>49,918</strong></div><div class="run-metric"><span>LLM Calls</span><strong>18</strong></div><div class="run-metric"><span>Slowest Node</span><strong>research_node</strong></div></div><ul class="provider-costs"><li><strong>Anthropic</strong>: $0.26293 · 33,058 tokens (11 calls)</li><li><strong>Openai</strong>: $0.05305 · 16,860 tokens (7 calls)</li></ul></section>
+            <div class="card">
+              <div class="verdict-badge" style="background:#f59e0b">🟡 Mixed</div>
+              
+              <h2 class="claim-text">"Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut"</h2>
+              <p class="source">Source: <a href="https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/" target="_blank">FactCheck.org</a></p>
+              <p class="confidence">Confidence: 85%</p>
+              <p class="sources-summary">Evidence sources (2): <span class="domain-tag">factcheck.org</span><span class="domain-tag">epa.gov</span></p>
+              <p class="summary">The claim that glyphosate weedkiller causes cancer is not clear-cut. While some politicians assert it causes cancer, the scientific evidence is inconsistent. Regulatory agencies like the EPA find it unlikely to be carcinogenic, whereas the IARC classifies it as probably carcinogenic. The distinction between occupational and trace exposure is crucial, with the latter showing little evidence of cancer risk.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>The EPA states glyphosate is 'unlikely to be a human carcinogen' when used according to label instructions.</li><li>The IARC classified glyphosate as 'probably carcinogenic to humans' based on animal studies and limited human evidence.</li><li>A large NIH study found no association between glyphosate exposure and non-Hodgkin lymphoma in agricultural workers.</li><li>FactCheck.org notes that there is little evidence suggesting glyphosate causes cancer in trace amounts present in food.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">factcheck.org</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.80<div class="retrieved-text">Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut - FactCheck.org
+
+Facebook
+
+Twitter
+
+Tumblr
+
+Close
+
+Skip to main content
+
+            FactCheck
+.org
+®
+
+A Project of The Annenberg Public Policy Center
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Following an executive order from the Trump administration that promotes production of glyphosate, some Democrats have claimed that the herbicide causes cancer. The science, however, is nuanced. While there is some evidence linking glyphosate to cancers in lab animals or to the blood cancer non-Hodgkin lymphoma in agricultural workers, the findings have been inconsistent. 
+
+Regulatory agencies around the world, 
+including
+ the U.S. Environmenta</div></li><li><span class="chunk-domain">epa.gov</span> · <strong>raw_source</strong> · Fetched Source 2.1 · score 0.12<div class="retrieved-text">Glyphosate | US EPA
+
+Skip to main content
+
+ 
+
+Official websites use .gov
+
+ A 
+.gov
+ website belongs to an official government organization in the United States.
+              
+
+Secure .gov websites use HTTPS
+
+ A 
+lock
+ (
+Lock
+A locked padlock
+) or 
+https://
+ means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+              
+
+  Glyphosate
+
+Related Information
+
+WITHDRAWN: EPA’s response to California’s Office of Environmental Health Hazard Assessment on California’s Proposition 65 
+
+EPA Releases Draft Risk Assessments for Glyphosate
+
+Draft Human Health and Ecological Risk Assessments for Glyphosate
+
+Registration of Enlist Duo
+
+Glyph</div></li><li><span class="chunk-domain">factcheck.org</span> · <strong>raw_source</strong> · Fetched Source 1.4 · score 0.23<div class="retrieved-text"> has continued to 
+indicate
+ that glyphosate is dangerous. In a Feb. 27 appearance on the “Joe Rogan Experience,” for example, he 
+mentioned
+ the link to NHL, the blood cancer found in some but not other studies of people who apply glyphosate.
+
+Other Republicans, such as Rep. Nancy Mace of South Carolina, have also responded, although she did not make as strong of a claim about cancer, saying only that glyphosate “has been linked” to cancer.
+
+“Glyphosate and other pesticides don’t belong on our food or in our children’s bodies,” she wrote in a March 8 
+post
+ on X. “We are systematically poisoning ourselves.”
+
+There is little to suggest glyphosate causes cancer in the trace amounts present in</div></li><li><span class="chunk-domain">factcheck.org</span> · <strong>raw_source</strong> · Fetched Source 1.3 · score 0.17<div class="retrieved-text">as long 
+said
+ that glyphosate 
+causes
+ cancer, although he 
+defended
+ the executive order.
+
+Democrats quickly noted the contradiction — and proceeded to make claims of their own about glyphosate.
+
+“This executive order is a slap in the face to the thousands of Americans who have gotten cancer from glyphosate,” Sen. Cory Booker, a Democrat from New Jersey, said in a Feb. 19 
+statement
+. 
+
+Democratic Sen. Ed Markey of Massachusetts, meanwhile, brought up glyphosate during the Feb. 25 
+confirmation hearing
+ for the surgeon general nominee, 
+stating
+ that Trump is “siding with the chemical manufacturing company that is, in fact, causing the cancers.”
+
+Even as he defended Trump’s action, Kennedy</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:85%;background:hsl(102,70%,45%)"></div></div><span class="score-pct">85%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              
+              <h2 class="claim-text">"Scientists just recreated a rare cosmic reaction never seen before"</h2>
+              <p class="source">Source: <a href="https://www.sciencedaily.com/releases/2026/04/260414075652.htm" target="_blank">Science Daily — Top Science</a></p>
+              <p class="confidence">Confidence: 85%</p>
+              <p class="sources-summary">Evidence sources (2): <span class="domain-tag">sciencedaily.com</span><span class="domain-tag">not fetched</span></p>
+              <p class="summary">The claim that scientists recreated a rare cosmic reaction never seen before is mostly true. This refers to the first direct laboratory measurement of a proton capture reaction on arsenic-73, which is a significant scientific milestone. However, the reaction itself occurs naturally in supernovae and was theoretically known, making the headline slightly sensationalized.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>For the first time, researchers directly measured how arsenic-73 captures a proton to form selenium-74 using a rare isotope beam. This result places new limits on how the lightest p-nucleus is created and destroyed in space. (Source: ScienceDaily)</li><li>The experiment was conducted at the Facility for Rare Isotope Beams (FRIB), a world-leading nuclear physics facility at Michigan State University. (Source: ScienceDaily)</li><li>The findings were published in Physical Review Letters, involving over 45 scientists from 20 institutions, lending strong credibility. (Source: ScienceDaily)</li><li>The article notes that the findings reveal gaps in current theories, hinting that the story isn't complete yet, which tempers the breakthrough narrative. (Source: ScienceDaily)</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 1.44<div class="retrieved-text">Scientists just recreated a rare cosmic reaction never seen before | ScienceDaily
+
+Science News
+
+from research organizations
+
+Scientists just recreated a rare cosmic reaction never seen before
+
+A first-of-its-kind experiment cracks part of a cosmic mystery—while revealing there’s still more to the story.
+
+Date:
+
+April 14, 2026
+
+Source:
+
+Michigan State University Facility for Rare Isotope Beams
+
+Summary:
+
+A breakthrough experiment has shed new light on one of astrophysics’ biggest mysteries: the origin of rare proton-rich elements. For the first time, scientists directly measured a key reaction that creates selenium-74 using a rare isotope beam. The results sharpen models of how these element</div></li><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.2 · score 0.27<div class="retrieved-text">s form in supernova explosions, cutting uncertainty in half. But the findings also reveal gaps in current theories, hinting that the story isn’t complete yet.
+
+Share:
+
+Facebook
+
+Twitter
+
+Pinterest
+
+LinkedIN
+
+Email
+
+FULL STORY
+
+Researchers have finally recreated a crucial reaction that forms one of the universe’s rarest elements, offering new clues about how exotic isotopes emerge in exploding stars. Credit: Shutterstock
+
+Scientists have reported a major experimental advance in understanding how some of the rarest elements in the universe are formed. These unusual atoms, known as p-nuclei, are proton-rich isotopes heavier than iron that have long puzzled researchers.
+
+The new study, led by Ar</div></li><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.3 · score 0.25<div class="retrieved-text">temis Tsantiri, who conducted the work as a graduate student at the Facility for Rare Isotope Beams (FRIB) and is now a postdoctoral fellow at the University of Regina in Canada, achieved a milestone. For the first time, researchers directly measured how arsenic-73 captures a proton to form selenium-74 using a rare isotope beam. This result places new limits on how the lightest p-nucleus is created and destroyed in space.
+
+The findings were published in 
+Physical Review Letters
+ ("Constraining the Synthesis of the Lightest &#119901; Nucleus 
+74
+Se") and involved more than 45 scientists from 20 institutions across the United States, Canada, and Europe.
+
+Why Some Elements Remain a Mystery
+
+A k</div></li><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.6 · score 0.14<div class="retrieved-text">nts of important reactions on short-lived isotopes are almost non-existent," said Tsantiri. "Experiments of this kind are only now possible with facilities like FRIB."
+
+Recreating a Stellar Reaction in the Lab
+
+In this study, researchers successfully recreated a key step in the process by observing proton capture on radioactive arsenic-73 for the first time. To do this, they generated a beam of arsenic-73 specifically for the experiment and directed it into a chamber filled with hydrogen gas. Th
+
+[Content truncated]</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              
+              <h2 class="claim-text">"NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work?"</h2>
+              <p class="source">Source: <a href="https://www.technologyreview.com/2026/04/14/1135848/nasa-nuclear-powered-spacecraft/" target="_blank">MIT Technology Review</a></p>
+              <p class="confidence">Confidence: 80%</p>
+              <p class="sources-summary">Evidence sources (1): <span class="domain-tag">technologyreview.com</span></p>
+              <p class="summary">The claim that NASA is building the first nuclear reactor-powered interplanetary spacecraft, named Space Reactor-1 Freedom (SR-1), is supported by a report from MIT Technology Review. The announcement was made by NASA Administrator Jared Isaacman, with a target mission to Mars by 2028. However, independent verification from NASA's official channels was not possible, and experts express skepticism about the ambitious timeline.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>MIT Technology Review reports that NASA Administrator Jared Isaacman announced the SR-1 program, aiming for a Mars mission by 2028.</li><li>The article distinguishes between previous RTG-powered missions and the new nuclear reactor spacecraft.</li><li>Experts quoted in the article describe the 2028 timeline as 'extremely tight', indicating feasibility concerns.</li><li>No NASA officials responded to MIT Technology Review's requests for comment, and details on SR-1 are limited.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.96<div class="retrieved-text">NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work? | MIT Technology Review
+
+Skip to Content
+EXECUTIVE SUMMARY
+ 
+MIT Technology Review Explains
+: Let our writers untangle the complex, messy world of technology to help you understand what’s coming next. 
+You can read more from the series here
+.
+ 
+Just before Artemis II began its historic slingshot around the moon, Jared Isaacman, the recently confirmed NASA administrator, made a 
+flurry of announcements
+ from the agency’s headquarters in Washington, DC. He said the US would soon undertake far more regular moon missions and establish the foundations for a base at the lunar south pole before the end o</div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.2 · score 0.74<div class="retrieved-text">f the decade. He also affirmed the space agency’s commitment to putting a nuclear reactor on the lunar surface.
+ 
+ 
+These goals were largely expected—but there was still one surprise. Isaacman also said NASA would build the first-ever nuclear reactor-powered interplanetary spacecraft and fly it to Mars by the end of 2028. It’s called the Space Reactor-1 Freedom, or SR-1 for short. “After decades of study, and billions spent on concepts that have never left Earth, America will finally get underway on nuclear power in space,” he said at the event. “We will launch the first-of-its-kind interplanetary mission.”
+ 
+A successful mission would herald a new era in spaceflight, one in which traveling </div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.4 · score 0.42<div class="retrieved-text">s did not respond to requests for comment. But 
+MIT Technology Review
+ spoke to several nuclear power and propulsion experts to find out how the new nuclear-powered spacecraft might work.
+ 
+
+ 
+ 
+Nuclear propulsion 101
+ 
+Traditionally, spaceflight has been powered by chemical propulsion. Liquefied hydrogen and liquefied oxygen are mixed, and then ignited, within a rocket; the searingly hot exhaust from this explosion is ejected through a nozzle, which propels the rocket forth.
+ 
+Chemical propulsion offers a significant amount of thrust and will, for the foreseeable future, still be used to launch spacecraft from Earth. But nuclear propulsion would enable spacecraft to fly through the solar sy</div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.6 · score 0.24<div class="retrieved-text">esn’t always shine in space, particularly when a planet or moon gets in its way—and as you head toward the outer solar system, beyond Mars, there’s just less sunlight available. 
+ 
+To circumvent this issue, nuclear energy sources have been used in spacecraft plenty of times before—including on 
+both Voyager missions
+ and the Saturn-interrogating 
+Cassini
+ probe. Known as radioisotope thermoelectric generators, or 
+RTGs
+, these use plutonium, which radioactively decays and generates heat in the p
+
+[Content truncated]</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:70%;background:hsl(84,70%,45%)"></div></div><span class="score-pct">70%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:82%;background:hsl(99,70%,45%)"></div></div><span class="score-pct">82%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-15T00:47:12Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

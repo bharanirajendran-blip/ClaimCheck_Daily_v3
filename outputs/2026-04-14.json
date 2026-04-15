@@ -1,0 +1,296 @@
+{
+  "date": "2026-04-14",
+  "generated_at": "2026-04-14T14:34:24Z",
+  "trace_summary": {
+    "spans": 17,
+    "failures": 0,
+    "total_input_tokens": 42621,
+    "total_output_tokens": 6185,
+    "total_tokens": 48806,
+    "total_cost_usd": 0.30676,
+    "total_latency_ms": 122898.9,
+    "slowest_node": "research_node",
+    "slowest_ms": 24249.9,
+    "by_node": {
+      "director": {
+        "calls": 4,
+        "tokens": 11664,
+        "cost_usd": 0.0351,
+        "latency_ms": 12662.1
+      },
+      "research_node": {
+        "calls": 10,
+        "tokens": 31573,
+        "cost_usd": 0.25295,
+        "latency_ms": 99034.6
+      },
+      "verify_node": {
+        "calls": 3,
+        "tokens": 5569,
+        "cost_usd": 0.01871,
+        "latency_ms": 11202.2
+      }
+    },
+    "by_provider": {
+      "openai": {
+        "calls": 7,
+        "input_tokens": 15802,
+        "output_tokens": 1431,
+        "total_tokens": 17233,
+        "cost_usd": 0.05382
+      },
+      "anthropic": {
+        "calls": 10,
+        "input_tokens": 26819,
+        "output_tokens": 4754,
+        "total_tokens": 31573,
+        "cost_usd": 0.25295
+      }
+    },
+    "by_model": {
+      "gpt-4o": {
+        "calls": 7,
+        "input_tokens": 15802,
+        "output_tokens": 1431,
+        "total_tokens": 17233,
+        "cost_usd": 0.05382
+      },
+      "claude-opus-4-5-20251101": {
+        "calls": 10,
+        "input_tokens": 26819,
+        "output_tokens": 4754,
+        "total_tokens": 31573,
+        "cost_usd": 0.25295
+      }
+    }
+  },
+  "results": [
+    {
+      "claim": "Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut",
+      "source": "FactCheck.org",
+      "verdict": "MIXED",
+      "confidence": 0.8,
+      "summary": "The claim that glyphosate weedkiller causes cancer is contested. Regulatory agencies like the EPA have found glyphosate unlikely to be carcinogenic at approved use levels, while the WHO's IARC classified it as 'probably carcinogenic' based on animal studies and limited human evidence. The scientific community remains divided, with some studies showing associations with cancer in occupational settings but not in typical consumer exposure.",
+      "key_evidence": [
+        "The EPA's official position states that glyphosate is unlikely to be a human carcinogen when used according to its label (EPA.gov).",
+        "The WHO's IARC classified glyphosate as 'probably carcinogenic to humans' based on animal studies and limited human evidence (FactCheck.org).",
+        "A large NIH study did not find an association between glyphosate and non-Hodgkin lymphoma or other cancers in agricultural workers (FactCheck.org).",
+        "There is little evidence to suggest glyphosate causes cancer in the trace amounts present in food (FactCheck.org)."
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "69318a29a47c",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.1",
+          "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
+          "hybrid_score": 0.746,
+          "text": "Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut - FactCheck.org\n\nFacebook\n\nTwitter\n\nTumblr\n\nClose\n\nSkip to main content\n\n            FactCheck\n.org\n®\n\nA Project of The Annenberg Public Policy Center\n\n \n\n \n\n \n\n \n\n \n\n \n\n \n\nFollowing an executive order from the Trump administration that promotes production of glyphosate, some Democrats have claimed that the herbicide causes cancer. The science, however, is nuanced. While there is some evidence linking glyphosate to cancers in lab animals or to the blood cancer non-Hodgkin lymphoma in agricultural workers, the findings have been inconsistent. \n\nRegulatory agencies around the world, \nincluding\n the U.S. Environmenta"
+        },
+        {
+          "chunk_id": "fa4f9a2d2aaf",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.1",
+          "source_url": "https://www.epa.gov/ingredients-used-pesticide-products/glyphosate",
+          "hybrid_score": 0.114,
+          "text": "Glyphosate | US EPA\n\nSkip to main content\n\n \n\nOfficial websites use .gov\n\n A \n.gov\n website belongs to an official government organization in the United States.\n              \n\nSecure .gov websites use HTTPS\n\n A \nlock\n (\nLock\nA locked padlock\n) or \nhttps://\n means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.\n              \n\n  Glyphosate\n\nRelated Information\n\nWITHDRAWN: EPA’s response to California’s Office of Environmental Health Hazard Assessment on California’s Proposition 65 \n\nEPA Releases Draft Risk Assessments for Glyphosate\n\nDraft Human Health and Ecological Risk Assessments for Glyphosate\n\nRegistration of Enlist Duo\n\nGlyph"
+        },
+        {
+          "chunk_id": "199f6cfb92d6",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.4",
+          "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
+          "hybrid_score": 0.205,
+          "text": " has continued to \nindicate\n that glyphosate is dangerous. In a Feb. 27 appearance on the “Joe Rogan Experience,” for example, he \nmentioned\n the link to NHL, the blood cancer found in some but not other studies of people who apply glyphosate.\n\nOther Republicans, such as Rep. Nancy Mace of South Carolina, have also responded, although she did not make as strong of a claim about cancer, saying only that glyphosate “has been linked” to cancer.\n\n“Glyphosate and other pesticides don’t belong on our food or in our children’s bodies,” she wrote in a March 8 \npost\n on X. “We are systematically poisoning ourselves.”\n\nThere is little to suggest glyphosate causes cancer in the trace amounts present in"
+        },
+        {
+          "chunk_id": "cf4a8e80d253",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.3",
+          "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
+          "hybrid_score": 0.172,
+          "text": "as long \nsaid\n that glyphosate \ncauses\n cancer, although he \ndefended\n the executive order.\n\nDemocrats quickly noted the contradiction — and proceeded to make claims of their own about glyphosate.\n\n“This executive order is a slap in the face to the thousands of Americans who have gotten cancer from glyphosate,” Sen. Cory Booker, a Democrat from New Jersey, said in a Feb. 19 \nstatement\n. \n\nDemocratic Sen. Ed Markey of Massachusetts, meanwhile, brought up glyphosate during the Feb. 25 \nconfirmation hearing\n for the surgeon general nominee, \nstating\n that Trump is “siding with the chemical manufacturing company that is, in fact, causing the cancers.”\n\nEven as he defended Trump’s action, Kennedy"
+        },
+        {
+          "chunk_id": "d6504abb59b9",
+          "chunk_kind": "summary",
+          "section": "Key Sources",
+          "source_url": "https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/",
+          "hybrid_score": 0.962,
+          "text": "| Title | URL | Reliability |\n|-------|-----|-------------|\n| FactCheck.org: Politicians Say Glyphosate Weedkiller Causes Cancer But Evidence Not Clear-Cut | https://www.factcheck.org/2026/04/politicians-say-glyphosate-weedkiller-causes-cancer-but-evidence-not-clear-cut/ | **High** - Annenberg Public Policy Center fact-checker, cites primary sources |\n| U.S. EPA: Glyphosate | https://www.epa.gov/ingredients-used-pesticide-products/glyphosate | **High** - Official federal regulatory agency, primary source for U.S. regulatory position |\n\n---\n\n**Verdict:** The FactCheck.org headline and article are **accurate in their characterization**. Politicians claiming glyphosate definitively \"causes canc"
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.8,
+        "citation_score": 0.8,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.8,
+        "overall_score": 0.85,
+        "unsupported_statements": [
+          "The scientific community remains divided, with some studies showing associations with cancer in occupational settings but not in typical consumer exposure."
+        ],
+        "contradictions": [],
+        "missing_citations": [
+          "The scientific community remains divided, with some studies showing associations with cancer in occupational settings but not in typical consumer exposure."
+        ],
+        "rewrite_suggestion": "The claim that glyphosate weedkiller causes cancer is contested. Regulatory agencies like the EPA have found glyphosate unlikely to be carcinogenic at approved use levels, while the WHO's IARC classified it as 'probably carcinogenic' based on animal studies and limited human evidence. Some studies have shown associations with cancer in agricultural workers, but there is little evidence to suggest glyphosate causes cancer in the trace amounts present in food.",
+        "should_retry": false
+      },
+      "review_required": false,
+      "review": null
+    },
+    {
+      "claim": "Scientists just recreated a rare cosmic reaction never seen before",
+      "source": "Science Daily — Top Science",
+      "verdict": "MOSTLY_TRUE",
+      "confidence": 0.85,
+      "summary": "The claim that scientists recreated a rare cosmic reaction is mostly true. Researchers achieved a first by directly measuring a nuclear reaction relevant to p-nuclei formation in supernovae. However, the claim's language is slightly sensationalized, as the novelty was in the measurement technique rather than discovering an entirely new phenomenon.",
+      "key_evidence": [
+        "Scientists directly measured how arsenic-73 captures a proton to form selenium-74 using a rare isotope beam, a first in this specific reaction measurement.",
+        "The research was conducted at the Facility for Rare Isotope Beams (FRIB) at Michigan State University, a legitimate DOE-funded facility.",
+        "The findings were published in Physical Review Letters, a reputable peer-reviewed journal.",
+        "The experiment involved over 45 scientists from 20 institutions, indicating a significant collaborative effort."
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "5bccca8e63c4",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.1",
+          "source_url": "https://www.sciencedaily.com/releases/2026/04/260414075652.htm",
+          "hybrid_score": 1.438,
+          "text": "Scientists just recreated a rare cosmic reaction never seen before | ScienceDaily\n\nScience News\n\nfrom research organizations\n\nScientists just recreated a rare cosmic reaction never seen before\n\nA first-of-its-kind experiment cracks part of a cosmic mystery—while revealing there’s still more to the story.\n\nDate:\n\nApril 14, 2026\n\nSource:\n\nMichigan State University Facility for Rare Isotope Beams\n\nSummary:\n\nA breakthrough experiment has shed new light on one of astrophysics’ biggest mysteries: the origin of rare proton-rich elements. For the first time, scientists directly measured a key reaction that creates selenium-74 using a rare isotope beam. The results sharpen models of how these element"
+        },
+        {
+          "chunk_id": "8e6e278de61d",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.2",
+          "source_url": "https://frib.msu.edu/news",
+          "hybrid_score": 0.081,
+          "text": "le\n\nMichigan State University (MSU) operates the Facility for Rare Isotope Beams (FRIB) as a \nuser facility for the U.S. Department of Energy Office of Science\n (DOE SC), with financial support from and furthering the mission of the DOE‑SC Office of Nuclear Physics. \nFRIB is registered to ISO 9001, ISO 14001, ISO 27001, and ISO 45001."
+        },
+        {
+          "chunk_id": "02ad5c073d05",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.2",
+          "source_url": "https://www.sciencedaily.com/releases/2026/04/260414075652.htm",
+          "hybrid_score": 0.235,
+          "text": "s form in supernova explosions, cutting uncertainty in half. But the findings also reveal gaps in current theories, hinting that the story isn’t complete yet.\n\nShare:\n\nFacebook\n\nTwitter\n\nPinterest\n\nLinkedIN\n\nEmail\n\nFULL STORY\n\nResearchers have finally recreated a crucial reaction that forms one of the universe’s rarest elements, offering new clues about how exotic isotopes emerge in exploding stars. Credit: Shutterstock\n\nScientists have reported a major experimental advance in understanding how some of the rarest elements in the universe are formed. These unusual atoms, known as p-nuclei, are proton-rich isotopes heavier than iron that have long puzzled researchers.\n\nThe new study, led by Ar"
+        },
+        {
+          "chunk_id": "3c4c0c59afb2",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.3",
+          "source_url": "https://www.sciencedaily.com/releases/2026/04/260414075652.htm",
+          "hybrid_score": 0.205,
+          "text": "temis Tsantiri, who conducted the work as a graduate student at the Facility for Rare Isotope Beams (FRIB) and is now a postdoctoral fellow at the University of Regina in Canada, achieved a milestone. For the first time, researchers directly measured how arsenic-73 captures a proton to form selenium-74 using a rare isotope beam. This result places new limits on how the lightest p-nucleus is created and destroyed in space.\n\nThe findings were published in \nPhysical Review Letters\n (\"Constraining the Synthesis of the Lightest &#119901; Nucleus \n74\nSe\") and involved more than 45 scientists from 20 institutions across the United States, Canada, and Europe.\n\nWhy Some Elements Remain a Mystery\n\nA k"
+        },
+        {
+          "chunk_id": "4b0b0fe71d19",
+          "chunk_kind": "source_metadata",
+          "section": "Key Sources",
+          "source_url": "—",
+          "hybrid_score": 0.0,
+          "text": "Source: Physical Review Letters (cited, not fetched). URL: —. Reliability: High (premier peer-reviewed physics journal)."
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.9,
+        "citation_score": 0.9,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.8,
+        "overall_score": 0.9,
+        "unsupported_statements": [],
+        "contradictions": [],
+        "missing_citations": [],
+        "rewrite_suggestion": "The claim that scientists recreated a rare cosmic reaction is mostly true. Researchers achieved a first by directly measuring a nuclear reaction relevant to p-nuclei formation in supernovae. However, the claim's language is slightly sensationalized, as the novelty was in the measurement technique rather than discovering an entirely new phenomenon. The experiment was conducted at the Facility for Rare Isotope Beams (FRIB) at Michigan State University and involved over 45 scientists from 20 institutions. The findings were published in Physical Review Letters.",
+        "should_retry": false
+      },
+      "review_required": false,
+      "review": null
+    },
+    {
+      "claim": "NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work?",
+      "source": "MIT Technology Review",
+      "verdict": "UNVERIFIABLE",
+      "confidence": 0.4,
+      "summary": "The claim that NASA is building the first nuclear reactor-powered interplanetary spacecraft, 'SR-1 Freedom', with a planned Mars mission by late 2028, is based on a future-dated article from MIT Technology Review. This article lacks corroboration from NASA's official channels, and the timeline is acknowledged as extremely tight by experts. The article's future publication date raises questions about its current validity.",
+      "key_evidence": [
+        "MIT Technology Review article states NASA Administrator Jared Isaacman announced the 'Space Reactor-1 Freedom' program with a Mars mission by 2028.",
+        "The article is dated April 2026, a future date, suggesting it may be speculative or reporting on anticipated events.",
+        "No corroboration found on NASA's official site for the 'SR-1 Freedom' program.",
+        "Experts quoted in the article express excitement but acknowledge the timeline is 'extremely tight'."
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "d7478bfc78d1",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.1",
+          "source_url": "https://www.technologyreview.com/2026/04/14/1135848/nasa-nuclear-powered-spacecraft/",
+          "hybrid_score": 1.143,
+          "text": "NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work? | MIT Technology Review\n\nSkip to Content\nEXECUTIVE SUMMARY\n \nMIT Technology Review Explains\n: Let our writers untangle the complex, messy world of technology to help you understand what’s coming next. \nYou can read more from the series here\n.\n \nJust before Artemis II began its historic slingshot around the moon, Jared Isaacman, the recently confirmed NASA administrator, made a \nflurry of announcements\n from the agency’s headquarters in Washington, DC. He said the US would soon undertake far more regular moon missions and establish the foundations for a base at the lunar south pole before the end o"
+        },
+        {
+          "chunk_id": "da126f0d4d01",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 3.4",
+          "source_url": "https://www.nasa.gov/humans-in-space/nuclear-propulsion-could-help-get-humans-to-mars-faster/",
+          "hybrid_score": 0.131,
+          "text": "ngagement at NASA\nAbout NASA\nNASA's Impacts\nCenters and Facilities\nDirectorates\nOrganizations\nPeople of NASA\nCareers\nInternships\nOur History\nDoing Business with NASA\nGet Involved\nContact\nNASA en Español\nCiencia\nAeronáutica\nCiencias Terrestres\nSistema Solar\nUniverso\nNews & Events\nNews Releases\nRecently Published\nVideo Series on NASA+\nPodcasts & Audio\nBlogs\nNewsletters\nSocial Media\nMedia Resources\nEvents\nUpcoming Launches & Landings\nVirtual Guest Program\nMultimedia\nNASA+\nImages\nNASA Live\nNASA Apps\nPodcasts\nImage of the Day\ne-Books\nInteractives\nSTEM Multimedia\nNASA Brand & Usage Guidelines\n \n\nFeatured\n\n \n\n3 min read\n\nHubble Spies an Active Spiral\n\narticle\n\n1 day ago\n\n \n\n2 min read\n\nEarthset Fro"
+        },
+        {
+          "chunk_id": "30bdac70b589",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.2",
+          "source_url": "https://www.technologyreview.com/2026/04/14/1135848/nasa-nuclear-powered-spacecraft/",
+          "hybrid_score": 0.883,
+          "text": "f the decade. He also affirmed the space agency’s commitment to putting a nuclear reactor on the lunar surface.\n \n \nThese goals were largely expected—but there was still one surprise. Isaacman also said NASA would build the first-ever nuclear reactor-powered interplanetary spacecraft and fly it to Mars by the end of 2028. It’s called the Space Reactor-1 Freedom, or SR-1 for short. “After decades of study, and billions spent on concepts that have never left Earth, America will finally get underway on nuclear power in space,” he said at the event. “We will launch the first-of-its-kind interplanetary mission.”\n \nA successful mission would herald a new era in spaceflight, one in which traveling "
+        },
+        {
+          "chunk_id": "0125d3db92f9",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.4",
+          "source_url": "https://www.technologyreview.com/2026/04/14/1135848/nasa-nuclear-powered-spacecraft/",
+          "hybrid_score": 0.622,
+          "text": "s did not respond to requests for comment. But \nMIT Technology Review\n spoke to several nuclear power and propulsion experts to find out how the new nuclear-powered spacecraft might work.\n \n\n \n \nNuclear propulsion 101\n \nTraditionally, spaceflight has been powered by chemical propulsion. Liquefied hydrogen and liquefied oxygen are mixed, and then ignited, within a rocket; the searingly hot exhaust from this explosion is ejected through a nozzle, which propels the rocket forth.\n \nChemical propulsion offers a significant amount of thrust and will, for the foreseeable future, still be used to launch spacecraft from Earth. But nuclear propulsion would enable spacecraft to fly through the solar sy"
+        },
+        {
+          "chunk_id": "5909d2397058",
+          "chunk_kind": "source_metadata",
+          "section": "Key Sources",
+          "source_url": "https://www.technologyreview.com/2026/04/14/1135848/nasa-nuclear-powered-spacecraft/",
+          "hybrid_score": 0.859,
+          "text": "Source: MIT Technology Review: \"NASA is building the first nuclear reactor-powered interplanetary spacecraft\". URL: https://www.technologyreview.com/2026/04/14/1135848/nasa-nuclear-powered-spacecraft/. Reliability: Medium — Reputable publication but article is dated in the future and lacks official NASA confirmation."
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.8,
+        "citation_score": 0.8,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.7,
+        "overall_score": 0.825,
+        "unsupported_statements": [
+          "The article's future publication date raises questions about its current validity."
+        ],
+        "contradictions": [],
+        "missing_citations": [
+          "The article's future publication date raises questions about its current validity."
+        ],
+        "rewrite_suggestion": "The claim that NASA is building the first nuclear reactor-powered interplanetary spacecraft, 'SR-1 Freedom', with a planned Mars mission by late 2028, is based on an article from MIT Technology Review. This article, dated April 2026, lacks corroboration from NASA's official channels. Experts quoted in the article express excitement but acknowledge the timeline is 'extremely tight'.",
+        "should_retry": false
+      },
+      "review_required": true,
+      "review": {
+        "review_id": "2026-04-14:ee905fff98b8e76a",
+        "claim_id": "ee905fff98b8e76a",
+        "claim_text": "NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work?",
+        "source": "MIT Technology Review",
+        "date_slug": "2026-04-14",
+        "verdict": "UNVERIFIABLE",
+        "confidence": 0.4,
+        "verifier_score": 0.825,
+        "reason": "Model confidence 0.40 is below the review threshold of 0.60.",
+        "status": "PENDING_REVIEW",
+        "created_at": "2026-04-14T14:34:24Z"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "review_id": "2026-04-14:ee905fff98b8e76a",
+    "claim_id": "ee905fff98b8e76a",
+    "claim_text": "NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work?",
+    "source": "MIT Technology Review",
+    "date_slug": "2026-04-14",
+    "verdict": "UNVERIFIABLE",
+    "confidence": 0.4,
+    "verifier_score": 0.825,
+    "reason": "Model confidence 0.40 is below the review threshold of 0.60.",
+    "status": "PENDING_REVIEW",
+    "created_at": "2026-04-14T14:34:24Z"
+  }
+]

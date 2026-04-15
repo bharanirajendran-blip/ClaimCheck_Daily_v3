@@ -19,6 +19,36 @@
     {
       "type": "source",
       "id": "airandspace.si.edu (referenced)"
+    },
+    {
+      "type": "claim",
+      "text": "vaccines causes autism",
+      "id": "15f5de8f"
+    },
+    {
+      "type": "source",
+      "id": "who.int"
+    },
+    {
+      "type": "source",
+      "id": "thelancet.com"
+    },
+    {
+      "type": "source",
+      "id": "cdc.gov"
+    },
+    {
+      "type": "claim",
+      "text": "drinking honey lemon water hot on empty stomach in the morning is beneficial",
+      "id": "3466916a"
+    },
+    {
+      "type": "source",
+      "id": "healthline.com"
+    },
+    {
+      "type": "source",
+      "id": "ncbi.nlm.nih.gov"
     }
   ],
   "links": [
@@ -51,6 +81,56 @@
       "rel": "SUPPORTS",
       "source": "airandspace.si.edu (referenced)",
       "target": "96cc84d3"
+    },
+    {
+      "rel": "CITES",
+      "source": "15f5de8f",
+      "target": "who.int"
+    },
+    {
+      "rel": "CITES",
+      "source": "15f5de8f",
+      "target": "thelancet.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "15f5de8f",
+      "target": "cdc.gov"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "who.int",
+      "target": "15f5de8f"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "thelancet.com",
+      "target": "15f5de8f"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "cdc.gov",
+      "target": "15f5de8f"
+    },
+    {
+      "rel": "CITES",
+      "source": "3466916a",
+      "target": "healthline.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "3466916a",
+      "target": "ncbi.nlm.nih.gov"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "healthline.com",
+      "target": "3466916a"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "ncbi.nlm.nih.gov",
+      "target": "3466916a"
     }
   ]
 }

@@ -1,0 +1,151 @@
+{
+  "date": "2026-04-14",
+  "generated_at": "2026-04-14T16:26:30Z",
+  "trace_summary": {
+    "spans": 12,
+    "failures": 2,
+    "total_input_tokens": 20607,
+    "total_output_tokens": 2916,
+    "total_tokens": 23523,
+    "total_cost_usd": 0.12741,
+    "total_latency_ms": 54246.2,
+    "slowest_node": "research_node",
+    "slowest_ms": 20955.2,
+    "by_node": {
+      "research_node": {
+        "calls": 4,
+        "tokens": 10654,
+        "cost_usd": 0.08543,
+        "latency_ms": 32684.6
+      },
+      "director": {
+        "calls": 3,
+        "tokens": 7914,
+        "cost_usd": 0.02328,
+        "latency_ms": 10285.7
+      },
+      "verify_node": {
+        "calls": 3,
+        "tokens": 4955,
+        "cost_usd": 0.0187,
+        "latency_ms": 10751.3
+      },
+      "corroborate_node": {
+        "calls": 2,
+        "tokens": 0,
+        "cost_usd": 0.0,
+        "latency_ms": 524.6
+      }
+    },
+    "by_provider": {
+      "anthropic": {
+        "calls": 6,
+        "input_tokens": 9046,
+        "output_tokens": 1608,
+        "total_tokens": 10654,
+        "cost_usd": 0.08543
+      },
+      "openai": {
+        "calls": 6,
+        "input_tokens": 11561,
+        "output_tokens": 1308,
+        "total_tokens": 12869,
+        "cost_usd": 0.04198
+      }
+    },
+    "by_model": {
+      "claude-opus-4-5-20251101": {
+        "calls": 6,
+        "input_tokens": 9046,
+        "output_tokens": 1608,
+        "total_tokens": 10654,
+        "cost_usd": 0.08543
+      },
+      "gpt-4o": {
+        "calls": 6,
+        "input_tokens": 11561,
+        "output_tokens": 1308,
+        "total_tokens": 12869,
+        "cost_usd": 0.04198
+      }
+    }
+  },
+  "results": [
+    {
+      "claim": "vaccines causes autism",
+      "source": "Manual Input",
+      "verdict": "FALSE",
+      "confidence": 1.0,
+      "summary": "The claim that vaccines cause autism is conclusively false. It originated from a fraudulent study by Andrew Wakefield, which has been retracted, and extensive scientific research has shown no causal link between vaccines and autism. Major health organizations worldwide confirm this conclusion.",
+      "key_evidence": [
+        "The original Wakefield study was retracted by The Lancet in 2010 due to fraud and ethical violations.",
+        "Multiple large-scale studies involving millions of children have found no link between vaccines and autism.",
+        "The WHO confirms that vaccines are safe and effective, undergoing rigorous safety testing.",
+        "Major health authorities such as the CDC and WHO state there is no causal link between vaccines and autism."
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "ca9d9484e97c",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.3",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 0.065,
+          "text": "d\nr\nemembers the disease and how to fight it. If you are then exposed to the germ in the future, your immune system can quickly destroy it before you become unwell.\nThe vaccine is therefore a safe and clever way to produce an immune response in the body, without causing illness.\nOur immune systems are designed to remember. Once exposed to one or more doses of a vaccine, we typically remain protected against a disease for years, decades or even a lifetime. This is what makes vaccines so effective. Rather than treating a disease after it occurs, vaccines prevent us in the first instance from getting sick.\n\n\r\n                                        Why should I get vaccinated?\r\n                "
+        },
+        {
+          "chunk_id": "58b30c31f9b7",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.5",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 0.057,
+          "text": "eriously ill or have certain allergies – they depend on others being vaccinated to ensure they are also safe from vaccine-preventable diseases.\n\n\r\n                                        When should I get vaccinated (or vaccinate my child)?\r\n                                    \n\nVaccines protect us throughout life and at different ages, from birth to childhood, as teenagers and into old age. In most countries you will be given a vaccination card that tells you what vaccines you or your child have had and when the next vaccines or booster doses are due. It is important to make sure that all these vaccines are up to date.\nIf we delay vaccination, we are at risk of getting seriously sick. If we"
+        },
+        {
+          "chunk_id": "bf8cba862b5b",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.2",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 0.057,
+          "text": "se vaccines contain only killed or weakened forms of germs like viruses or bacteria, they do not cause the disease or put you at risk of its complications.\nMost vaccines are given by an injection, but some are given orally (by mouth) or sprayed into the nose.\n\n\r\n                                        How does a vaccine work?\r\n                                    \n\nVaccines reduce risks of getting a disease by working with your body’s natural defenses to build protection. When you get a vaccine, your immune system responds. It:\nrecognizes the invading germ, such as the virus or bacteria; \nproduces antibodies. Antibodies are proteins produced naturally by the immune system to fight disease; an"
+        },
+        {
+          "chunk_id": "bd63f4c4b98e",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.6",
+          "source_url": "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination",
+          "hybrid_score": 0.053,
+          "text": " wait until we think we may be exposed to a serious illness – like during a disease outbreak – there may not be enough time for the vaccine to work and to receive all the recommended doses.\nIf you have missed any recommended vaccinations for you or your child, talk to your healthcare worker about catching up.\n\n\r\n                                        What diseases do vaccines prevent?\r\n                                    \n\nVaccines protect against \nmany different diseases\n, including:\r\n\nCervica\n\n[Content truncated]"
+        },
+        {
+          "chunk_id": "13df6436be9c",
+          "chunk_kind": "source_metadata",
+          "section": "Key Sources",
+          "source_url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(10)60175-4/fulltext",
+          "hybrid_score": 0.061,
+          "text": "Source: The Lancet Retraction Notice (2010). URL: https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(10)60175-4/fulltext. Reliability: High (Primary source of retraction)."
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.8,
+        "citation_score": 0.8,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.8,
+        "overall_score": 0.85,
+        "unsupported_statements": [
+          "extensive scientific research has shown no causal link between vaccines and autism",
+          "Major health organizations worldwide confirm this conclusion"
+        ],
+        "contradictions": [],
+        "missing_citations": [
+          "Multiple large-scale studies involving millions of children have found no link between vaccines and autism",
+          "The WHO confirms that vaccines are safe and effective, undergoing rigorous safety testing",
+          "Major health authorities such as the CDC and WHO state there is no causal link between vaccines and autism"
+        ],
+        "rewrite_suggestion": "The claim that vaccines cause autism is false. It originated from a fraudulent study by Andrew Wakefield, which has been retracted. The Lancet retracted the study in 2010 due to fraud and ethical violations. The CDC and other health authorities state there is no causal link between vaccines and autism.",
+        "should_retry": false
+      },
+      "review_required": false,
+      "review": null
+    }
+  ]
+}
