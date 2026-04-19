@@ -1,0 +1,140 @@
+{
+  "date": "2026-04-19",
+  "generated_at": "2026-04-19T16:36:59Z",
+  "trace_summary": {
+    "spans": 6,
+    "failures": 0,
+    "total_input_tokens": 13779,
+    "total_output_tokens": 1747,
+    "total_tokens": 15526,
+    "total_cost_usd": 0.09991,
+    "total_latency_ms": 33837.0,
+    "slowest_node": "research_node",
+    "slowest_ms": 18424.2,
+    "by_node": {
+      "research_node": {
+        "calls": 4,
+        "tokens": 12265,
+        "cost_usd": 0.08904,
+        "latency_ms": 29716.5
+      },
+      "director": {
+        "calls": 1,
+        "tokens": 1872,
+        "cost_usd": 0.0059,
+        "latency_ms": 2082.4
+      },
+      "verify_node": {
+        "calls": 1,
+        "tokens": 1389,
+        "cost_usd": 0.00496,
+        "latency_ms": 2038.1
+      }
+    },
+    "by_provider": {
+      "anthropic": {
+        "calls": 4,
+        "input_tokens": 10879,
+        "output_tokens": 1386,
+        "total_tokens": 12265,
+        "cost_usd": 0.08904
+      },
+      "openai": {
+        "calls": 2,
+        "input_tokens": 2900,
+        "output_tokens": 361,
+        "total_tokens": 3261,
+        "cost_usd": 0.01086
+      }
+    },
+    "by_model": {
+      "claude-opus-4-5-20251101": {
+        "calls": 4,
+        "input_tokens": 10879,
+        "output_tokens": 1386,
+        "total_tokens": 12265,
+        "cost_usd": 0.08904
+      },
+      "gpt-4o": {
+        "calls": 2,
+        "input_tokens": 2900,
+        "output_tokens": 361,
+        "total_tokens": 3261,
+        "cost_usd": 0.01086
+      }
+    }
+  },
+  "results": [
+    {
+      "claim": "Are there Aliens living on earth",
+      "source": "Manual Input",
+      "verdict": "FALSE",
+      "confidence": 0.95,
+      "summary": "There is no credible scientific evidence that aliens are living on Earth. All major scientific institutions, space agencies, and government investigations have found no verified proof of extraterrestrial beings on our planet. The search for life in the universe continues, but the claim that aliens currently reside on Earth remains unsupported by any authoritative source.",
+      "key_evidence": [
+        "NASA's ongoing Search for Life program indicates they are still searching—no discovery has been made.",
+        "U.S. government UAP investigations (AARO, Pentagon reports) have not attributed any phenomena to alien origin.",
+        "Scientific consensus: No peer-reviewed evidence of extraterrestrial life on Earth exists.",
+        "SETI Institute continues searching for signals from space—no confirmed contact."
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "1fe69d49cec3",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.2",
+          "source_url": "https://science.nasa.gov/universe/search-for-life/",
+          "hybrid_score": 0.34,
+          "text": " Launches and Landings\nSpaceships and Rockets\nCommunicating with Missions\nArtemis\nJames Webb Space Telescope\nHubble Space Telescope\nInternational Space Station\nOSIRIS-REx\nHumans in Space\nWhy Go to Space\nAstronauts\nCommercial Space\nDestinations\nSpaceships and Rockets\nLiving in Space\nEarth\nExplore Earth Science\nClimate Change\nEarth, Our Planet\nEarth Science in Action\nEarth Multimedia\nEarth Data\nEarth Science Researchers\nThe Solar System\nThe Sun\nMercury\nVenus\nEarth\nThe Moon\nMars\nJupiter\nSaturn\nUranus\nNeptune\nPluto & Dwarf Planets\nAsteroids, Comets & Meteors\nThe Kuiper Belt\nThe Oort Cloud\nSkywatching\nThe Universe\nExoplanets\nThe Search for Life in the Universe\nStars\nGalaxies\nBlack Holes\nThe Big B"
+        },
+        {
+          "chunk_id": "8b3dc6d7aecd",
+          "chunk_kind": "source_metadata",
+          "section": "Key Sources",
+          "source_url": "https://www.aaro.mil/",
+          "hybrid_score": 0.0,
+          "text": "Source: AARO (Pentagon UAP Office) Official Reports. URL: https://www.aaro.mil/. Reliability: High."
+        },
+        {
+          "chunk_id": "01e364024256",
+          "chunk_kind": "source_metadata",
+          "section": "Key Sources",
+          "source_url": "https://www.seti.org/",
+          "hybrid_score": 0.0,
+          "text": "Source: SETI Institute. URL: https://www.seti.org/. Reliability: High."
+        },
+        {
+          "chunk_id": "5a8925a73fe3",
+          "chunk_kind": "summary",
+          "section": "Supporting evidence",
+          "source_url": "https://science.nasa.gov/universe/search-for-life/",
+          "hybrid_score": 1.132,
+          "text": "*(For the claim that aliens ARE living on Earth)*\n\n- **None found.** No credible scientific source, government agency, or peer-reviewed publication has confirmed extraterrestrial beings living on Earth."
+        },
+        {
+          "chunk_id": "6187f0662304",
+          "chunk_kind": "summary",
+          "section": "Verdict: **FALSE / UNSUBSTANTIATED**",
+          "source_url": "https://science.nasa.gov/universe/search-for-life/",
+          "hybrid_score": 0.883,
+          "text": "There is **no credible scientific evidence** that aliens are living on Earth. All major scientific institutions, space agencies, and government investigations have found no verified proof of extraterrestrial beings on our planet. While the search for life in the universe continues, the claim that aliens currently reside on Earth remains unsupported by any authoritative source."
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.8,
+        "citation_score": 0.8,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.9,
+        "overall_score": 0.875,
+        "unsupported_statements": [],
+        "contradictions": [],
+        "missing_citations": [
+          "Scientific consensus: No peer-reviewed evidence of extraterrestrial life on Earth exists."
+        ],
+        "rewrite_suggestion": "There is no credible scientific evidence that aliens are living on Earth. NASA's ongoing Search for Life program indicates they are still searching—no discovery has been made. U.S. government UAP investigations (AARO, Pentagon reports) have not attributed any phenomena to alien origin. The SETI Institute continues searching for signals from space—no confirmed contact. The claim that aliens currently reside on Earth remains unsupported by any authoritative source.",
+        "should_retry": false
+      },
+      "review_required": false,
+      "review": null
+    }
+  ]
+}

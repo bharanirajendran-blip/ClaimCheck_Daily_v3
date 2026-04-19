@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-19</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    .run-summary { background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }
+    .run-summary h2 { font-size: 1.15rem; margin-bottom: .9rem; }
+    .run-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }
+    .run-metric { background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }
+    .run-metric span { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .run-metric strong { font-size: 1rem; }
+    .provider-costs { margin: 1rem 0 0 1.1rem; color: var(--muted); }
+    .provider-costs li { margin: .35rem 0; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-19</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main><section class="run-summary"><h2>Run Cost & Usage</h2><div class="run-metrics"><div class="run-metric"><span>Total Cost</span><strong>$0.09991</strong></div><div class="run-metric"><span>Total Tokens</span><strong>15,526</strong></div><div class="run-metric"><span>LLM Calls</span><strong>6</strong></div><div class="run-metric"><span>Slowest Node</span><strong>research_node</strong></div></div><ul class="provider-costs"><li><strong>Anthropic</strong>: $0.08904 · 12,265 tokens (4 calls)</li><li><strong>Openai</strong>: $0.01086 · 3,261 tokens (2 calls)</li></ul></section>
+            <div class="card">
+              <div class="verdict-badge" style="background:#ef4444">❌ False</div>
+              
+              <h2 class="claim-text">"Are there Aliens living on earth"</h2>
+              <p class="source">Source: <a href="#" target="_blank">Manual Input</a></p>
+              <p class="confidence">Confidence: 95%</p>
+              <p class="sources-summary">Evidence sources (3): <span class="domain-tag">science.nasa.gov</span><span class="domain-tag">aaro.mil</span><span class="domain-tag">seti.org</span></p>
+              <p class="summary">There is no credible scientific evidence that aliens are living on Earth. All major scientific institutions, space agencies, and government investigations have found no verified proof of extraterrestrial beings on our planet. The search for life in the universe continues, but the claim that aliens currently reside on Earth remains unsupported by any authoritative source.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>NASA's ongoing Search for Life program indicates they are still searching—no discovery has been made.</li><li>U.S. government UAP investigations (AARO, Pentagon reports) have not attributed any phenomena to alien origin.</li><li>Scientific consensus: No peer-reviewed evidence of extraterrestrial life on Earth exists.</li><li>SETI Institute continues searching for signals from space—no confirmed contact.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">science.nasa.gov</span> · <strong>raw_source</strong> · Fetched Source 1.2 · score 0.34<div class="retrieved-text"> Launches and Landings
+Spaceships and Rockets
+Communicating with Missions
+Artemis
+James Webb Space Telescope
+Hubble Space Telescope
+International Space Station
+OSIRIS-REx
+Humans in Space
+Why Go to Space
+Astronauts
+Commercial Space
+Destinations
+Spaceships and Rockets
+Living in Space
+Earth
+Explore Earth Science
+Climate Change
+Earth, Our Planet
+Earth Science in Action
+Earth Multimedia
+Earth Data
+Earth Science Researchers
+The Solar System
+The Sun
+Mercury
+Venus
+Earth
+The Moon
+Mars
+Jupiter
+Saturn
+Uranus
+Neptune
+Pluto & Dwarf Planets
+Asteroids, Comets & Meteors
+The Kuiper Belt
+The Oort Cloud
+Skywatching
+The Universe
+Exoplanets
+The Search for Life in the Universe
+Stars
+Galaxies
+Black Holes
+The Big B</div></li><li><span class="chunk-domain">aaro.mil</span> · <strong>source_metadata</strong> · Key Sources · score 0.00<div class="retrieved-text">Source: AARO (Pentagon UAP Office) Official Reports. URL: https://www.aaro.mil/. Reliability: High.</div></li><li><span class="chunk-domain">seti.org</span> · <strong>source_metadata</strong> · Key Sources · score 0.00<div class="retrieved-text">Source: SETI Institute. URL: https://www.seti.org/. Reliability: High.</div></li><li><span class="chunk-domain">science.nasa.gov</span> · <strong>summary</strong> · Supporting evidence · score 1.13<div class="retrieved-text">*(For the claim that aliens ARE living on Earth)*
+
+- **None found.** No credible scientific source, government agency, or peer-reviewed publication has confirmed extraterrestrial beings living on Earth.</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:87%;background:hsl(105,70%,45%)"></div></div><span class="score-pct">87%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-19T16:36:59Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

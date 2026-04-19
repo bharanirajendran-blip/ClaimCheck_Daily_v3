@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-19</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    .run-summary { background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }
+    .run-summary h2 { font-size: 1.15rem; margin-bottom: .9rem; }
+    .run-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }
+    .run-metric { background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }
+    .run-metric span { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .run-metric strong { font-size: 1rem; }
+    .provider-costs { margin: 1rem 0 0 1.1rem; color: var(--muted); }
+    .provider-costs li { margin: .35rem 0; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-19</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main><section class="run-summary"><h2>Run Cost & Usage</h2><div class="run-metrics"><div class="run-metric"><span>Total Cost</span><strong>$0.28282</strong></div><div class="run-metric"><span>Total Tokens</span><strong>44,324</strong></div><div class="run-metric"><span>LLM Calls</span><strong>17</strong></div><div class="run-metric"><span>Slowest Node</span><strong>research_node</strong></div></div><ul class="provider-costs"><li><strong>Anthropic</strong>: $0.23363 · 28,526 tokens (10 calls)</li><li><strong>Openai</strong>: $0.04919 · 15,798 tokens (7 calls)</li></ul></section>
+            <div class="card">
+              <div class="verdict-badge" style="background:#ef4444">❌ False</div>
+              
+              <h2 class="claim-text">"Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine"</h2>
+              <p class="source">Source: <a href="https://www.factcheck.org/2026/04/elon-musk-amplifies-baseless-claim-about-covid-19-vaccine/" target="_blank">FactCheck.org</a></p>
+              <p class="confidence">Confidence: 95%</p>
+              <p class="sources-summary">Evidence sources (1): <span class="domain-tag">factcheck.org</span></p>
+              <p class="summary">The claim that COVID-19 vaccines killed 20,000–60,000 people in Germany, amplified by Elon Musk, is false. It is based on a misuse of passive surveillance data and lacks scientific support. Expert analysis and large-scale studies do not show an excess mortality risk from COVID-19 vaccines.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>Dr. Mahmoud Zureik, an epidemiologist, stated that the claim 'confuses coincidence with causation' and is 'not supported by the best available scientific evidence.'</li><li>The methodology used by Dr. Helmut Sterz involved multiplying reported deaths by an arbitrary factor of 30, which experts have criticized as flawed.</li><li>Pfizer confirmed that Sterz was not working in the capacity claimed and emphasized the vaccine's favorable safety profile.</li><li>Large epidemiologic studies have not shown an excess risk of overall mortality after COVID-19 mRNA vaccination.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">factcheck.org</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.76<div class="retrieved-text">Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine - FactCheck.org
+
+Facebook
+
+Twitter
+
+Tumblr
+
+Close
+
+Skip to main content
+
+            FactCheck
+.org
+®
+
+A Project of The Annenberg Public Policy Center
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Elon Musk this week amplified an unfounded claim, based on a distortion of vaccine safety monitoring data, that COVID-19 vaccines killed tens of thousands of people in Germany. The vaccines saved millions of lives worldwide during a deadly pandemic, and serious side effects or deaths from vaccination are rare.
+
+Despite this well-established safety record, Musk questioned COVID-19 vaccine safety 
+on X
+ on April 12 while sharing a 
+post
+ from far-right Swedish 
+influ</div></li><li><span class="chunk-domain">factcheck.org</span> · <strong>summary</strong> · Key Sources · score 1.08<div class="retrieved-text">| Title | URL | Reliability |
+|-------|-----|-------------|
+| Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine - FactCheck.org | https://www.factcheck.org/2026/04/elon-musk-amplifies-baseless-claim-about-covid-19-vaccine/ | **High** (Annenberg Public Policy Center project; quotes multiple experts; links to primary sources) |
+
+---
+
+**Verdict**: The claim that Elon Musk amplified a baseless claim about COVID-19 vaccines is **well-supported**. The underlying assertion—that vaccines killed 20,000–60,000 people in Germany—is based on a fundamental misuse of passive surveillance data and contradicted by expert analysis and large-scale epidemiological studies. Musk's sharing of this conten</div></li><li><span class="chunk-domain">factcheck.org</span> · <strong>source_metadata</strong> · Key Sources · score 0.94<div class="retrieved-text">Source: Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine - FactCheck.org. URL: https://www.factcheck.org/2026/04/elon-musk-amplifies-baseless-claim-about-covid-19-vaccine/. Reliability: High (Annenberg Public Policy Center project; quotes multiple experts; links to primary sources).</div></li><li><span class="chunk-domain">factcheck.org</span> · <strong>summary</strong> · Sub-questions · score 0.60<div class="retrieved-text">1. What specific claim did Elon Musk amplify on X regarding COVID-19 vaccines?
+2. What was the source of the claim Musk shared?
+3. What evidence supports or contradicts the claim that COVID-19 vaccines killed 20,000–60,000 people in Germany?
+4. What methodology was used to arrive at the death figures, and is it scientifically valid?
+5. What do independent experts say about the claim?
+6. What is the established scientific consensus on COVID-19 vaccine safety?
+
+---</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:85%;background:hsl(102,70%,45%)"></div></div><span class="score-pct">85%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#f59e0b">🟡 Mixed</div>
+              
+              <h2 class="claim-text">"A new force of nature is reshaping the planet, study finds"</h2>
+              <p class="source">Source: <a href="https://www.sciencedaily.com/releases/2026/04/260419054825.htm" target="_blank">Science Daily — Top Science</a></p>
+              <p class="confidence">Confidence: 80%</p>
+              <p class="sources-summary">Evidence sources (2): <span class="domain-tag">sciencedaily.com</span><span class="domain-tag">ecotope.org</span></p>
+              <p class="summary">The claim that a 'new force of nature' is reshaping the planet is misleading. The research by Erle Ellis discusses human cultural and social innovations as a metaphorical force reshaping ecosystems, not a new fundamental physical force. The headline sensationalizes established concepts in Anthropocene research.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>The 'new force of nature' refers to human cultural and social innovations, not a new physical force. [a75b249a1632]</li><li>Erle Ellis is a credible researcher in the field of Anthropocene studies, with a long history of peer-reviewed work. [298ad342b8c7]</li><li>The concept of human impact as a planetary force is well-established in scientific literature, but the headline exaggerates its novelty. [f31b597b26a3]</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 1.44<div class="retrieved-text">A new force of nature is reshaping the planet, study finds | ScienceDaily
+
+Science News
+
+from research organizations
+
+A new force of nature is reshaping the planet, study finds
+
+Date:
+
+April 19, 2026
+
+Source:
+
+University of Maryland Baltimore County
+
+Summary:
+
+Human societies didn’t just adapt to the planet—they learned to reshape it. From early fire use to today’s global supply chains, our cultural and social innovations have unlocked extraordinary power to transform Earth and improve human life. But that progress has come with serious costs, including climate change, pollution, and mass extinction. Instead of framing this era—the Anthropocene—as pure crisis, Erle Ellis argues it’s also pro</div></li><li><span class="chunk-domain">ecotope.org</span> · <strong>raw_source</strong> · Fetched Source 2.1 · score 0.06<div class="retrieved-text">Anthromes – Anthroecology Lab
+
+Anthromes
+
+Home
+Anthromes
+ 
+
+People have reshaped the biosphere.
+
+Anthromes are the global ecological patterns shaped by direct human interactions with ecosystems
+. Also known as “human biomes”, 
+anthromes are “anthropogenic biomes”
+, a term coined in a 
+2008 publication by Erle Ellis and Navin Ramankutty
+. This site is the home page for all anthromes work produced by Erle Ellis and collaborators since 2008. 
+
+Maps
+
+Guide to Anthromes
+
+Anthromes for Education
+
+Anthromes FAQ
+
+Research
+
+Media</div></li><li><span class="chunk-domain">sciencedaily.com</span> · <strong>summary</strong> · Sub-questions · score 0.51<div class="retrieved-text">1. What exactly is the "new force of nature" claimed in the headline?
+2. Is there a specific new scientific study being referenced?
+3. Who is Erle Ellis, and what is his credibility in this field?
+4. Does the headline accurately represent the research findings?
+5. Is the concept of human activity as a planetary force scientifically supported?
+
+---</div></li><li><span class="chunk-domain">ecotope.org</span> · <strong>source_metadata</strong> · Key Sources · score 0.00<div class="retrieved-text">Source: Anthromes – Anthroecology Lab (UMBC). URL: https://ecotope.org/anthromes/. Reliability: High (primary research lab of the cited scientist).</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:85%;background:hsl(102,70%,45%)"></div></div><span class="score-pct">85%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#22c55e">✅ True</div>
+              
+              <h2 class="claim-text">"Rat poison found in HiPP baby food jar in Austria, police say"</h2>
+              <p class="source">Source: <a href="https://www.bbc.com/news/articles/cvg07lq5ql4o?at_medium=RSS&at_campaign=rss" target="_blank">BBC News — World</a></p>
+              <p class="confidence">Confidence: 90%</p>
+              <p class="sources-summary">Evidence sources (1): <span class="domain-tag">bbc.com</span></p>
+              <p class="summary">The claim that rat poison was found in a HiPP baby food jar in Austria is true, as confirmed by Austrian police and reported by BBC News. The incident led to a product recall and a cross-border investigation involving Austria, the Czech Republic, and Slovakia.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>Austrian police in Burgenland confirmed a poisoned jar of HiPP carrot and potato purée was reported by a customer, and the baby did not consume it.</li><li>HiPP issued a recall of its jarred purées sold in Spar supermarkets in Austria, acknowledging tampered jars containing rat poison.</li><li>The Austrian Agency for Health and Food Safety issued warnings about symptoms of rat poison exposure and advised checking for tampered jars.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">bbc.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 1.44<div class="retrieved-text">Rat poison found in HiPP baby food jar in Austria, police say
+Skip to content
+Home
+News
+Sport
+Business
+Technology
+Health
+Culture
+Arts
+Travel
+Earth
+Audio
+Video
+Live
+Documentaries
+Weather
+Newsletters
+Watch Live
+Rat poison found in HiPP baby food jar in Austria, police say
+4 hours ago
+Share
+Save
+Add as preferred on Google
+André Rhoden-Paul
+Getty Images
+File photo of a HiPP carrot and potato baby food jar
+Police in Austria have urged people to be vigilant after a sample of HiPP baby food was found to contain rat poison.
+Police in the eastern region of Burgenland said the poisoned jar of carrot and potato purée had been reported by a customer and that their baby had fortunately not consumed the f</div></li><li><span class="chunk-domain">bbc.com</span> · <strong>summary</strong> · Key Sources · score 0.81<div class="retrieved-text">| Title | URL | Reliability |
+|-------|-----|-------------|
+| BBC News - "Rat poison found in HiPP baby food jar in Austria, police say" | https://www.bbc.com/news/articles/cvg07lq5ql4o | **High** — Established international news outlet with multiple official sources cited |
+
+---
+
+**Verdict:** The claim is **well-supported** by the BBC News article, which cites Austrian police, HiPP's official corporate statement, and the Austrian Agency for Health and Food Safety. The incident involves a confirmed case of rat poison contamination in a tampered baby food jar, an official product recall, and a multi-country criminal investigation. While I could not access a second independent source, the prim</div></li><li><span class="chunk-domain">bbc.com</span> · <strong>source_metadata</strong> · Key Sources · score 0.75<div class="retrieved-text">Source: BBC News - "Rat poison found in HiPP baby food jar in Austria, police say". URL: https://www.bbc.com/news/articles/cvg07lq5ql4o. Reliability: High — Established international news outlet with multiple official sources cited.</div></li><li><span class="chunk-domain">bbc.com</span> · <strong>summary</strong> · Sub-questions · score 0.57<div class="retrieved-text">1. Did Austrian police actually report finding rat poison in a HiPP baby food jar?
+2. Was the contamination confirmed through official testing?
+3. Has HiPP issued a recall in response?
+4. Are there any other countries affected?
+5. Is this part of a criminal investigation?</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-19T16:36:12Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

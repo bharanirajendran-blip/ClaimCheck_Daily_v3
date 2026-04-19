@@ -49,6 +49,23 @@
     {
       "type": "source",
       "id": "ncbi.nlm.nih.gov"
+    },
+    {
+      "type": "claim",
+      "text": "Are there Aliens living on earth",
+      "id": "b096c18d"
+    },
+    {
+      "type": "source",
+      "id": "seti.org"
+    },
+    {
+      "type": "source",
+      "id": "science.nasa.gov"
+    },
+    {
+      "type": "source",
+      "id": "aaro.mil"
     }
   ],
   "links": [
@@ -131,6 +148,36 @@
       "rel": "SUPPORTS",
       "source": "ncbi.nlm.nih.gov",
       "target": "3466916a"
+    },
+    {
+      "rel": "CITES",
+      "source": "b096c18d",
+      "target": "seti.org"
+    },
+    {
+      "rel": "CITES",
+      "source": "b096c18d",
+      "target": "science.nasa.gov"
+    },
+    {
+      "rel": "CITES",
+      "source": "b096c18d",
+      "target": "aaro.mil"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "seti.org",
+      "target": "b096c18d"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "science.nasa.gov",
+      "target": "b096c18d"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "aaro.mil",
+      "target": "b096c18d"
     }
   ]
 }

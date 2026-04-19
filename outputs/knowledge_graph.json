@@ -86,6 +86,33 @@
     {
       "type": "source",
       "id": "nasa.gov"
+    },
+    {
+      "type": "claim",
+      "text": "Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine",
+      "id": "5aed4512e3f735a1"
+    },
+    {
+      "type": "source",
+      "id": "politifact.com"
+    },
+    {
+      "type": "claim",
+      "text": "A new force of nature is reshaping the planet, study finds",
+      "id": "054466fc94e1ce6b"
+    },
+    {
+      "type": "claim",
+      "text": "Rat poison found in HiPP baby food jar in Austria, police say",
+      "id": "b76cdcd7651d63b0"
+    },
+    {
+      "type": "source",
+      "id": "bbc.com"
+    },
+    {
+      "type": "source",
+      "id": "ecotope.org"
     }
   ],
   "edges": [
@@ -106,6 +133,12 @@
       "target": "0efa6fa2426f67ad"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "factcheck.org",
+      "source": "6bf393d7",
+      "target": "5aed4512e3f735a1"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "factcheck.org",
       "target": "6bf393d7"
@@ -114,6 +147,11 @@
       "rel": "SUPPORTS",
       "source": "factcheck.org",
       "target": "0efa6fa2426f67ad"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "factcheck.org",
+      "target": "5aed4512e3f735a1"
     },
     {
       "rel": "SUPPORTS",
@@ -138,6 +176,12 @@
       "target": "dffb7d6f79a9bacf"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "5332e1de",
+      "target": "054466fc94e1ce6b"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "sciencedaily.com",
       "target": "5332e1de"
@@ -151,6 +195,11 @@
       "rel": "SUPPORTS",
       "source": "sciencedaily.com",
       "target": "dffb7d6f79a9bacf"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "sciencedaily.com",
+      "target": "054466fc94e1ce6b"
     },
     {
       "rel": "CITES",
@@ -200,6 +249,12 @@
       "target": "iarc.who.int"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "factcheck.org",
+      "source": "0efa6fa2426f67ad",
+      "target": "5aed4512e3f735a1"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "epa.gov",
       "target": "0efa6fa2426f67ad"
@@ -224,6 +279,12 @@
       "via": "sciencedaily.com",
       "source": "042ca03f52c521fb",
       "target": "dffb7d6f79a9bacf"
+    },
+    {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "042ca03f52c521fb",
+      "target": "054466fc94e1ce6b"
     },
     {
       "rel": "SUPPORTS",
@@ -272,6 +333,12 @@
       "target": "frib.msu.edu"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "dffb7d6f79a9bacf",
+      "target": "054466fc94e1ce6b"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "frib.msu.edu",
       "target": "dffb7d6f79a9bacf"
@@ -290,6 +357,46 @@
       "rel": "SUPPORTS",
       "source": "nasa.gov",
       "target": "ee905fff98b8e76a"
+    },
+    {
+      "rel": "CITES",
+      "source": "5aed4512e3f735a1",
+      "target": "factcheck.org"
+    },
+    {
+      "rel": "CITES",
+      "source": "5aed4512e3f735a1",
+      "target": "politifact.com"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "politifact.com",
+      "target": "5aed4512e3f735a1"
+    },
+    {
+      "rel": "CITES",
+      "source": "054466fc94e1ce6b",
+      "target": "sciencedaily.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "054466fc94e1ce6b",
+      "target": "ecotope.org"
+    },
+    {
+      "rel": "CITES",
+      "source": "b76cdcd7651d63b0",
+      "target": "bbc.com"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "bbc.com",
+      "target": "b76cdcd7651d63b0"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "ecotope.org",
+      "target": "054466fc94e1ce6b"
     }
   ]
 }

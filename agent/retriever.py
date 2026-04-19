@@ -121,6 +121,7 @@ class HybridRetriever:
         "summary": 0.95,
         "source_metadata": 0.75,
     }
+    MAX_HITS_PER_DOMAIN = 2
     # Chunks whose claim_id matches the current query claim score this much higher,
     # biasing retrieval toward same-claim evidence before cross-run evidence.
     SAME_CLAIM_BOOST = 1.25
@@ -277,9 +278,17 @@ class HybridRetriever:
         selected: list[RetrievalHit] = []
         seen_ids: set[str] = set()
         seen_domains: set[str] = set()
+        domain_counts: Counter[str] = Counter()
 
         raw_hits   = [h for h in hits if h.chunk.chunk_kind == "raw_source"]
         other_hits = [h for h in hits if h.chunk.chunk_kind != "raw_source"]
+
+        def _take(hit: RetrievalHit) -> None:
+            domain = _domain(hit.chunk.source_url)
+            selected.append(hit)
+            seen_ids.add(hit.chunk.chunk_id)
+            seen_domains.add(domain)
+            domain_counts[domain] += 1
 
         # Pass 1: best raw_source chunk per domain, up to 4 slots
         for hit in raw_hits:
@@ -288,40 +297,37 @@ class HybridRetriever:
             d = _domain(hit.chunk.source_url)
             if hit.chunk.chunk_id in seen_ids:
                 continue
-            # Prefer new domain; allow repeat domain only if we'd otherwise stall
-            if d not in seen_domains or len(seen_domains) >= 3:
-                selected.append(hit)
-                seen_ids.add(hit.chunk.chunk_id)
-                seen_domains.add(d)
+            if d not in seen_domains:
+                _take(hit)
 
-        # If pass 1 left raw_source slots unfilled (all same domain), top-up
-        for hit in raw_hits:
-            if len(selected) >= min(4, top_k):
-                break
-            if hit.chunk.chunk_id not in seen_ids:
-                selected.append(hit)
-                seen_ids.add(hit.chunk.chunk_id)
-                seen_domains.add(_domain(hit.chunk.source_url))
-
-        # Pass 2: fill remaining slots with non-raw chunks, preferring new domains
+        # Pass 2: fill remaining slots with non-raw chunks from unseen domains first.
         for hit in other_hits:
-            if len(selected) >= top_k:
+            if len(selected) >= min(4, top_k):
                 break
             if hit.chunk.chunk_id in seen_ids:
                 continue
             d = _domain(hit.chunk.source_url)
             if d not in seen_domains:
-                selected.append(hit)
-                seen_ids.add(hit.chunk.chunk_id)
-                seen_domains.add(d)
+                _take(hit)
 
-        # Pass 3: pad with any remaining unseen chunks regardless of domain
+        # Pass 3: allow additional high-scoring chunks, but cap repeats per domain
+        # so one source does not crowd out corroborating evidence when alternatives exist.
+        for hit in hits:
+            if len(selected) >= top_k:
+                break
+            if hit.chunk.chunk_id in seen_ids:
+                continue
+            d = _domain(hit.chunk.source_url)
+            if domain_counts[d] < self.MAX_HITS_PER_DOMAIN:
+                _take(hit)
+
+        # Pass 4: if the claim genuinely has too few distinct domains, pad with the
+        # remaining best chunks regardless of domain so we still return top_k hits.
         for hit in hits:
             if len(selected) >= top_k:
                 break
             if hit.chunk.chunk_id not in seen_ids:
-                selected.append(hit)
-                seen_ids.add(hit.chunk.chunk_id)
+                _take(hit)
 
         return selected[:top_k]
 
