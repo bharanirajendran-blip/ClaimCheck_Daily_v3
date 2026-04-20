@@ -41,32 +41,45 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
 
     Your task is to evaluate a claim by finding and reading authoritative sources.
 
+    ════════════════════════════════════════════════════════════
+    MANDATORY SOURCE DIVERSITY REQUIREMENT
+    ════════════════════════════════════════════════════════════
+    You MUST fetch articles from AT LEAST 2 DIFFERENT domains before writing
+    your final report. A single-domain report is INCOMPLETE and unacceptable.
+
+    Step-by-step process:
+      1. Fetch the primary source URL (if provided).
+      2. Use web_search to find a SECOND source from a DIFFERENT domain.
+      3. fetch_url that second source.
+      4. ONLY THEN write your final findings — after reading BOTH sources.
+
+    Do NOT skip step 2–3. Even if the primary source seems comprehensive,
+    independent corroboration is required for every claim.
+    ════════════════════════════════════════════════════════════
+
     TOOL USAGE STRATEGY:
     - If a specific source URL is provided: fetch it first as your primary source.
-    - To find corroborating or additional sources: use web_search with a specific
-      query, then fetch_url on the most relevant result.
-    - If no source URL is provided (e.g. a manual claim check):
-        * If web_search is available: search first, then fetch the best results.
-        * If web_search is unavailable (returns a configuration error): infer the
-          most likely authoritative URLs from your knowledge and fetch them directly.
-          Prefer well-known outlets (.gov, .edu, Reuters, AP, Nature, PolitiFact).
+    - Always use web_search to find a second authoritative source from a DIFFERENT
+      domain, then fetch_url that result. This is not optional.
+    - If no source URL is provided:
+        * Use web_search to find 2 authoritative sources, then fetch both.
+        * If web_search is unavailable: fetch 2 known authoritative URLs directly
+          (e.g. .gov, .edu, Reuters, AP, Nature, PolitiFact, FactCheck.org).
 
-    IMPORTANT RULES:
-    - Use at most 2 fetch_url calls total (primary source + one corroboration).
-    - Use web_search when available — it finds better sources than guessing.
-    - Do NOT chase dead links; if a fetch fails move on immediately.
-    - Always fetch a corroborating source from a DIFFERENT domain when any of these apply:
-        * the claim contains a specific date, statistic, or named event
-        * the primary source is a news summary, blog, or indirect reference
-        * the claim is contested or involves numbers that could be misrepresented
-    - Match your corroborating source to the claim type:
-        * Science / health claim  → primary institution or journal
-                                    + science news outlet (ScienceDaily, Nature News)
-        * Policy / government     → official document or .gov source
-                                    + independent fact-checker (FactCheck.org, PolitiFact)
-        * Historical claim        → official archive (NASA, Smithsonian, national records)
-                                    + established reference (Britannica, major encyclopedia)
-        * General factual claim   → authoritative news outlet + independent verification
+    SOURCE PAIRING GUIDE (match to claim type):
+      Science / health  → primary institution or journal
+                          + science news outlet (ScienceDaily, Nature News, STAT)
+      Policy / politics → official .gov document or primary statement
+                          + independent fact-checker (FactCheck.org, PolitiFact)
+      Technology        → original announcement or company source
+                          + tech journalist (Wired, MIT Tech Review, Ars Technica)
+      General factual   → authoritative news outlet (AP, Reuters, BBC)
+                          + independent verification from a different outlet
+
+    OTHER RULES:
+    - Use at most 3 fetch_url calls total (primary + corroboration + optional 3rd).
+    - Do NOT fetch the same domain twice.
+    - Do NOT chase dead links; if a fetch fails, search for an alternative and fetch that.
     - Base your verdict only on what you successfully read.
 
     Structure your final response as follows:
@@ -75,10 +88,10 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
     [numbered list]
 
     ## Evidence Assessment
-    [detailed prose, balanced, based on what you read]
+    [detailed prose, balanced, based on what you read from BOTH sources]
 
     ## Supporting evidence
-    [bullet points with sources]
+    [bullet points with sources — must reference at least 2 different domains]
 
     ## Contradicting evidence
     [bullet points with sources]
@@ -91,6 +104,12 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
 """)
 
 MAX_TOOL_ROUNDS = 8  # web_search + fetch_url (×2 sources) + synthesis + slack for retries
+
+# Corroborate loop uses a fixed thinking budget independent of self.thinking_budget.
+# Anthropic requires budget_tokens >= 1024; we use the minimum here since
+# corroboration is a single-source fetch — not a deep reasoning task.
+CORROBORATE_MAX_TOKENS    = 4000
+CORROBORATE_THINKING_BUDGET = 1024  # must be < CORROBORATE_MAX_TOKENS
 
 CORROBORATE_SYSTEM_PROMPT = textwrap.dedent("""\
     You are a fact-checking researcher tasked with finding ONE corroborating source.
@@ -229,17 +248,25 @@ class Researcher:
         for round_num in range(1, 5):
             kwargs: dict = dict(
                 model=self.model,
-                max_tokens=4000,
+                max_tokens=CORROBORATE_MAX_TOKENS,
                 system=CORROBORATE_SYSTEM_PROMPT,
                 tools=TOOL_DEFINITIONS,
                 messages=messages,
             )
             if self.use_extended_thinking:
-                # Anthropic minimum is 1024; corroborate is lightweight so
-                # we use the minimum unless the user has set a larger budget.
-                corroborate_budget = max(1024, min(self.thinking_budget, 2000))
-                kwargs["thinking"] = {"type": "enabled", "budget_tokens": corroborate_budget}
+                # Use a fixed budget constant that is guaranteed to satisfy
+                # Anthropic's constraint: 1024 <= budget_tokens < max_tokens.
+                # Never derive this from self.thinking_budget which may have
+                # been clamped to 1 by __post_init__ on misconfigured envs.
+                kwargs["thinking"] = {
+                    "type": "enabled",
+                    "budget_tokens": CORROBORATE_THINKING_BUDGET,
+                }
                 kwargs["temperature"] = 1
+                logger.debug(
+                    "[corroborate] round %d — max_tokens=%d budget_tokens=%d",
+                    round_num, CORROBORATE_MAX_TOKENS, CORROBORATE_THINKING_BUDGET,
+                )
 
             try:
                 with get_tracer().span("corroborate_node", model=self.model) as span:
@@ -247,7 +274,12 @@ class Researcher:
                     span.record_anthropic(response)
                     span.set_extra(round=round_num, claim_id=claim_id)
             except Exception as exc:
-                logger.warning("[corroborate] API error on round %d: %s", round_num, exc)
+                logger.error(
+                    "[corroborate] API error on round %d (model=%s, max_tokens=%d, "
+                    "budget_tokens=%d): %s",
+                    round_num, self.model, CORROBORATE_MAX_TOKENS,
+                    CORROBORATE_THINKING_BUDGET, exc,
+                )
                 return None
 
             if response.stop_reason == "end_turn":
@@ -294,6 +326,15 @@ class Researcher:
     # Agentic tool-use loop
     # ------------------------------------------------------------------
 
+    @staticmethod
+    def _domain_of(url: str) -> str:
+        """Extract the bare hostname (e.g. 'bbc.com') from a URL."""
+        import urllib.parse
+        try:
+            return urllib.parse.urlparse(url).netloc.lstrip("www.")
+        except Exception:
+            return url
+
     @retry(times=3, delay=3)
     def _run_tool_loop(self, claim: Claim) -> tuple[str, list[dict]]:  # noqa: C901
         """
@@ -301,6 +342,10 @@ class Researcher:
           1. Send claim + tools to Claude
           2. If Claude calls fetch_url → execute it → append tool_result → repeat
           3. When Claude returns a final text response → extract and return it
+
+        Diversity enforcement: if Claude reaches round 4 having only fetched one
+        domain, a reminder is injected asking it to search for a second source
+        before writing its findings.
         """
         messages = [
             {
@@ -310,13 +355,40 @@ class Researcher:
                     f"Original source: {claim.source}\n"
                     f"Source URL: {claim.url or 'not available'}\n"
                     f"Published: {claim.published_at or 'unknown'}\n\n"
-                    "Please fetch the source article first, then research this claim thoroughly."
+                    "Remember: you MUST fetch articles from at least 2 DIFFERENT domains "
+                    "before writing your final report. Fetch the source article first, "
+                    "then search for and fetch one more source from a different domain."
                 ),
             }
         ]
         fetched_pages: list[dict] = []
+        fetched_domains: set[str] = set()
+        _diversity_reminder_sent = False
 
         for round_num in range(1, MAX_TOOL_ROUNDS + 1):
+            # ── Diversity nudge ───────────────────────────────────────────────
+            # If we're at round 4+, Claude has done at least 3 tool exchanges but
+            # has only fetched from one domain — remind it before it writes up.
+            if (
+                not _diversity_reminder_sent
+                and round_num >= 4
+                and len(fetched_domains) < 2
+                and fetched_domains  # at least one fetch happened
+            ):
+                domain_seen = next(iter(fetched_domains))
+                reminder = (
+                    f"⚠️ DIVERSITY REMINDER: You have only fetched content from "
+                    f"'{domain_seen}' so far. You MUST fetch at least one more source "
+                    f"from a DIFFERENT domain before writing your final report. "
+                    f"Please use web_search to find another authoritative source, "
+                    f"then fetch_url it now."
+                )
+                messages.append({"role": "user", "content": reminder})
+                _diversity_reminder_sent = True
+                logger.info(
+                    "[research] Diversity reminder injected at round %d "
+                    "(only domain so far: %s)", round_num, domain_seen,
+                )
             kwargs: dict = dict(
                 model=self.model,
                 max_tokens=self.max_tokens,
@@ -345,6 +417,17 @@ class Researcher:
                     for block in response.content
                     if hasattr(block, "text")
                 ]
+                if len(fetched_domains) < 2:
+                    logger.warning(
+                        "[research] Claim %s finished with only %d distinct domain(s): %s. "
+                        "Evidence may lack diversity.",
+                        getattr(claim, "id", "?"), len(fetched_domains), fetched_domains,
+                    )
+                else:
+                    logger.info(
+                        "[research] Claim %s — fetched %d distinct domain(s): %s",
+                        getattr(claim, "id", "?"), len(fetched_domains), fetched_domains,
+                    )
                 return "\n".join(parts).strip(), fetched_pages
 
             # ── Claude wants to use a tool ────────────────────────────
@@ -370,10 +453,17 @@ class Researcher:
                         )
                         result_text = execute_tool(block.name, block.input)
                         if block.name == "fetch_url":
+                            url = block.input.get("url", "")
                             fetched_pages.append({
-                                "url": block.input.get("url", ""),
+                                "url": url,
                                 "content": result_text,
                             })
+                            domain = self._domain_of(url)
+                            fetched_domains.add(domain)
+                            logger.info(
+                                "[research] Fetched domain '%s' (total distinct domains: %d)",
+                                domain, len(fetched_domains),
+                            )
                         tool_results.append({
                             "type": "tool_result",
                             "tool_use_id": block.id,
