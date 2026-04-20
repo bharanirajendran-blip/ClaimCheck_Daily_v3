@@ -41,6 +41,7 @@ Planned but not yet integrated into the runtime graph:
 - **Mandatory source diversity:** the system prompt requires fetching from at least 2 different domains before writing findings; the tool loop tracks `fetched_domains` and injects a reminder at round 4 if only one domain has been fetched
 - Supports targeted corroboration during retry (fetches one extra source from a different domain)
 - **Corroborate budget:** uses fixed `CORROBORATE_MAX_TOKENS=4000` / `CORROBORATE_THINKING_BUDGET=1024` constants decoupled from `self.thinking_budget`, guaranteeing the Anthropic API constraint (`budget_tokens >= 1024 < max_tokens`) regardless of env var configuration
+- **Configurable tool rounds:** `max_tool_rounds` dataclass field backed by `CLAIMCHECK_MAX_TOOL_ROUNDS` env var (default 8 for CLI; MCP server sets 5). `synthesis_deadline_round = max_tool_rounds - 2` is computed in `__post_init__` so the deadline scales with the cap
 
 ### Research Tools (`agent/tools.py`)
 
@@ -98,6 +99,7 @@ Planned but not yet integrated into the runtime graph:
   - `get_verdict_history(date=None)`
 - Manual MCP checks use `docs_manual/` and `outputs_manual/`
 - Read tools aggregate both daily and manual artifacts
+- **MCP timeout tuning:** sets `CLAIMCHECK_MAX_TOOL_ROUNDS=5` and `CLAIMCHECK_MAX_RETRIES=0` before the pipeline starts so single-claim checks finish in ~35–40 s (first pass only), well within Claude Desktop's ~60 s request timeout. Both values can be overridden in `.env`
 
 ## 3. Runtime Flow
 
@@ -260,6 +262,7 @@ Example Claude Desktop server entry:
 - The graph is still source-domain-centric rather than a richer entity/event GraphRAG design.
 - Retry loops re-run downstream verdict/verify work for the whole selected batch rather than only the failing claim.
 - Feed headlines are used as claim text and may be imprecise.
+- MCP `check_claim` disables the corroborate/retry loop (`CLAIMCHECK_MAX_RETRIES=0`) to stay within the ~60 s client timeout; verdicts are first-pass only with no self-correction.
 
 ## 9. Cost Notes
 
@@ -302,6 +305,8 @@ Current runtime behavior:
 | `b0aee6e` | 2026-04 | Add `web_search` tool (Serper API), new feeds, run artifacts |
 | `87e20b4` | 2026-04 | `MAX_HITS_PER_DOMAIN = 2` retriever diversity cap; `test_retriever.py` |
 | `5913eee` | 2026-04 | Fix corroborate `budget_tokens` bug; enforce ≥2-domain diversity in researcher |
+| `ab84ff3` | 2026-04 | Cache HybridRetriever by chunk fingerprint; synthesis deadline injection at round 6 |
+| `03e54d3` | 2026-04 | MCP timeout fix: `CLAIMCHECK_MAX_TOOL_ROUNDS=5`, `CLAIMCHECK_MAX_RETRIES=0` for MCP; both env-var-configurable |
 
 ## 11. Current Roadmap
 
