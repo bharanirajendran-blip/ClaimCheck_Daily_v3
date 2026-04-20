@@ -38,7 +38,9 @@ Planned but not yet integrated into the runtime graph:
 - Uses a ReAct-style tool loop: `web_search` to discover authoritative URLs, then `fetch_url` to read them
 - Extended thinking enabled for deep reasoning before committing to a finding
 - Stores fetched page content for downstream chunking
+- **Mandatory source diversity:** the system prompt requires fetching from at least 2 different domains before writing findings; the tool loop tracks `fetched_domains` and injects a reminder at round 4 if only one domain has been fetched
 - Supports targeted corroboration during retry (fetches one extra source from a different domain)
+- **Corroborate budget:** uses fixed `CORROBORATE_MAX_TOKENS=4000` / `CORROBORATE_THINKING_BUDGET=1024` constants decoupled from `self.thinking_budget`, guaranteeing the Anthropic API constraint (`budget_tokens >= 1024 < max_tokens`) regardless of env var configuration
 
 ### Research Tools (`agent/tools.py`)
 
@@ -67,6 +69,13 @@ Planned but not yet integrated into the runtime graph:
   - BM25 keyword scoring
 - Applies chunk-type weighting and claim-local boosts
 - Merges claim-local hits first, then cross-run fallback hits
+- **Domain diversity cap:** `MAX_HITS_PER_DOMAIN = 2` limits how many chunks from any single domain are returned, preventing one heavily-scraped source from flooding the evidence window seen by the Director
+
+### Observability (`agent/observability.py`)
+- Every LLM call is wrapped in a `Span` context manager
+- Records model, node name, input/output tokens, cost, latency, and success/error per call
+- Appends spans to `outputs/traces.jsonl` after each run
+- `DailyReport.trace_summary` aggregates totals by node, provider, and model
 
 ### Verifier (`agent/verifier.py`)
 - Scores verdicts on groundedness, citation quality, contradiction, and assumption
@@ -149,30 +158,36 @@ All shared models are defined in `agent/models.py`.
 ClaimCheck_Daily_v3/
 ├── agent/
 │   ├── __init__.py
-│   ├── director.py
-│   ├── evals.py
-│   ├── feeds.py
-│   ├── graph.py
-│   ├── mcp_server.py
-│   ├── models.py
-│   ├── pipeline.py
-│   ├── publisher.py
-│   ├── researcher.py
-│   ├── retriever.py
-│   ├── review_queue.py
-│   ├── store.py
-│   ├── tools.py
-│   ├── utils.py
-│   └── verifier.py
-├── docs/
-├── docs_manual/
-├── outputs/
+│   ├── director.py          GPT-4o claim selection + verdict synthesis
+│   ├── evals.py             RAGAS eval suite
+│   ├── feeds.py             RSS/Atom feed parser
+│   ├── graph.py             Lightweight knowledge graph context
+│   ├── mcp_server.py        MCP server (check_claim, search_evidence, get_verdict_history)
+│   ├── models.py            Pydantic data models + PipelineState
+│   ├── observability.py     Span tracing → outputs/traces.jsonl
+│   ├── pipeline.py          LangGraph StateGraph orchestration
+│   ├── publisher.py         HTML + JSON output renderer
+│   ├── researcher.py        Claude researcher (tool-use loop, diversity enforcement)
+│   ├── retriever.py         Hybrid TF-IDF + BM25 retriever with domain cap
+│   ├── review_queue.py      Low-confidence claim review queue
+│   ├── store.py             Persistent evidence store
+│   ├── tools.py             web_search + fetch_url tool definitions
+│   ├── utils.py             retry, logging, env helpers
+│   └── verifier.py          LLM-as-a-Judge verdict verifier
+├── tests/
+│   ├── __init__.py
+│   ├── test_director.py     Director unit tests
+│   ├── test_evals.py        Eval harness tests
+│   └── test_retriever.py    Retriever diversity cap tests
+├── docs/                    GitHub Pages daily reports
+├── docs_manual/             GitHub Pages manual claim reports
+├── outputs/                 JSON reports + traces + evidence store
 ├── outputs/review_queue.json
-├── outputs_manual/
+├── outputs_manual/          Manual claim JSON + traces
 ├── outputs_manual/review_queue.json
-├── feeds.yaml
+├── feeds.yaml               RSS feed configuration
 ├── requirements.txt
-├── run.py
+├── run.py                   CLI entry point
 ├── README.md
 └── SPEC.md
 ```
@@ -274,7 +289,21 @@ Current runtime behavior:
 - HTML reports render a `Run Cost & Usage` section
 - MCP `check_claim` responses include `cost_summary`
 
-## 10. Current Roadmap
+## 10. Changelog
+
+| Commit | Date | Changes |
+|---|---|---|
+| `c5337b0` | 2026-03 | Init v3 — clean slate from v2 |
+| `948cf7b` | 2026-03 | Week 9: MCP server (`check_claim`, `search_evidence`, `get_verdict_history`) |
+| `52a7b3c` | 2026-03 | RAGAS eval suite — golden dataset, metric gates, pytest harness |
+| `736f72b` | 2026-04 | Observability tracing + adaptive retrieval routing |
+| `49f67c4` | 2026-04 | Fix three evaluation layer bugs |
+| `413ddad` | 2026-04 | Polish v3 runtime, MCP setup, docs, and cost reporting |
+| `b0aee6e` | 2026-04 | Add `web_search` tool (Serper API), new feeds, run artifacts |
+| `87e20b4` | 2026-04 | `MAX_HITS_PER_DOMAIN = 2` retriever diversity cap; `test_retriever.py` |
+| `5913eee` | 2026-04 | Fix corroborate `budget_tokens` bug; enforce ≥2-domain diversity in researcher |
+
+## 11. Current Roadmap
 
 The next major implementation milestones for this branch are:
 
