@@ -66,6 +66,23 @@
     {
       "type": "source",
       "id": "aaro.mil"
+    },
+    {
+      "type": "claim",
+      "text": "glyphosate causes cancer",
+      "id": "4b3dfa44"
+    },
+    {
+      "type": "source",
+      "id": "iarc.who.int"
+    },
+    {
+      "type": "source",
+      "id": "epa.gov"
+    },
+    {
+      "type": "source",
+      "id": "pmc.ncbi.nlm.nih.gov"
     }
   ],
   "links": [
@@ -178,6 +195,36 @@
       "rel": "SUPPORTS",
       "source": "aaro.mil",
       "target": "b096c18d"
+    },
+    {
+      "rel": "CITES",
+      "source": "4b3dfa44",
+      "target": "iarc.who.int"
+    },
+    {
+      "rel": "CITES",
+      "source": "4b3dfa44",
+      "target": "epa.gov"
+    },
+    {
+      "rel": "CITES",
+      "source": "4b3dfa44",
+      "target": "pmc.ncbi.nlm.nih.gov"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "iarc.who.int",
+      "target": "4b3dfa44"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "epa.gov",
+      "target": "4b3dfa44"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "pmc.ncbi.nlm.nih.gov",
+      "target": "4b3dfa44"
     }
   ]
 }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-20</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    .run-summary { background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }
+    .run-summary h2 { font-size: 1.15rem; margin-bottom: .9rem; }
+    .run-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }
+    .run-metric { background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }
+    .run-metric span { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .run-metric strong { font-size: 1rem; }
+    .provider-costs { margin: 1rem 0 0 1.1rem; color: var(--muted); }
+    .provider-costs li { margin: .35rem 0; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-20</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main><section class="run-summary"><h2>Run Cost & Usage</h2><div class="run-metrics"><div class="run-metric"><span>Total Cost</span><strong>$0.13568</strong></div><div class="run-metric"><span>Total Tokens</span><strong>21,341</strong></div><div class="run-metric"><span>LLM Calls</span><strong>6</strong></div><div class="run-metric"><span>Slowest Node</span><strong>research_node</strong></div></div><ul class="provider-costs"><li><strong>Anthropic</strong>: $0.12124 · 16,489 tokens (4 calls)</li><li><strong>Openai</strong>: $0.01443 · 4,852 tokens (2 calls)</li></ul></section>
+            <div class="card">
+              <div class="verdict-badge" style="background:#f59e0b">🟡 Mixed</div>
+              
+              <h2 class="claim-text">"glyphosate causes cancer"</h2>
+              <p class="source">Source: <a href="#" target="_blank">Manual Input</a></p>
+              <p class="confidence">Confidence: 80%</p>
+              <p class="sources-summary">Evidence sources (3): <span class="domain-tag">iarc.who.int</span><span class="domain-tag">epa.gov</span><span class="domain-tag">pmc.ncbi.nlm.nih.gov</span></p>
+              <p class="summary">The claim that 'glyphosate causes cancer' is contested. The IARC (WHO) classified glyphosate as 'probably carcinogenic to humans' based on limited human evidence and sufficient animal evidence. However, the EPA and EFSA have concluded it is unlikely to be carcinogenic at typical exposure levels. The evidence indicates a potential cancer hazard but does not definitively establish causation in real-world exposures. The claim lacks nuance regarding dose, exposure context, and the distinction between hazard and risk.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>IARC classified glyphosate as 'probably carcinogenic to humans' (Group 2A) based on limited human evidence and sufficient animal evidence.</li><li>The EPA concluded glyphosate is 'unlikely to be a human carcinogen' when used according to its label, although this decision was vacated by a court.</li><li>The IARC focuses on hazard identification, while the EPA assesses risk, leading to different conclusions.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">iarc.who.int</span> · <strong>raw_source</strong> · Fetched Source 1.3 · score 0.55<div class="retrieved-text">non, glyphosate, malathion, parathion, and tetrachlorvinphos.
+
+Read more
+
+IARC Monograph on Glyphosate
+
+Q&A on Glyphosate
+
+Q&A on Glyphosate
+
+DOWNLOAD PDF
+
+In March 2015, IARC classified glyphosate as “probably carcinogenic to humans” (Group 2A).
+
+This was based on “limited” evidence of cancer in humans (from real-world exposures that actually occurred) and “sufficient” evidence of cancer in experimental animals (from studies of “pure” glyphosate).
+
+IARC also concluded that there was “strong” evidence for genotoxicity, both for “pure” glyphosate and for glyphosate formulations.
+
+The IARC Monographs evaluation is based on the systematic assembly and review of all publicly available and pertin</div></li><li><span class="chunk-domain">epa.gov</span> · <strong>raw_source</strong> · Fetched Source 2.2 · score 0.14<div class="retrieved-text">osate is a widely used herbicide that controls broadleaf weeds and grasses. It has been registered as a pesticide in the U.S. since 1974. Since glyphosate’s first registration, EPA has reviewed and reassessed its safety and uses, including undergoing 
+registration review
+, a program that re-evaluates each registered pesticide on a 15-year cycle.
+
+In February 2020, after receiving and considering public comments on the glyphosate proposed interim decision, EPA published the interim decision registration review decision (ID) for glyphosate. As part of this action, EPA found that there are no risks of concern to human health when glyphosate is used in accordance with its current label. EPA also</div></li><li><span class="chunk-domain">pmc.ncbi.nlm.nih.gov</span> · <strong>raw_source</strong> · Fetched Source 3.1 · score 0.00<div class="retrieved-text">Checking your browser - reCAPTCHA
+Checking your browser before accessing pmc.ncbi.nlm.nih.gov ...
+Click 
+here
+ if you are not automatically redirected after 5 seconds.</div></li><li><span class="chunk-domain">iarc.who.int</span> · <strong>summary</strong> · Evidence Assessment · score 1.19<div class="retrieved-text">The claim "glyphosate causes cancer" is **contested by major scientific and regulatory bodies**, with two authoritative institutions reaching different conclusions based on how they evaluated the evidence.
+
+**IARC (WHO) Position:**
+In March 2015, the International Agency for Research on Cancer (IARC), part of the World Health Organization, classified glyphosate as **"probably carcinogenic to humans" (Group 2A)**. This classification was based on:
+- **"Limited" evidence** of cancer in humans from epidemiological studies (particularly among farmers)
+- **"Sufficient" evidence** of cancer in experimental animals from studies of pure glyphosate
+- **"Strong" evidence** for genotoxicity (DNA damage</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:90%;background:hsl(108,70%,45%)"></div></div><span class="score-pct">90%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:92%;background:hsl(111,70%,45%)"></div></div><span class="score-pct">92%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-20T20:29:31Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

@@ -1,0 +1,137 @@
+{
+  "date": "2026-04-20",
+  "generated_at": "2026-04-20T20:29:31Z",
+  "trace_summary": {
+    "spans": 6,
+    "failures": 0,
+    "total_input_tokens": 19094,
+    "total_output_tokens": 2247,
+    "total_tokens": 21341,
+    "total_cost_usd": 0.13568,
+    "total_latency_ms": 41796.4,
+    "slowest_node": "research_node",
+    "slowest_ms": 26851.8,
+    "by_node": {
+      "research_node": {
+        "calls": 4,
+        "tokens": 16489,
+        "cost_usd": 0.12124,
+        "latency_ms": 37035.8
+      },
+      "director": {
+        "calls": 1,
+        "tokens": 3165,
+        "cost_usd": 0.00951,
+        "latency_ms": 2604.4
+      },
+      "verify_node": {
+        "calls": 1,
+        "tokens": 1687,
+        "cost_usd": 0.00492,
+        "latency_ms": 2156.2
+      }
+    },
+    "by_provider": {
+      "anthropic": {
+        "calls": 4,
+        "input_tokens": 14549,
+        "output_tokens": 1940,
+        "total_tokens": 16489,
+        "cost_usd": 0.12124
+      },
+      "openai": {
+        "calls": 2,
+        "input_tokens": 4545,
+        "output_tokens": 307,
+        "total_tokens": 4852,
+        "cost_usd": 0.01443
+      }
+    },
+    "by_model": {
+      "claude-opus-4-5-20251101": {
+        "calls": 4,
+        "input_tokens": 14549,
+        "output_tokens": 1940,
+        "total_tokens": 16489,
+        "cost_usd": 0.12124
+      },
+      "gpt-4o": {
+        "calls": 2,
+        "input_tokens": 4545,
+        "output_tokens": 307,
+        "total_tokens": 4852,
+        "cost_usd": 0.01443
+      }
+    }
+  },
+  "results": [
+    {
+      "claim": "glyphosate causes cancer",
+      "source": "Manual Input",
+      "verdict": "MIXED",
+      "confidence": 0.8,
+      "summary": "The claim that 'glyphosate causes cancer' is contested. The IARC (WHO) classified glyphosate as 'probably carcinogenic to humans' based on limited human evidence and sufficient animal evidence. However, the EPA and EFSA have concluded it is unlikely to be carcinogenic at typical exposure levels. The evidence indicates a potential cancer hazard but does not definitively establish causation in real-world exposures. The claim lacks nuance regarding dose, exposure context, and the distinction between hazard and risk.",
+      "key_evidence": [
+        "IARC classified glyphosate as 'probably carcinogenic to humans' (Group 2A) based on limited human evidence and sufficient animal evidence.",
+        "The EPA concluded glyphosate is 'unlikely to be a human carcinogen' when used according to its label, although this decision was vacated by a court.",
+        "The IARC focuses on hazard identification, while the EPA assesses risk, leading to different conclusions."
+      ],
+      "retrieved_evidence": [
+        {
+          "chunk_id": "187e4b6fa223",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 1.3",
+          "source_url": "https://www.iarc.who.int/featured-news/media-centre-iarc-news-glyphosate/",
+          "hybrid_score": 0.549,
+          "text": "non, glyphosate, malathion, parathion, and tetrachlorvinphos.\n\nRead more\n\nIARC Monograph on Glyphosate\n\nQ&A on Glyphosate\n\nQ&A on Glyphosate\n\nDOWNLOAD PDF\n\nIn March 2015, IARC classified glyphosate as “probably carcinogenic to humans” (Group 2A).\n\nThis was based on “limited” evidence of cancer in humans (from real-world exposures that actually occurred) and “sufficient” evidence of cancer in experimental animals (from studies of “pure” glyphosate).\n\nIARC also concluded that there was “strong” evidence for genotoxicity, both for “pure” glyphosate and for glyphosate formulations.\n\nThe IARC Monographs evaluation is based on the systematic assembly and review of all publicly available and pertin"
+        },
+        {
+          "chunk_id": "b169df9790fc",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.2",
+          "source_url": "https://www.epa.gov/ingredients-used-pesticide-products/glyphosate",
+          "hybrid_score": 0.145,
+          "text": "osate is a widely used herbicide that controls broadleaf weeds and grasses. It has been registered as a pesticide in the U.S. since 1974. Since glyphosate’s first registration, EPA has reviewed and reassessed its safety and uses, including undergoing \nregistration review\n, a program that re-evaluates each registered pesticide on a 15-year cycle.\n\nIn February 2020, after receiving and considering public comments on the glyphosate proposed interim decision, EPA published the interim decision registration review decision (ID) for glyphosate. As part of this action, EPA found that there are no risks of concern to human health when glyphosate is used in accordance with its current label. EPA also"
+        },
+        {
+          "chunk_id": "ec72db707f62",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 3.1",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515989/",
+          "hybrid_score": 0.0,
+          "text": "Checking your browser - reCAPTCHA\nChecking your browser before accessing pmc.ncbi.nlm.nih.gov ...\nClick \nhere\n if you are not automatically redirected after 5 seconds."
+        },
+        {
+          "chunk_id": "20b5138c54b6",
+          "chunk_kind": "summary",
+          "section": "Evidence Assessment",
+          "source_url": "https://www.iarc.who.int/featured-news/media-centre-iarc-news-glyphosate/",
+          "hybrid_score": 1.188,
+          "text": "The claim \"glyphosate causes cancer\" is **contested by major scientific and regulatory bodies**, with two authoritative institutions reaching different conclusions based on how they evaluated the evidence.\n\n**IARC (WHO) Position:**\nIn March 2015, the International Agency for Research on Cancer (IARC), part of the World Health Organization, classified glyphosate as **\"probably carcinogenic to humans\" (Group 2A)**. This classification was based on:\n- **\"Limited\" evidence** of cancer in humans from epidemiological studies (particularly among farmers)\n- **\"Sufficient\" evidence** of cancer in experimental animals from studies of pure glyphosate\n- **\"Strong\" evidence** for genotoxicity (DNA damage"
+        },
+        {
+          "chunk_id": "64c20024fb0b",
+          "chunk_kind": "raw_source",
+          "section": "Fetched Source 2.1",
+          "source_url": "https://www.epa.gov/ingredients-used-pesticide-products/glyphosate",
+          "hybrid_score": 0.129,
+          "text": "Glyphosate | US EPA\n\nSkip to main content\n\n \n\nOfficial websites use .gov\n\n A \n.gov\n website belongs to an official government organization in the United States.\n              \n\nSecure .gov websites use HTTPS\n\n A \nlock\n (\nLock\nA locked padlock\n) or \nhttps://\n means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.\n              \n\n  Glyphosate\n\nRelated Information\n\nWITHDRAWN: EPA’s response to California’s Office of Environmental Health Hazard Assessment on California’s Proposition 65 \n\nEPA Releases Draft Risk Assessments for Glyphosate\n\nDraft Human Health and Ecological Risk Assessments for Glyphosate\n\nRegistration of Enlist Duo\n\nGlyph"
+        }
+      ],
+      "verifier_report": {
+        "groundedness_score": 0.9,
+        "citation_score": 0.9,
+        "no_contradiction_score": 1.0,
+        "no_assumption_score": 0.9,
+        "overall_score": 0.925,
+        "unsupported_statements": [],
+        "contradictions": [],
+        "missing_citations": [],
+        "rewrite_suggestion": "",
+        "should_retry": false
+      },
+      "review_required": false,
+      "review": null
+    }
+  ]
+}

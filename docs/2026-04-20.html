@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimCheck Daily — 2026-04-20</title>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+            max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+    a { color: var(--accent); }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    h1 { font-size: 2rem; }
+    .date { color: var(--muted); margin-top: .25rem; }
+    .card { background: var(--surface); border-radius: .75rem; padding: 1.5rem;
+             margin-bottom: 1.5rem; }
+    .verdict-badge { display: inline-block; padding: .25rem .75rem; border-radius: 999px;
+                      font-weight: 700; font-size: .85rem; margin-bottom: .75rem;
+                      color: #000; }
+    .claim-text { font-size: 1.1rem; margin-bottom: .5rem; }
+    .source, .confidence { color: var(--muted); font-size: .85rem; margin-bottom: .4rem; }
+    .summary { margin-top: .75rem; line-height: 1.6; }
+    details { margin-top: .75rem; }
+    details summary { cursor: pointer; color: var(--accent); }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.8; }
+    .archive { list-style: none; padding: 0; }
+    .archive-item { margin: .7rem 0; padding: .8rem 1rem; background: var(--surface);
+                     border-radius: .6rem; }
+    .archive-preview { margin-top: .3rem; color: var(--text); line-height: 1.5; }
+    .archive-meta { margin-top: .2rem; color: var(--muted); font-size: .82rem; }
+    .archive-nav { margin: .6rem 0 1.2rem; }
+    .run-summary { background: var(--surface); border-radius: .75rem; padding: 1.25rem 1.5rem;
+                    margin-bottom: 1.5rem; }
+    .run-summary h2 { font-size: 1.15rem; margin-bottom: .9rem; }
+    .run-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    gap: .75rem; }
+    .run-metric { background: rgba(15, 23, 42, 0.55); border-radius: .55rem; padding: .8rem .9rem; }
+    .run-metric span { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .2rem; }
+    .run-metric strong { font-size: 1rem; }
+    .provider-costs { margin: 1rem 0 0 1.1rem; color: var(--muted); }
+    .provider-costs li { margin: .35rem 0; }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .85rem;
+              border-top: 1px solid #334155; padding-top: 1rem; }
+    /* LLM-as-a-Judge score bars */
+    .verifier-details { margin-top: .75rem; }
+    .scores { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .score-row { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .score-label { width: 9rem; color: var(--muted); flex-shrink: 0; }
+    .score-track { flex: 1; background: #334155; border-radius: 999px; height: .55rem; overflow: hidden; }
+    .score-fill  { height: 100%; border-radius: 999px; transition: width .3s; }
+    .score-pct   { width: 2.5rem; text-align: right; color: var(--text); }
+    .retry-note  { margin-top: .4rem; color: #f97316; font-size: .82rem; }
+    .retrieved-text { margin-top: .35rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    /* Source diversity */
+    .sources-summary { margin-top: .4rem; font-size: .82rem; color: var(--muted); }
+    .domain-tag { display: inline-block; background: #0f3460; color: var(--accent);
+                   border-radius: .3rem; padding: .1rem .45rem; margin: .1rem .2rem 0 0;
+                   font-size: .78rem; font-family: monospace; }
+    .chunk-domain { color: var(--accent); font-family: monospace; font-size: .8rem; }
+    .review-banner { margin: .35rem 0 .85rem; padding: .7rem .85rem; border-left: 4px solid #f59e0b;
+                      background: rgba(245, 158, 11, 0.12); color: #fde68a; border-radius: .35rem; }
+  </style>
+</head>
+<body>
+
+            <header>
+              <h1>ClaimCheck Daily</h1>
+              <p class="date">2026-04-20</p>
+              <a href="index.html">← All reports</a>
+            </header>
+            <main><section class="run-summary"><h2>Run Cost & Usage</h2><div class="run-metrics"><div class="run-metric"><span>Total Cost</span><strong>$0.88057</strong></div><div class="run-metric"><span>Total Tokens</span><strong>157,170</strong></div><div class="run-metric"><span>LLM Calls</span><strong>52</strong></div><div class="run-metric"><span>Slowest Node</span><strong>research_node</strong></div></div><ul class="provider-costs"><li><strong>Anthropic</strong>: $0.73359 · 111,371 tokens (33 calls)</li><li><strong>Openai</strong>: $0.14697 · 45,799 tokens (19 calls)</li></ul></section>
+            <div class="card">
+              <div class="verdict-badge" style="background:#22c55e">✅ True</div>
+              
+              <h2 class="claim-text">"Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine"</h2>
+              <p class="source">Source: <a href="https://www.factcheck.org/2026/04/elon-musk-amplifies-baseless-claim-about-covid-19-vaccine/" target="_blank">FactCheck.org</a></p>
+              <p class="confidence">Confidence: 95%</p>
+              <p class="sources-summary">Evidence sources (4): <span class="domain-tag">factcheck.org</span><span class="domain-tag">bbc.com</span><span class="domain-tag">yahoo.com</span><span class="domain-tag">ndtv.com</span></p>
+              <p class="summary">The claim that Elon Musk amplified a baseless claim about COVID-19 vaccines is supported by evidence. Musk shared a post on his platform X that claimed COVID-19 vaccines caused 20,000-60,000 deaths in Germany, a claim experts have widely debunked as methodologically flawed and unsupported by scientific evidence. The amplification of this claim by Musk, a prominent figure, aligns with the evaluative framing of the headline.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>FactCheck.org confirms Musk shared a post on April 12, 2026, amplifying a claim about COVID-19 vaccine deaths in Germany, which received nearly 60 million views.</li><li>Dr. Mahmoud Zureik, an expert in epidemiology, criticized the methodology behind the claim as flawed and arbitrary, noting it confuses correlation with causation.</li><li>Pfizer stated that their COVID-19 vaccine continues to demonstrate a favorable safety profile, supported by extensive real-world evidence.</li><li>Multiple news outlets, including NDTV and Yahoo News, corroborate the fact that Musk amplified these disputed claims, which experts strongly contest.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">factcheck.org</span> · <strong>raw_source</strong> · Fetched Source 1.5 · score 0.88<div class="retrieved-text">nch health authorities to independently advise on health product safety.
+
+Zureik added that the idea that COVID-19 vaccines have caused large numbers of deaths is inconsistent with the scientific literature. “More broadly, large epidemiologic studies have not shown an excess risk of overall mortality after COVID-19 mRNA vaccination,” he said. 
+
+Photo Illustration by Anna Barclay/Getty Images.
+
+Pfizer spokesperson Andrew Widger told us via email that the company’s COVID-19 vaccine “continues to demonstrate a favourable safety and efficacy profile supported by extensive real-world evidence as well as by clinical, non-clinical, pharmacovigilance, and manufacturing data
+.
+“
+
+A LinkedIn profile 
+</div></li><li><span class="chunk-domain">bbc.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.09<div class="retrieved-text">Elon Musk tweet boosts vaccine conspiracies targeting LeBron James' son
+Skip to content
+Home
+News
+Sport
+Business
+Technology
+Health
+Culture
+Arts
+Travel
+Earth
+Audio
+Video
+Live
+Documentaries
+Weather
+Newsletters
+Watch Live
+Elon Musk tweet boosts vaccine conspiracies targeting LeBron James' son
+26 July 2023
+Share
+Save
+Add as preferred on Google
+Rachel Schraer
+Health and disinformation reporter
+Getty Images
+An unfounded belief Covid vaccines are leading to a rise in heart problems, especially in young athletes, has been amplified by Twitter owner Elon Musk.
+Bronny James - son of basketball legend LeBron James - suffered a cardiac arrest on Monday while practising. 
+In a tweet about the incident, M</div></li><li><span class="chunk-domain">yahoo.com</span> · <strong>source_metadata</strong> · Key Sources · score 0.04<div class="retrieved-text">Source: Yahoo News / MSN coverage (via search results). URL: https://www.yahoo.com/news/articles/elon-musk-questions-covid-19-003108638.html. Reliability: Medium - Mainstream news syndication confirming key details.</div></li><li><span class="chunk-domain">ndtv.com</span> · <strong>source_metadata</strong> · Key Sources · score 0.03<div class="retrieved-text">Source: NDTV coverage (via search results). URL: https://www.ndtv.com/health/covid-vaccine-claims-go-viral-after-elon-musks-comments-experts-explain-what-the-evidence-shows-11354743. Reliability: Medium - Major news outlet corroborating facts.</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:85%;background:hsl(102,70%,45%)"></div></div><span class="score-pct">85%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#84cc16">🟢 Mostly True</div>
+              
+              <h2 class="claim-text">"After 200 years scientists finally crack the “dolomite problem”"</h2>
+              <p class="source">Source: <a href="https://www.sciencedaily.com/releases/2026/04/260420015840.htm" target="_blank">Science Daily — Top Science</a></p>
+              <p class="confidence">Confidence: 80%</p>
+              <p class="sources-summary">Evidence sources (4): <span class="domain-tag">sciencedaily.com</span><span class="domain-tag">iflscience.com</span><span class="domain-tag">forbes.com</span><span class="domain-tag">pubs.acs.org</span></p>
+              <p class="summary">Researchers from the University of Michigan and Hokkaido University have made a significant breakthrough in understanding the 'dolomite problem,' providing a theoretical and experimental solution published in the journal Science. They discovered that dolomite's growth is hindered by structural defects, which can be resolved through natural cycles of water exposure. However, the claim that the problem is definitively 'cracked' is overstated, as there is ongoing scientific debate and published rebuttals questioning the finality of this solution.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>Researchers from the University of Michigan and Hokkaido University published their findings in the journal Science, proposing a solution to the dolomite problem by mimicking natural defect-dissolution cycles using electron beam pulses.</li><li>The dolomite problem refers to the difficulty in growing dolomite in laboratory conditions, despite its abundance in ancient rocks. The new research provides a theoretical explanation for this discrepancy.</li><li>A formal comment published in Science disputes the claim that the dolomite problem is solved, indicating ongoing scientific debate.</li><li>The research has been widely covered by reputable sources like ScienceDaily and C&EN, highlighting its significance in the scientific community.</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">sciencedaily.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.72<div class="retrieved-text">After 200 years scientists finally crack the “dolomite problem” | ScienceDaily
+
+Science News
+
+from research organizations
+
+After 200 years scientists finally crack the “dolomite problem”
+
+A 200-year mystery is cracked as scientists finally grow dolomite—by learning how to wash away its flaws.
+
+Date:
+
+April 20, 2026
+
+Source:
+
+University of Michigan
+
+Summary:
+
+After two centuries of failed attempts, scientists have finally grown dolomite in the lab, cracking a long-standing geological puzzle. They discovered that the mineral’s growth stalls because of tiny defects—but in nature, those flaws get washed away over time. By mimicking this process with precise simulations and electron beam pulses, </div></li><li><span class="chunk-domain">iflscience.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.19<div class="retrieved-text">The "Dolomite Problem" Involving Mysterious Crystal Formation Has Been Solved | IFLScience
+ Skip to main content
+CLOSE
+Thank you!
+We have emailed you a PDF version of the article you requested.
+Can't find the email? 
+Please check your spam or junk folder 
+You can also add
+newsletters@iflscience.com
+to your safe senders list to ensure you never miss a message from us.
+CLOSE
+IFLScience Home
+The "Dolomite Problem" Involving Mysterious Crystal Formation Has Been Solved After Two Centuries
+Complete the form below to listen to the audio version of this article
+IFLScience needs the contact information you provide to us to contact you about our products and services. You may unsubscribe from these c</div></li><li><span class="chunk-domain">forbes.com</span> · <strong>source_metadata</strong> · Key Sources · score 0.15<div class="retrieved-text">Source: Forbes coverage by David Bressan. URL: https://www.forbes.com/sites/davidbressan/2023/11/27/scientists-solve-200-year-old-dolomite-problem/. Reliability: Medium - Science journalist coverage.</div></li><li><span class="chunk-domain">pubs.acs.org</span> · <strong>source_metadata</strong> · Key Sources · score 0.11<div class="retrieved-text">Source: "Dolomite problem may be solved" - C&EN (American Chemical Society). URL: https://pubs.acs.org/doi/10.1021/cen-10140-scicon1. Reliability: High - Professional scientific society publication.</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:70%;background:hsl(84,70%,45%)"></div></div><span class="score-pct">70%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:70%;background:hsl(84,70%,45%)"></div></div><span class="score-pct">70%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:75%;background:hsl(90,70%,45%)"></div></div><span class="score-pct">75%</span></div></div></details>
+            </div>
+            <div class="card">
+              <div class="verdict-badge" style="background:#f59e0b">🟡 Mixed</div>
+              
+              <h2 class="claim-text">"Colossal Biosciences said it cloned red wolves. Is it for real?"</h2>
+              <p class="source">Source: <a href="https://www.technologyreview.com/2026/04/20/1135222/red-wolves-colossal-biosciences-clones/" target="_blank">MIT Technology Review</a></p>
+              <p class="confidence">Confidence: 80%</p>
+              <p class="sources-summary">Evidence sources (3): <span class="domain-tag">scientificamerican.com</span><span class="domain-tag">technologyreview.com</span><span class="domain-tag">nywolf.org</span></p>
+              <p class="summary">Colossal Biosciences announced the cloning of four red wolf pups, and multiple credible sources confirm the existence of these animals. However, there is significant scientific skepticism regarding whether these clones qualify as true red wolves. The announcement lacks independent genetic verification and peer-reviewed publication, and established conservation programs were not consulted. The conservation value of these clones is debated among scientists.</p>
+              <details>
+                <summary>Key Evidence</summary>
+                <ul><li>Colossal Biosciences announced the cloning of four red wolf pups from three living adult red wolves (Scientific American, MIT Technology Review).</li><li>The first cloned red wolf, Neka Kayda, has reached one year old, according to Colossal's statements (MIT Technology Review).</li><li>The Wolf Conservation Center disputes the claim, suggesting the animals may not qualify as true red wolves (Wolf Conservation Center).</li><li>No peer-reviewed publication accompanied the announcement, adding to scientific skepticism (Scientific American).</li><li>Established conservation programs weren't consulted, raising questions about scientific transparency (MIT Technology Review).</li></ul>
+              </details>
+              <details>
+                <summary>Retrieved Evidence Chunks</summary>
+                <ul><li><span class="chunk-domain">scientificamerican.com</span> · <strong>raw_source</strong> · Fetched Source 4.1 · score 0.72<div class="retrieved-text">The Dire Wolf Hoopla Hides the Real Story: How to Save Red Wolves | Scientific American
+
+Opinion
+Argonaut
+Wednesdays
+April 16, 2025
+5
+ min read
+ 
+Add Us On Google
+Add SciAm
+The Dire Wolf Hoopla Hides the Real Story: How to Save Red Wolves
+Rather than resurrect extinct species, cloning technology could save those at risk of dying out, like the red wolf, but only with solid conservation efforts and habitat protections
+By 
+Dan Vergano
+ 
+Colossal Biosciences has cloned four red wolf pups from living red wolves. The technology could aid conservation efforts in saving the species.
+ 
+Colossal Biosciences
+Keep in touch with the Argonaut: Get email alerts for this weekly column by Dan Vergano
+Four cl</div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>raw_source</strong> · Fetched Source 1.1 · score 0.53<div class="retrieved-text">Colossal Biosciences said it cloned red wolves. Is it for real? | MIT Technology Review
+
+Skip to Content
+ 
+If you want to capture something wolflike, it’s best to embark before dawn.
+ 
+So on a morning this January, with the eastern horizon still pink-hued, I drove with two young scientists into a blanket of fog. Forty miles to the west, the industrial sprawl of Houston spawned a golden glow. Tanner Broussard’s old Toyota Tacoma bumped over the levee-top roads as killdeer, flushed from their rest, flew across the beams of his headlights. 
+ 
+ 
+Broussard peered into the darkness, looking for traps. “I have one over here,” he said, slowing slightly. A master’s student at McNeese State University</div></li><li><span class="chunk-domain">nywolf.org</span> · <strong>raw_source</strong> · Fetched Source 2.6 · score 0.33<div class="retrieved-text">y professional life dedicated to the conservation of Red Wolves in the wild and know first-hand the challenges that their recovery faces. Although cloning has some potential to serve among existing conservation tools, there are more immediate and effective methods to promote long term survival and well-being of Red Wolves. Cloning is a solution in search of a problem that doesn’t exist for Red Wolves.
+
+Currently, there are only 16 Red Wolves known to remain in the wild. Our immediate concern is 
+
+[Content truncated]</div></li><li><span class="chunk-domain">technologyreview.com</span> · <strong>summary</strong> · Evidence Assessment · score 1.16<div class="retrieved-text">Based on evidence from MIT Technology Review, Scientific American, and the Wolf Conservation Center, **Colossal Biosciences did indeed announce the cloning of four red wolf pups** from three living adult red wolves. The announcement came alongside their more-publicized "dire wolf de-extinction" project in late 2024/early 2025.
+
+However, the claim requires significant nuance:
+
+**The cloning appears to be real** — multiple credible sources confirm the announcement and the existence of the cloned pups. MIT Technology Review conducted on-the-ground reporting, and Scientific American reported that Colossal announced "the birth late last year of" red wolf clones. One clone, named Neka Kayda, has a</div></li></ul>
+              </details>
+              <details class="verifier-details"><summary>Quality Scores (LLM-as-a-Judge)</summary><div class="scores"><div class="score-row"><span class="score-label">Groundedness</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">Citation</span><div class="score-track"><div class="score-fill" style="width:80%;background:hsl(96,70%,45%)"></div></div><span class="score-pct">80%</span></div><div class="score-row"><span class="score-label">No Contradiction</span><div class="score-track"><div class="score-fill" style="width:100%;background:hsl(120,70%,45%)"></div></div><span class="score-pct">100%</span></div><div class="score-row"><span class="score-label">No Assumption</span><div class="score-track"><div class="score-fill" style="width:70%;background:hsl(84,70%,45%)"></div></div><span class="score-pct">70%</span></div><div class="score-row"><span class="score-label">Overall</span><div class="score-track"><div class="score-fill" style="width:82%;background:hsl(99,70%,45%)"></div></div><span class="score-pct">82%</span></div></div></details>
+            </div></main>
+            <footer>
+              Generated 2026-04-20T20:08:53Z · Powered by Claude + GPT-4o
+            </footer>
+</body>
+</html>

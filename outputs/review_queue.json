@@ -1,5 +1,18 @@
 [
   {
+    "review_id": "2026-04-20:5cabeb16f31141b2",
+    "claim_id": "5cabeb16f31141b2",
+    "claim_text": "Colossal Biosciences said it cloned red wolves. Is it for real?",
+    "source": "MIT Technology Review",
+    "date_slug": "2026-04-20",
+    "verdict": "UNVERIFIABLE",
+    "confidence": 0.5,
+    "verifier_score": 0.675,
+    "reason": "Model confidence 0.50 is below the review threshold of 0.60. Verifier overall score 0.68 is below the review threshold of 0.75.",
+    "status": "PENDING_REVIEW",
+    "created_at": "2026-04-20T19:42:19Z"
+  },
+  {
     "review_id": "2026-04-14:ee905fff98b8e76a",
     "claim_id": "ee905fff98b8e76a",
     "claim_text": "NASA is building the first nuclear reactor-powered interplanetary spacecraft. How will it work?",

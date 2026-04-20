@@ -113,6 +113,32 @@
     {
       "type": "source",
       "id": "ecotope.org"
+    },
+    {
+      "type": "claim",
+      "text": "After 200 years scientists finally crack the “dolomite problem”",
+      "id": "8a1bb17ffbd13a30"
+    },
+    {
+      "type": "claim",
+      "text": "Colossal Biosciences said it cloned red wolves. Is it for real?",
+      "id": "5cabeb16f31141b2"
+    },
+    {
+      "type": "source",
+      "id": "apnews.com"
+    },
+    {
+      "type": "source",
+      "id": "healthfeedback.org"
+    },
+    {
+      "type": "source",
+      "id": "eurekalert.org"
+    },
+    {
+      "type": "source",
+      "id": "fws.gov"
     }
   ],
   "edges": [
@@ -182,6 +208,12 @@
       "target": "054466fc94e1ce6b"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "5332e1de",
+      "target": "8a1bb17ffbd13a30"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "sciencedaily.com",
       "target": "5332e1de"
@@ -202,6 +234,11 @@
       "target": "054466fc94e1ce6b"
     },
     {
+      "rel": "SUPPORTS",
+      "source": "sciencedaily.com",
+      "target": "8a1bb17ffbd13a30"
+    },
+    {
       "rel": "CITES",
       "source": "93d6e6a1",
       "target": "technologyreview.com"
@@ -219,6 +256,12 @@
       "target": "ee905fff98b8e76a"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "technologyreview.com",
+      "source": "93d6e6a1",
+      "target": "5cabeb16f31141b2"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "technologyreview.com",
       "target": "93d6e6a1"
@@ -232,6 +275,11 @@
       "rel": "SUPPORTS",
       "source": "technologyreview.com",
       "target": "ee905fff98b8e76a"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "technologyreview.com",
+      "target": "5cabeb16f31141b2"
     },
     {
       "rel": "CITES",
@@ -287,6 +335,12 @@
       "target": "054466fc94e1ce6b"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "042ca03f52c521fb",
+      "target": "8a1bb17ffbd13a30"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "izi.fraunhofer.de",
       "target": "042ca03f52c521fb"
@@ -306,6 +360,12 @@
       "via": "technologyreview.com",
       "source": "0e3d35f06b80a80d",
       "target": "ee905fff98b8e76a"
+    },
+    {
+      "rel": "RELATED_TO",
+      "via": "technologyreview.com",
+      "source": "0e3d35f06b80a80d",
+      "target": "5cabeb16f31141b2"
     },
     {
       "rel": "SUPPORTS",
@@ -339,6 +399,12 @@
       "target": "054466fc94e1ce6b"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "dffb7d6f79a9bacf",
+      "target": "8a1bb17ffbd13a30"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "frib.msu.edu",
       "target": "dffb7d6f79a9bacf"
@@ -352,6 +418,12 @@
       "rel": "CITES",
       "source": "ee905fff98b8e76a",
       "target": "nasa.gov"
+    },
+    {
+      "rel": "RELATED_TO",
+      "via": "technologyreview.com",
+      "source": "ee905fff98b8e76a",
+      "target": "5cabeb16f31141b2"
     },
     {
       "rel": "SUPPORTS",
@@ -369,6 +441,16 @@
       "target": "politifact.com"
     },
     {
+      "rel": "CITES",
+      "source": "5aed4512e3f735a1",
+      "target": "apnews.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "5aed4512e3f735a1",
+      "target": "healthfeedback.org"
+    },
+    {
       "rel": "SUPPORTS",
       "source": "politifact.com",
       "target": "5aed4512e3f735a1"
@@ -384,6 +466,12 @@
       "target": "ecotope.org"
     },
     {
+      "rel": "RELATED_TO",
+      "via": "sciencedaily.com",
+      "source": "054466fc94e1ce6b",
+      "target": "8a1bb17ffbd13a30"
+    },
+    {
       "rel": "CITES",
       "source": "b76cdcd7651d63b0",
       "target": "bbc.com"
@@ -397,6 +485,46 @@
       "rel": "SUPPORTS",
       "source": "ecotope.org",
       "target": "054466fc94e1ce6b"
+    },
+    {
+      "rel": "CITES",
+      "source": "8a1bb17ffbd13a30",
+      "target": "sciencedaily.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "8a1bb17ffbd13a30",
+      "target": "eurekalert.org"
+    },
+    {
+      "rel": "CITES",
+      "source": "5cabeb16f31141b2",
+      "target": "technologyreview.com"
+    },
+    {
+      "rel": "CITES",
+      "source": "5cabeb16f31141b2",
+      "target": "fws.gov"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "apnews.com",
+      "target": "5aed4512e3f735a1"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "healthfeedback.org",
+      "target": "5aed4512e3f735a1"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "eurekalert.org",
+      "target": "8a1bb17ffbd13a30"
+    },
+    {
+      "rel": "SUPPORTS",
+      "source": "fws.gov",
+      "target": "5cabeb16f31141b2"
     }
   ]
 }
