@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -507,7 +508,7 @@ def publish_node(state: PipelineState) -> dict[str, Any]:
 
 # ── Conditional edges ─────────────────────────────────────────────────────────
 
-MAX_RETRIES = 2
+MAX_RETRIES = int(os.getenv("CLAIMCHECK_MAX_RETRIES", "2"))
 
 
 def should_continue(state: PipelineState) -> str:

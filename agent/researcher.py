@@ -184,11 +184,16 @@ class Researcher:
     # Controls how deeply Claude reasons before committing to a finding.
     # Override via CLAUDE_THINKING_BUDGET (must stay below max_tokens).
     thinking_budget: int = field(default_factory=lambda: int(os.getenv("CLAUDE_THINKING_BUDGET", "3000")))
+    # Max tool-call rounds before forcing synthesis.  MCP server sets
+    # CLAIMCHECK_MAX_TOOL_ROUNDS=5 to finish well within client timeout.
+    max_tool_rounds: int = field(default_factory=lambda: int(os.getenv("CLAIMCHECK_MAX_TOOL_ROUNDS", str(MAX_TOOL_ROUNDS))))
     _client: anthropic.Anthropic = field(
         default_factory=anthropic.Anthropic, init=False, repr=False
     )
 
     def __post_init__(self) -> None:
+        # Synthesis deadline = 2 rounds before the hard cap.
+        self.synthesis_deadline_round: int = max(1, self.max_tool_rounds - 2)
         # Fail fast if the token budget config is invalid rather than letting
         # every research call blow up with an opaque Anthropic API error.
         # We clamp rather than hard-error so a partial misconfiguration
@@ -370,7 +375,7 @@ class Researcher:
 
         _synthesis_deadline_sent = False
 
-        for round_num in range(1, MAX_TOOL_ROUNDS + 1):
+        for round_num in range(1, self.max_tool_rounds + 1):
             # ── Diversity nudge ───────────────────────────────────────────────
             # If we're at round 4+, Claude has done at least 3 tool exchanges but
             # has only fetched from one domain — remind it before it writes up.
@@ -400,11 +405,11 @@ class Researcher:
             # final structured report. This prevents the "Research incomplete:
             # maximum tool rounds reached" fallback when Serper is down and
             # Claude keeps guessing URLs that 404/403.
-            if not _synthesis_deadline_sent and round_num >= SYNTHESIS_DEADLINE_ROUND:
+            if not _synthesis_deadline_sent and round_num >= self.synthesis_deadline_round:
                 sources_read = len(fetched_pages)
                 domains_read = len(fetched_domains)
                 deadline_msg = (
-                    f"⏱️ SYNTHESIS DEADLINE: You have {MAX_TOOL_ROUNDS - round_num + 1} "
+                    f"⏱️ SYNTHESIS DEADLINE: You have {self.max_tool_rounds - round_num + 1} "
                     f"round(s) remaining. You have successfully read {sources_read} "
                     f"page(s) from {domains_read} domain(s). "
                     f"STOP fetching now and write your complete final report using "
@@ -540,7 +545,7 @@ class Researcher:
             ]
             return "\n".join(parts).strip(), fetched_pages
 
-        logger.warning("Tool loop hit max rounds (%d) for claim %s", MAX_TOOL_ROUNDS, claim.id)
+        logger.warning("Tool loop hit max rounds (%d) for claim %s", self.max_tool_rounds, claim.id)
         return "Research incomplete: maximum tool rounds reached.", fetched_pages
 
     # ------------------------------------------------------------------

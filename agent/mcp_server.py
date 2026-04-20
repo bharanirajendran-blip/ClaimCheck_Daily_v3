@@ -54,6 +54,13 @@ from dotenv import load_dotenv
 # ── Load env early so pipeline can find API keys ──────────────────────────────
 load_dotenv()
 
+# Cap tool-call rounds for MCP single-claim runs so the pipeline finishes
+# well within Claude Desktop's ~60 s request timeout.
+# CLI and daily runs are not affected (they don't set this env var).
+# Users can override by setting CLAIMCHECK_MAX_TOOL_ROUNDS in .env.
+os.environ.setdefault("CLAIMCHECK_MAX_TOOL_ROUNDS", "5")
+os.environ.setdefault("CLAIMCHECK_MAX_RETRIES", "0")
+
 # ── Add project root to path so agent.* imports work ─────────────────────────
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
