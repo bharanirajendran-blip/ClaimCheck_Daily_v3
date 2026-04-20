@@ -104,6 +104,9 @@ RESEARCH_SYSTEM_PROMPT = textwrap.dedent("""\
 """)
 
 MAX_TOOL_ROUNDS = 8  # web_search + fetch_url (×2 sources) + synthesis + slack for retries
+# At this round, inject a hard deadline message so Claude writes findings
+# instead of continuing to search, preventing "Research incomplete" fallback.
+SYNTHESIS_DEADLINE_ROUND = MAX_TOOL_ROUNDS - 2  # round 6 of 8
 
 # Corroborate loop uses a fixed thinking budget independent of self.thinking_budget.
 # Anthropic requires budget_tokens >= 1024; we use the minimum here since
@@ -365,6 +368,8 @@ class Researcher:
         fetched_domains: set[str] = set()
         _diversity_reminder_sent = False
 
+        _synthesis_deadline_sent = False
+
         for round_num in range(1, MAX_TOOL_ROUNDS + 1):
             # ── Diversity nudge ───────────────────────────────────────────────
             # If we're at round 4+, Claude has done at least 3 tool exchanges but
@@ -389,6 +394,29 @@ class Researcher:
                     "[research] Diversity reminder injected at round %d "
                     "(only domain so far: %s)", round_num, domain_seen,
                 )
+
+            # ── Synthesis deadline ────────────────────────────────────────────
+            # Two rounds before the hard cap, stop all tool use and demand the
+            # final structured report. This prevents the "Research incomplete:
+            # maximum tool rounds reached" fallback when Serper is down and
+            # Claude keeps guessing URLs that 404/403.
+            if not _synthesis_deadline_sent and round_num >= SYNTHESIS_DEADLINE_ROUND:
+                sources_read = len(fetched_pages)
+                domains_read = len(fetched_domains)
+                deadline_msg = (
+                    f"⏱️ SYNTHESIS DEADLINE: You have {MAX_TOOL_ROUNDS - round_num + 1} "
+                    f"round(s) remaining. You have successfully read {sources_read} "
+                    f"page(s) from {domains_read} domain(s). "
+                    f"STOP fetching now and write your complete final report using "
+                    f"the evidence you already have. Do NOT call any more tools."
+                )
+                messages.append({"role": "user", "content": deadline_msg})
+                _synthesis_deadline_sent = True
+                logger.info(
+                    "[research] Synthesis deadline injected at round %d "
+                    "(fetched %d pages from %d domains)", round_num, sources_read, domains_read,
+                )
+
             kwargs: dict = dict(
                 model=self.model,
                 max_tokens=self.max_tokens,
@@ -432,6 +460,37 @@ class Researcher:
 
             # ── Claude wants to use a tool ────────────────────────────
             if response.stop_reason == "tool_use":
+                # If the synthesis deadline has already been sent and Claude
+                # is still trying to call tools, refuse the tool calls and
+                # force it to write its report with what it has.
+                if _synthesis_deadline_sent:
+                    logger.warning(
+                        "[research] Claude called tool(s) after synthesis deadline "
+                        "at round %d — refusing and forcing final synthesis.", round_num,
+                    )
+                    assistant_content = [
+                        block_dict
+                        for block_dict in (_block_to_dict(b) for b in response.content)
+                        if block_dict is not None
+                    ]
+                    messages.append({"role": "assistant", "content": assistant_content})
+                    # Return stub tool results so the messages list stays valid,
+                    # then demand the final report.
+                    stub_results = [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": block.id,
+                            "content": "Tool call refused: synthesis deadline reached. Write your final report now.",
+                        }
+                        for block in response.content
+                        if block.type == "tool_use"
+                    ]
+                    messages.append({"role": "user", "content": stub_results + [{
+                        "type": "text",
+                        "text": "Write your complete final report now using the evidence already gathered. No more tool calls.",
+                    }]})
+                    continue
+
                 # Serialize SDK content blocks to plain dicts to avoid
                 # Pydantic v2 / Anthropic SDK 'by_alias' serialization conflict
                 assistant_content = [

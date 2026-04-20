@@ -53,6 +53,41 @@ _ERROR_FETCH_PREFIX = "Error fetching page"
 REVIEW_CONFIDENCE_THRESHOLD = 0.60
 REVIEW_VERIFIER_SCORE_THRESHOLD = 0.75
 
+# ── Retriever cache ───────────────────────────────────────────────────────────
+# HybridRetriever.fit_transform is expensive (~30-60s on large stores).
+# We cache the fitted retriever keyed by a fingerprint of the chunk list so
+# the same chunk set is never re-fit within a single Python process.
+# The cache is intentionally small (max 4 entries) to bound memory usage.
+_retriever_cache: dict[str, HybridRetriever] = {}
+_RETRIEVER_CACHE_MAX = 4
+
+
+def _chunk_fingerprint(chunks: list) -> str:
+    """Fast fingerprint of a chunk list — chunk count + XOR of first/last IDs."""
+    if not chunks:
+        return "empty"
+    n = len(chunks)
+    first_id = getattr(chunks[0], "chunk_id", str(chunks[0]))
+    last_id  = getattr(chunks[-1], "chunk_id", str(chunks[-1]))
+    raw = f"{n}:{first_id}:{last_id}"
+    return hashlib.md5(raw.encode()).hexdigest()[:12]
+
+
+def _get_retriever(chunks: list) -> HybridRetriever:
+    """Return a cached HybridRetriever for this chunk set, building if needed."""
+    if not chunks:
+        return HybridRetriever([])
+    key = _chunk_fingerprint(chunks)
+    if key not in _retriever_cache:
+        if len(_retriever_cache) >= _RETRIEVER_CACHE_MAX:
+            # Evict the oldest entry (insertion-order dict, Python 3.7+)
+            _retriever_cache.pop(next(iter(_retriever_cache)))
+        logger.info("[retriever_cache] Building new retriever for %d chunks (key=%s)", len(chunks), key)
+        _retriever_cache[key] = HybridRetriever(chunks)
+    else:
+        logger.debug("[retriever_cache] Cache hit for %d chunks (key=%s)", len(chunks), key)
+    return _retriever_cache[key]
+
 # Lazily-initialised singletons — not created until first node call,
 # so API keys are guaranteed to be loaded from .env before instantiation.
 _director:   Director   | None = None
@@ -234,7 +269,7 @@ def _search_chunks(
 ) -> list:
     if not chunks:
         return []
-    return HybridRetriever(chunks).search(query, top_k=top_k, claim_id=claim_id, query_type=query_type)
+    return _get_retriever(chunks).search(query, top_k=top_k, claim_id=claim_id, query_type=query_type)
 
 
 def _merge_retrieval_hits(
