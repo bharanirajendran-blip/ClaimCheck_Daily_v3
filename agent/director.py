@@ -13,6 +13,8 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
+import textwrap
 from typing import Any
 
 from openai import OpenAI
@@ -61,6 +63,8 @@ For verdict generation:
 - Prefer raw source chunks over researcher summaries when there is tension.
 - Do not make claims that are not supported by the retrieved evidence.
 - Write key_evidence bullets so they reflect specific retrieved support, not vague summaries.
+- Answer the exact claim text you were given. Do not silently substitute a related
+  embedded claim, narrower proposition, or different headline interpretation.
 
 Always respond with valid JSON matching the schema provided in each user message."""
 
@@ -90,6 +94,54 @@ VERDICT_SCHEMA = {
     },
     "required": ["verdict", "confidence", "summary", "key_evidence"],
 }
+
+_EVALUATIVE_META_CLAIM_RE = re.compile(
+    r"\b("
+    r"baseless|unfounded|false claim|falsehood|misleading|debunked|unsupported|"
+    r"no evidence|fact[- ]?check|myth|hoax"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def _looks_like_evaluative_meta_claim(text: str) -> bool:
+    """
+    Return True for headlines that evaluate an embedded claim rather than
+    directly asserting the embedded proposition themselves.
+
+    Example:
+      "Elon Musk Amplifies Baseless Claim About COVID-19 Vaccine"
+
+    These headlines need special handling so the model judges the full
+    headline-level assertion (actor + evaluative framing), not only the
+    embedded claim.
+    """
+    return bool(_EVALUATIVE_META_CLAIM_RE.search(text or ""))
+
+
+def _claim_focus_guidance(claim_text: str) -> str:
+    """
+    Build extra prompt guidance that keeps verdict synthesis aligned with the
+    original claim semantics.
+    """
+    base = textwrap.dedent("""\
+        Claim-framing rules:
+        - Judge the claim exactly as written.
+        - Do not replace it with a different but related proposition.
+        - If the evidence only supports a narrower claim, say that explicitly in the summary.
+    """)
+    if not _looks_like_evaluative_meta_claim(claim_text):
+        return base
+
+    return base + textwrap.dedent("""\
+        - This claim is an evaluative headline about another claim.
+        - Verify both the attribution/action (who said, amplified, promoted, or repeated it)
+          and whether the evaluative wording (for example baseless, unfounded, misleading,
+          false, unsupported, debunked) is justified by the evidence.
+        - Do NOT give a verdict solely for the embedded claim while ignoring the
+          headline-level assertion.
+        - In the summary, explicitly mention the actor and the evaluative framing.
+    """)
 
 
 class Director:
@@ -161,6 +213,7 @@ class Director:
 
         response = self._chat(
             f"Claim: {claim.text}\n\n"
+            f"{_claim_focus_guidance(claim.text)}\n\n"
             f"Research findings (secondary context only):\n{research.findings}\n\n"
             f"Sources consulted:\n{json.dumps(research.sources, indent=2)}"
             f"{rag_section}\n\n"
